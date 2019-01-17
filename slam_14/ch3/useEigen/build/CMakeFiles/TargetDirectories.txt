@@ -1,0 +1,4 @@
+/home/kali/kaka/MyGithub/slam/ch3/useEigen/build/CMakeFiles/rebuild_cache.dir
+/home/kali/kaka/MyGithub/slam/ch3/useEigen/build/CMakeFiles/edit_cache.dir
+/home/kali/kaka/MyGithub/slam/ch3/useEigen/build/CMakeFiles/testGeometry.dir
+/home/kali/kaka/MyGithub/slam/ch3/useEigen/build/CMakeFiles/testEigen.dir

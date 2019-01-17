@@ -1,0 +1,1 @@
+/usr/bin/c++   -g   CMakeFiles/usehello.dir/useHello.cpp.o  -o usehello -rdynamic libhello_shared.so -Wl,-rpath,/home/kali/kaka/MyGithub/slam/ch2/build 
