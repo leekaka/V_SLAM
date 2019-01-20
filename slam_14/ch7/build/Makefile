@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/ch7/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -77,6 +66,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -109,6 +109,19 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+#=============================================================================
+# Target rules for targets named pose_estimation_2d2d
+
+# Build rule for target.
+pose_estimation_2d2d: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pose_estimation_2d2d
+.PHONY : pose_estimation_2d2d
+
+# fast build rule for target.
+pose_estimation_2d2d/fast:
+	$(MAKE) -f CMakeFiles/pose_estimation_2d2d.dir/build.make CMakeFiles/pose_estimation_2d2d.dir/build
+.PHONY : pose_estimation_2d2d/fast
 
 #=============================================================================
 # Target rules for targets named feature_extraction
@@ -150,18 +163,49 @@ orb_feature.cpp.s:
 	$(MAKE) -f CMakeFiles/feature_extraction.dir/build.make CMakeFiles/feature_extraction.dir/orb_feature.cpp.s
 .PHONY : orb_feature.cpp.s
 
+pose_estimation_2d2d.o: pose_estimation_2d2d.cpp.o
+
+.PHONY : pose_estimation_2d2d.o
+
+# target to build an object file
+pose_estimation_2d2d.cpp.o:
+	$(MAKE) -f CMakeFiles/pose_estimation_2d2d.dir/build.make CMakeFiles/pose_estimation_2d2d.dir/pose_estimation_2d2d.cpp.o
+.PHONY : pose_estimation_2d2d.cpp.o
+
+pose_estimation_2d2d.i: pose_estimation_2d2d.cpp.i
+
+.PHONY : pose_estimation_2d2d.i
+
+# target to preprocess a source file
+pose_estimation_2d2d.cpp.i:
+	$(MAKE) -f CMakeFiles/pose_estimation_2d2d.dir/build.make CMakeFiles/pose_estimation_2d2d.dir/pose_estimation_2d2d.cpp.i
+.PHONY : pose_estimation_2d2d.cpp.i
+
+pose_estimation_2d2d.s: pose_estimation_2d2d.cpp.s
+
+.PHONY : pose_estimation_2d2d.s
+
+# target to generate assembly for a file
+pose_estimation_2d2d.cpp.s:
+	$(MAKE) -f CMakeFiles/pose_estimation_2d2d.dir/build.make CMakeFiles/pose_estimation_2d2d.dir/pose_estimation_2d2d.cpp.s
+.PHONY : pose_estimation_2d2d.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... edit_cache"
+	@echo "... pose_estimation_2d2d"
 	@echo "... feature_extraction"
 	@echo "... orb_feature.o"
 	@echo "... orb_feature.i"
 	@echo "... orb_feature.s"
+	@echo "... pose_estimation_2d2d.o"
+	@echo "... pose_estimation_2d2d.i"
+	@echo "... pose_estimation_2d2d.s"
 .PHONY : help
 
 

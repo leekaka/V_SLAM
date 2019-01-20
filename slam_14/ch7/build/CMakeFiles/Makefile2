@@ -60,6 +60,43 @@ CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/slam/ch7
 CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/ch7/build
 
 #=============================================================================
+# Target rules for target CMakeFiles/pose_estimation_2d2d.dir
+
+# All Build rule for target.
+CMakeFiles/pose_estimation_2d2d.dir/all:
+	$(MAKE) -f CMakeFiles/pose_estimation_2d2d.dir/build.make CMakeFiles/pose_estimation_2d2d.dir/depend
+	$(MAKE) -f CMakeFiles/pose_estimation_2d2d.dir/build.make CMakeFiles/pose_estimation_2d2d.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/kali/kaka/MyGithub/slam/ch7/build/CMakeFiles --progress-num=3,4 "Built target pose_estimation_2d2d"
+.PHONY : CMakeFiles/pose_estimation_2d2d.dir/all
+
+# Include target in all.
+all: CMakeFiles/pose_estimation_2d2d.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/pose_estimation_2d2d.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch7/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/pose_estimation_2d2d.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch7/build/CMakeFiles 0
+.PHONY : CMakeFiles/pose_estimation_2d2d.dir/rule
+
+# Convenience name for target.
+pose_estimation_2d2d: CMakeFiles/pose_estimation_2d2d.dir/rule
+
+.PHONY : pose_estimation_2d2d
+
+# clean rule for target.
+CMakeFiles/pose_estimation_2d2d.dir/clean:
+	$(MAKE) -f CMakeFiles/pose_estimation_2d2d.dir/build.make CMakeFiles/pose_estimation_2d2d.dir/clean
+.PHONY : CMakeFiles/pose_estimation_2d2d.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/pose_estimation_2d2d.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/feature_extraction.dir
 
 # All Build rule for target.
