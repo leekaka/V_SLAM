@@ -7,5 +7,5 @@
       * 安装OpenCV等
       
      * CMAKE熟练
-      * 把ch7代码抽出来到src和include
+       * 把ch7代码抽出来到src和include
     
