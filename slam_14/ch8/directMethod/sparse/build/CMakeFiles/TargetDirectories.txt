@@ -1,0 +1,3 @@
+/home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles/edit_cache.dir
+/home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles/rebuild_cache.dir
+/home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles/sparseMethod.dir

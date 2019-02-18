@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense
+CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build
+CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named semidenseMethod
+# Target rules for targets named sparseMethod
 
 # Build rule for target.
-semidenseMethod: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 semidenseMethod
-.PHONY : semidenseMethod
+sparseMethod: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sparseMethod
+.PHONY : sparseMethod
 
 # fast build rule for target.
-semidenseMethod/fast:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/build
-.PHONY : semidenseMethod/fast
+sparseMethod/fast:
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/build
+.PHONY : sparseMethod/fast
 
 src/common.o: src/common.cpp.o
 
@@ -129,7 +129,7 @@ src/common.o: src/common.cpp.o
 
 # target to build an object file
 src/common.cpp.o:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/src/common.cpp.o
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/src/common.cpp.o
 .PHONY : src/common.cpp.o
 
 src/common.i: src/common.cpp.i
@@ -138,7 +138,7 @@ src/common.i: src/common.cpp.i
 
 # target to preprocess a source file
 src/common.cpp.i:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/src/common.cpp.i
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/src/common.cpp.i
 .PHONY : src/common.cpp.i
 
 src/common.s: src/common.cpp.s
@@ -147,35 +147,35 @@ src/common.s: src/common.cpp.s
 
 # target to generate assembly for a file
 src/common.cpp.s:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/src/common.cpp.s
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/src/common.cpp.s
 .PHONY : src/common.cpp.s
 
-src/direct_semidense.o: src/direct_semidense.cpp.o
+src/direct_sparse.o: src/direct_sparse.cpp.o
 
-.PHONY : src/direct_semidense.o
+.PHONY : src/direct_sparse.o
 
 # target to build an object file
-src/direct_semidense.cpp.o:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o
-.PHONY : src/direct_semidense.cpp.o
+src/direct_sparse.cpp.o:
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/src/direct_sparse.cpp.o
+.PHONY : src/direct_sparse.cpp.o
 
-src/direct_semidense.i: src/direct_semidense.cpp.i
+src/direct_sparse.i: src/direct_sparse.cpp.i
 
-.PHONY : src/direct_semidense.i
+.PHONY : src/direct_sparse.i
 
 # target to preprocess a source file
-src/direct_semidense.cpp.i:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.i
-.PHONY : src/direct_semidense.cpp.i
+src/direct_sparse.cpp.i:
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/src/direct_sparse.cpp.i
+.PHONY : src/direct_sparse.cpp.i
 
-src/direct_semidense.s: src/direct_semidense.cpp.s
+src/direct_sparse.s: src/direct_sparse.cpp.s
 
-.PHONY : src/direct_semidense.s
+.PHONY : src/direct_sparse.s
 
 # target to generate assembly for a file
-src/direct_semidense.cpp.s:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.s
-.PHONY : src/direct_semidense.cpp.s
+src/direct_sparse.cpp.s:
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/src/direct_sparse.cpp.s
+.PHONY : src/direct_sparse.cpp.s
 
 # Help Target
 help:
@@ -185,13 +185,13 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... semidenseMethod"
+	@echo "... sparseMethod"
 	@echo "... src/common.o"
 	@echo "... src/common.i"
 	@echo "... src/common.s"
-	@echo "... src/direct_semidense.o"
-	@echo "... src/direct_semidense.i"
-	@echo "... src/direct_semidense.s"
+	@echo "... src/direct_sparse.o"
+	@echo "... src/direct_sparse.i"
+	@echo "... src/direct_sparse.s"
 .PHONY : help
 
 

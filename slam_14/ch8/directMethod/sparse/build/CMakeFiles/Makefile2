@@ -54,45 +54,45 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense
+CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build
+CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/semidenseMethod.dir
+# Target rules for target CMakeFiles/sparseMethod.dir
 
 # All Build rule for target.
-CMakeFiles/semidenseMethod.dir/all:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/depend
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles --progress-num=1,2,3 "Built target semidenseMethod"
-.PHONY : CMakeFiles/semidenseMethod.dir/all
+CMakeFiles/sparseMethod.dir/all:
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/depend
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles --progress-num=1,2,3 "Built target sparseMethod"
+.PHONY : CMakeFiles/sparseMethod.dir/all
 
 # Include target in all.
-all: CMakeFiles/semidenseMethod.dir/all
+all: CMakeFiles/sparseMethod.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/semidenseMethod.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/semidenseMethod.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles 0
-.PHONY : CMakeFiles/semidenseMethod.dir/rule
+CMakeFiles/sparseMethod.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/sparseMethod.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/ch8/directMethod/sparse/build/CMakeFiles 0
+.PHONY : CMakeFiles/sparseMethod.dir/rule
 
 # Convenience name for target.
-semidenseMethod: CMakeFiles/semidenseMethod.dir/rule
+sparseMethod: CMakeFiles/sparseMethod.dir/rule
 
-.PHONY : semidenseMethod
-
-# clean rule for target.
-CMakeFiles/semidenseMethod.dir/clean:
-	$(MAKE) -f CMakeFiles/semidenseMethod.dir/build.make CMakeFiles/semidenseMethod.dir/clean
-.PHONY : CMakeFiles/semidenseMethod.dir/clean
+.PHONY : sparseMethod
 
 # clean rule for target.
-clean: CMakeFiles/semidenseMethod.dir/clean
+CMakeFiles/sparseMethod.dir/clean:
+	$(MAKE) -f CMakeFiles/sparseMethod.dir/build.make CMakeFiles/sparseMethod.dir/clean
+.PHONY : CMakeFiles/sparseMethod.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/sparseMethod.dir/clean
 
 .PHONY : clean
 

@@ -49,5 +49,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/semidenseMethod.dir/DependInfo.cmake"
+  "CMakeFiles/sparseMethod.dir/DependInfo.cmake"
   )
