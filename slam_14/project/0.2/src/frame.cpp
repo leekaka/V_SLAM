@@ -58,7 +58,7 @@ double Frame::findDepth ( const cv::KeyPoint& kp )
         // check the nearby points 
         int dx[4] = {-1,0,1,0};
         int dy[4] = {0,-1,0,1};
-        for ( int i=0; i<4; i++ )
+        for ( int i=0; i<4; i++ ) // 这四个没有做选择也
         {
             d = depth_.ptr<ushort>( y+dy[i] )[x+dx[i]];
             if ( d!=0 )

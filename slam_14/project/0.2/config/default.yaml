@@ -3,7 +3,7 @@
 # the tum dataset directory, change it to yours! 
 #dataset_dir: ~/kaka/slambook/project/data
 
-dataset_dir: ../data
+dataset_dir: ../../data
 
 # camera intrinsics
 # fr1

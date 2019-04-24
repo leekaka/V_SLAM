@@ -22,7 +22,7 @@
 namespace myslam
 {
 
-void Map::insertKeyFrame ( Frame::Ptr frame )
+void Map::insertKeyFrame ( Frame::Ptr frame )    // 连个插入是一样的,找到了则赋值,没有则插入新的
 {
     cout<<"Key frame size = "<<keyframes_.size()<<endl;
     if ( keyframes_.find(frame->id_) == keyframes_.end() )
