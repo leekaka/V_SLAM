@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11 -O3 -O3 -DNDEBUG
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/include -isystem /opt/ros/kinetic/include/opencv-3.3.1-dev -isystem /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv -I/usr/include/eigen3 
+CXX_INCLUDES = -I/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/include -isystem /opt/ros/kinetic/include/opencv-3.3.1-dev -isystem /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv -I/usr/include/eigen3 
 

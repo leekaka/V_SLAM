@@ -57,7 +57,8 @@ int main(int argc, char** argv)
 	
 	vector<cv::Point2f>next_keypoints;
 	vector<cv::Point2f>pre_keypoints;
-	for (auto kp:keypoints)
+	
+	for (auto kp:keypoints) // 把所以keypoints的点放入pre_key
 	    pre_keypoints.push_back(kp);
 	vector<unsigned char> status;
 	vector<float>error;
@@ -79,6 +80,7 @@ int main(int argc, char** argv)
 	    *iter = next_keypoints[i];
 	    iter++;
 	}
+
 	cout<<"tracked keypoints: "<<keypoints.size()<<endl;
 	if (keypoints.size()==0)
 	{
@@ -91,7 +93,9 @@ int main(int argc, char** argv)
 	cv::Mat img_show = color.clone();
 	for (auto kp:keypoints )
 	    cv::circle(img_show,kp,10,cv::Scalar(0, 240, 0),1);
+
 	cv::imshow("corners",img_show);
+	
 	cv::waitKey(0);
 	last_color = color;
     }

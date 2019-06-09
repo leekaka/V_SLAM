@@ -25,14 +25,17 @@ using namespace std;
 using namespace g2o;
 using namespace Eigen;
 
-struct Measurement
+
+//inline 只能在头文件中
+
+struct Measurement  // 测量值包括3d坐标和灰度值
 {
     Measurement(Eigen::Vector3d p, float g) : pos_world (p), grayscale( g ) {}
     Vector3d pos_world;
     float grayscale;
 };
 
-
+/*像素坐标变空间坐标*/
 inline Vector3d project2Dto3D (int x, int y, int d, float fx, float fy, float cx, float cy, float scale)
 {
     float zz = float (d) / scale;
@@ -41,6 +44,8 @@ inline Vector3d project2Dto3D (int x, int y, int d, float fx, float fy, float cx
     return Vector3d (xx,yy,zz);
 }
 
+
+/*空间坐标变成像素坐标*/
 inline Vector2d project3Dto2D(float x, float y, float z, float fx, float fy, float cx, float cy)
 {
     float u = fx*x/z+cx;
@@ -55,7 +60,7 @@ bool poseEstimationDirect(const vector<Measurement>& measurements,cv::Mat*gray,E
 //project a 3d point into an image plane, the error is photimetric error
 //an unary edge with one vertex SE3Expmap (the pose of camera)
 //
-class EdgeSE3ProjectDirect: public BaseUnaryEdge< 1, double, VertexSE3Expmap>
+class EdgeSE3ProjectDirect: public BaseUnaryEdge< 1, double, VertexSE3Expmap>   // 公用继承
 {
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
@@ -66,7 +71,7 @@ public:
         : x_world_ ( point ), fx_ ( fx ), fy_ ( fy ), cx_ ( cx ), cy_ ( cy ), image_ ( image )
     {}
 
-    virtual void computeError()
+    virtual void computeError()   // 覆写两个虚函数
     {
         const VertexSE3Expmap* v  =static_cast<const VertexSE3Expmap*> ( _vertices[0] );
         Eigen::Vector3d x_local = v->estimate().map ( x_world_ );
@@ -138,7 +143,7 @@ protected:
     inline float getPixelValue ( float x, float y )
     {
         uchar* data = & image_->data[ int ( y ) * image_->step + int ( x ) ];
-        float xx = x - floor ( x );
+        float xx = x - floor ( x );  //向下取整
         float yy = y - floor ( y );
         return float (
                    ( 1-xx ) * ( 1-yy ) * data[0] +

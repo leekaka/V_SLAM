@@ -4,7 +4,7 @@
 src/CMakeFiles/myslam.dir/camera.cpp.o
  ../include/myslam/camera.h
  ../include/myslam/common_include.h
- /home/kali/kaka/MyGithub/slam/project/0.1/src/camera.cpp
+ /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/camera.cpp
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
  /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h
@@ -317,7 +317,7 @@ src/CMakeFiles/myslam.dir/camera.cpp.o
 src/CMakeFiles/myslam.dir/config.cpp.o
  ../include/myslam/common_include.h
  ../include/myslam/config.h
- /home/kali/kaka/MyGithub/slam/project/0.1/src/config.cpp
+ /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/config.cpp
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
  /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h
@@ -631,7 +631,7 @@ src/CMakeFiles/myslam.dir/frame.cpp.o
  ../include/myslam/camera.h
  ../include/myslam/common_include.h
  ../include/myslam/frame.h
- /home/kali/kaka/MyGithub/slam/project/0.1/src/frame.cpp
+ /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/frame.cpp
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
  /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h
@@ -947,7 +947,7 @@ src/CMakeFiles/myslam.dir/map.cpp.o
  ../include/myslam/frame.h
  ../include/myslam/map.h
  ../include/myslam/mappoint.h
- /home/kali/kaka/MyGithub/slam/project/0.1/src/map.cpp
+ /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/map.cpp
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
  /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h
@@ -1260,7 +1260,7 @@ src/CMakeFiles/myslam.dir/map.cpp.o
 src/CMakeFiles/myslam.dir/mappoint.cpp.o
  ../include/myslam/common_include.h
  ../include/myslam/mappoint.h
- /home/kali/kaka/MyGithub/slam/project/0.1/src/mappoint.cpp
+ /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/mappoint.cpp
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
  /home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
  /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h

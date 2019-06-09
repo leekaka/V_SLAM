@@ -1,4 +1,4 @@
-# Install script for directory: /home/kali/kaka/MyGithub/slam/project/0.1/test
+# Install script for directory: /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/test
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

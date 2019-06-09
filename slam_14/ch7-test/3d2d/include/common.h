@@ -16,28 +16,19 @@
 #include <chrono>
 
 
-
 using namespace std;
 using namespace cv;
-
-
 
 
 // 像素坐标转相机归一化坐标
 Point2d pixel2cam ( const Point2d& p, const Mat& K );
 
 
-
-void find_feature_matches ( const Mat& img_1, const Mat& img_2,
-                            std::vector<KeyPoint>& keypoints_1,
-                            std::vector<KeyPoint>& keypoints_2,
-                            std::vector< DMatch >& matches );
-
-void pose_estimation_2d2d (
-    std::vector<KeyPoint> keypoints_1,
-    std::vector<KeyPoint> keypoints_2,
-    std::vector< DMatch > matches,
-    Mat& R, Mat& t );
+void find_feature_matches (
+    const Mat& img_1, const Mat& img_2,
+    std::vector<KeyPoint>& keypoints_1,
+    std::vector<KeyPoint>& keypoints_2,
+    std::vector< DMatch >& matches );
 
 
 void bundleAdjustment(

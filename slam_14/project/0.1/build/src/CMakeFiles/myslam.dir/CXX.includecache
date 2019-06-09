@@ -56,27 +56,27 @@ myslam/mappoint.h
 
 ../include/myslam/mappoint.h
 
-/home/kali/kaka/MyGithub/slam/project/0.1/src/camera.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/camera.cpp
 myslam/camera.h
-/home/kali/kaka/MyGithub/slam/project/0.1/src/myslam/camera.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/myslam/camera.h
 
-/home/kali/kaka/MyGithub/slam/project/0.1/src/config.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/config.cpp
 myslam/config.h
-/home/kali/kaka/MyGithub/slam/project/0.1/src/myslam/config.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/myslam/config.h
 
-/home/kali/kaka/MyGithub/slam/project/0.1/src/frame.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/frame.cpp
 myslam/frame.h
-/home/kali/kaka/MyGithub/slam/project/0.1/src/myslam/frame.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/myslam/frame.h
 
-/home/kali/kaka/MyGithub/slam/project/0.1/src/map.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/map.cpp
 myslam/map.h
-/home/kali/kaka/MyGithub/slam/project/0.1/src/myslam/map.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/myslam/map.h
 
-/home/kali/kaka/MyGithub/slam/project/0.1/src/mappoint.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/mappoint.cpp
 myslam/common_include.h
-/home/kali/kaka/MyGithub/slam/project/0.1/src/myslam/common_include.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/myslam/common_include.h
 myslam/mappoint.h
-/home/kali/kaka/MyGithub/slam/project/0.1/src/myslam/mappoint.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/myslam/mappoint.h
 
 /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
 so3.h

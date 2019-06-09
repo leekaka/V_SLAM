@@ -36,6 +36,8 @@ int main ( int argc, char** argv )
 
     vector<string> rgb_files, depth_files;
     vector<double> rgb_times, depth_times;
+
+
     while ( !fin.eof() )
     {
         string rgb_time, rgb_file, depth_time, depth_file;
@@ -82,6 +84,8 @@ int main ( int argc, char** argv )
         
         if ( vo->state_ == myslam::VisualOdometry::LOST )
             break;
+
+            
         SE3 Tcw = pFrame->T_c_w_.inverse();
         
         // show the map and the camera pose 

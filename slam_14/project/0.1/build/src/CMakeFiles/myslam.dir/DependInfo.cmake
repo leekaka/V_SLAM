@@ -4,11 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/kali/kaka/MyGithub/slam/project/0.1/src/camera.cpp" "/home/kali/kaka/MyGithub/slam/project/0.1/build/src/CMakeFiles/myslam.dir/camera.cpp.o"
-  "/home/kali/kaka/MyGithub/slam/project/0.1/src/config.cpp" "/home/kali/kaka/MyGithub/slam/project/0.1/build/src/CMakeFiles/myslam.dir/config.cpp.o"
-  "/home/kali/kaka/MyGithub/slam/project/0.1/src/frame.cpp" "/home/kali/kaka/MyGithub/slam/project/0.1/build/src/CMakeFiles/myslam.dir/frame.cpp.o"
-  "/home/kali/kaka/MyGithub/slam/project/0.1/src/map.cpp" "/home/kali/kaka/MyGithub/slam/project/0.1/build/src/CMakeFiles/myslam.dir/map.cpp.o"
-  "/home/kali/kaka/MyGithub/slam/project/0.1/src/mappoint.cpp" "/home/kali/kaka/MyGithub/slam/project/0.1/build/src/CMakeFiles/myslam.dir/mappoint.cpp.o"
+  "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/camera.cpp" "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/src/CMakeFiles/myslam.dir/camera.cpp.o"
+  "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/config.cpp" "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/src/CMakeFiles/myslam.dir/config.cpp.o"
+  "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/frame.cpp" "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/src/CMakeFiles/myslam.dir/frame.cpp.o"
+  "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/map.cpp" "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/src/CMakeFiles/myslam.dir/map.cpp.o"
+  "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/mappoint.cpp" "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/src/CMakeFiles/myslam.dir/mappoint.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

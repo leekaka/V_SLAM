@@ -44,7 +44,8 @@ int main( int argc, char** argv)
 	if(color.data==nullptr||depth.data==nullptr)
 	    continue;
 	cv::cvtColor (color,gray,cv::COLOR_BGR2GRAY);
-	if(index==0)
+
+	if(index==0)  // 和稀疏法的唯一区别就是   像素选的是像素梯度大的像素点，而不是  稀疏法的 特征点的像素
 	{
 	    for (int x=10;x<gray.cols-10;x++)
 		for (int y=10;y<gray.rows-10;y++)
@@ -66,6 +67,7 @@ int main( int argc, char** argv)
 	    cout<<"add total "<<measurements.size()<<" measurements."<<endl;
 	    continue;
 	}
+
 	//使用直接法计算相机运动
 	chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
 	poseEstimationDirect ( measurements,&gray,K,Tcw );
@@ -78,6 +80,9 @@ int main( int argc, char** argv)
 	cv::Mat img_show (color.rows*2, color.cols, CV_8UC3 );
 	prev_color.copyTo (img_show(cv::Rect(0,0,color.cols,color.rows)));
 	color.copyTo (img_show(cv::Rect(0,color.rows,color.cols,color.rows)));
+
+
+
 	for (Measurement m:measurements)
 	{
 	    if(rand() > RAND_MAX/5)
@@ -92,6 +97,11 @@ int main( int argc, char** argv)
 	    float b = 0;
 	    float g =250;
 	    float r = 0;
+
+		// b = 255*float ( rand() ) /RAND_MAX;
+        // g = 255*float ( rand() ) /RAND_MAX;
+        // r = 255*float ( rand() ) /RAND_MAX;
+
 	    img_show.ptr<uchar>(pixel_prev(1,0))[int(pixel_prev(0,0))*3] = b;
 	    img_show.ptr<uchar>(pixel_prev(1,0))[int(pixel_prev(0,0))*3+1] = g;
 	    img_show.ptr<uchar>(pixel_prev(1,0))[int(pixel_prev(0,0))*3+2] = r;
@@ -102,6 +112,10 @@ int main( int argc, char** argv)
 
 	    cv::circle(img_show,cv::Point2d(pixel_prev(0,0),pixel_prev(1,0)),4,cv::Scalar(b,g,r),2);
 	    cv::circle(img_show,cv::Point2d(pixel_now(0,0),pixel_now(1,0)+color.rows),4,cv::Scalar(b,g,r),2);
+
+	
+
+		//cv::line ( img_show, cv::Point2d ( pixel_prev ( 0,0 ), pixel_prev ( 1,0 ) ), cv::Point2d ( pixel_now ( 0,0 ), pixel_now ( 1,0 ) +color.rows ), cv::Scalar ( b,g,r ), 1 );
 
 	}
 	cv::imshow("result",img_show);

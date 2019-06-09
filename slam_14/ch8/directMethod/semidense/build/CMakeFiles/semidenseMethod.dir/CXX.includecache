@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/include/common.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/include/common.h
 iostream
 -
 fstream
@@ -42,13 +42,13 @@ g2o/core/robust_kernel.h
 g2o/types/sba/types_six_dof_expmap.h
 -
 
-/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/common.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/common.cpp
 ../include/common.h
-/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/include/common.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/include/common.h
 
-/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/direct_semidense.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/direct_semidense.cpp
 ../include/common.h
-/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/include/common.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/include/common.h
 
 /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h
 opencv2/core/core_c.h

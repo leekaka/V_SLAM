@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/slam/project/0.1
+CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/project/0.1/build
+CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/kali/kaka/MyGithub/slam/project/0.1/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/project/0.1/build/CMakeFiles /home/kali/kaka/MyGithub/slam/project/0.1/build/test/CMakeFiles/progress.marks
-	cd /home/kali/kaka/MyGithub/slam/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/slam/project/0.1/build/CMakeFiles 0
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/CMakeFiles /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/test/CMakeFiles/progress.marks
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/kali/kaka/MyGithub/slam/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/clean
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,17 +97,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/kali/kaka/MyGithub/slam/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/kali/kaka/MyGithub/slam/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/kali/kaka/MyGithub/slam/project/0.1/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -129,6 +129,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/kali/kaka/MyGithub/slam/project/0.1/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

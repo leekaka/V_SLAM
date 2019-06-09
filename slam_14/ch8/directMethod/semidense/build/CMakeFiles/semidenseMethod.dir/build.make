@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense
+CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build
+CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/semidenseMethod.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/semidenseMethod.dir/flags.make
 
 CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o: CMakeFiles/semidenseMethod.dir/flags.make
 CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o: ../src/direct_semidense.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o -c /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/direct_semidense.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/direct_semidense.cpp
 
 CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/direct_semidense.cpp > CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/direct_semidense.cpp > CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.i
 
 CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/direct_semidense.cpp -o CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/direct_semidense.cpp -o CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.s
 
 CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o.provides.build: CMakeF
 
 CMakeFiles/semidenseMethod.dir/src/common.cpp.o: CMakeFiles/semidenseMethod.dir/flags.make
 CMakeFiles/semidenseMethod.dir/src/common.cpp.o: ../src/common.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/semidenseMethod.dir/src/common.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/semidenseMethod.dir/src/common.cpp.o -c /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/common.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/semidenseMethod.dir/src/common.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/semidenseMethod.dir/src/common.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/common.cpp
 
 CMakeFiles/semidenseMethod.dir/src/common.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/semidenseMethod.dir/src/common.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/common.cpp > CMakeFiles/semidenseMethod.dir/src/common.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/common.cpp > CMakeFiles/semidenseMethod.dir/src/common.cpp.i
 
 CMakeFiles/semidenseMethod.dir/src/common.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/semidenseMethod.dir/src/common.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/common.cpp -o CMakeFiles/semidenseMethod.dir/src/common.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/common.cpp -o CMakeFiles/semidenseMethod.dir/src/common.cpp.s
 
 CMakeFiles/semidenseMethod.dir/src/common.cpp.o.requires:
 
@@ -162,7 +162,7 @@ semidenseMethod: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_objdetect3.so.3
 semidenseMethod: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_imgproc3.so.3.3.1
 semidenseMethod: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_core3.so.3.3.1
 semidenseMethod: CMakeFiles/semidenseMethod.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable semidenseMethod"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable semidenseMethod"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/semidenseMethod.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -180,6 +180,6 @@ CMakeFiles/semidenseMethod.dir/clean:
 .PHONY : CMakeFiles/semidenseMethod.dir/clean
 
 CMakeFiles/semidenseMethod.dir/depend:
-	cd /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build /home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles/semidenseMethod.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build/CMakeFiles/semidenseMethod.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/semidenseMethod.dir/depend
 

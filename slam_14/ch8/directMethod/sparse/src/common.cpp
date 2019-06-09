@@ -6,7 +6,7 @@
 
 bool poseEstimationDirect(const vector<Measurement>& measurements, cv::Mat* gray, Eigen::Matrix3f& K, Eigen::Isometry3d& Tcw )
 {
-    //初始化过g2o
+    //初始化过g2o  误差项优化变量为6维，误差值维度为1维
     typedef g2o::BlockSolver<g2o::BlockSolverTraits<6,1>> DirectBlock;  //求解向量是6*1的
     DirectBlock::LinearSolverType* linearSolver = new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>();
     DirectBlock* solver_ptr = new DirectBlock (unique_ptr<DirectBlock::LinearSolverType>(linearSolver));
@@ -16,6 +16,8 @@ bool poseEstimationDirect(const vector<Measurement>& measurements, cv::Mat* gray
     optimizer.setAlgorithm (solver);
     optimizer.setVerbose(true);
 
+
+    //增加定点，优化参数
     g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();
     pose->setEstimate (g2o:: SE3Quat(Tcw.rotation(),Tcw.translation()));
     pose->setId(0);

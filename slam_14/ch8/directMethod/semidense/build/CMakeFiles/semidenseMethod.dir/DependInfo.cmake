@@ -4,8 +4,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/common.cpp" "/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles/semidenseMethod.dir/src/common.cpp.o"
-  "/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/src/direct_semidense.cpp" "/home/kali/kaka/MyGithub/slam/ch8/directMethod/semidense/build/CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o"
+  "/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/common.cpp" "/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build/CMakeFiles/semidenseMethod.dir/src/common.cpp.o"
+  "/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/src/direct_semidense.cpp" "/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch8/directMethod/semidense/build/CMakeFiles/semidenseMethod.dir/src/direct_semidense.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
