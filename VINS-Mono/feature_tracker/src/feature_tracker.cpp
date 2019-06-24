@@ -78,13 +78,21 @@ void FeatureTracker::addPoints()
     }
 }
 
+
+/*
+    1、readImage函数将图像的特征点以及光流速度都计算出来，存储在trackerData[i]的变量，
+    2、校正后的特征点存储在cur_un_pts（本帧，包含新添加的特征）和 pre_un_pts（上帧，和本帧添加新点之前的特征点已经对齐）中，
+    光流速度 pts_velocity 、cur_pts和pre_pts是未经过校正的像素位置
+    3、cur_un_pts和pre_un_pts并不是简单的像素位置，而是[(u-cx)/fx,[(v-cy)/fy];pts_velocity也不是单纯的像素速度，而是（像素速度/fx），即 [(deltu/fx)/dt,(deltv/fy)/dt]
+*/
 void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
 {
     cv::Mat img;
     TicToc t_r;
     cur_time = _cur_time;
 
-    if (EQUALIZE)
+    /*首先如果EQUALIZE为1，先对图像亮度进行了调整*/
+    if (EQUALIZE)  
     {
         cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(3.0, cv::Size(8, 8));
         TicToc t_c;
@@ -94,6 +102,8 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
     else
         img = _img;
 
+    
+    /*如果是首次计算，那么先跳过光流计算函数，跳到  goodFeaturesToTrack */
     if (forw_img.empty())
     {
         prev_img = cur_img = forw_img = img;
@@ -110,34 +120,67 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
         TicToc t_o;
         vector<uchar> status;
         vector<float> err;
-        cv::calcOpticalFlowPyrLK(cur_img, forw_img, cur_pts, forw_pts, status, err, cv::Size(21, 21), 3);
 
-        for (int i = 0; i < int(forw_pts.size()); i++)
+        /*送入光流计算的图像和点都是未做畸变校正的点*/
+        cv::calcOpticalFlowPyrLK(cur_img, forw_img, cur_pts, forw_pts, status, err, cv::Size(21, 21), 3);  // 新计算出来的特征点 forw_pts
+
+        for (int i = 0; i < int(forw_pts.size()); i++)  //inBorder 保证新计算出来的有效特征forw_pts 位于图像内, 将有效的，但是位置正好在边界上的特征点去掉
             if (status[i] && !inBorder(forw_pts[i]))
                 status[i] = 0;
-        reduceVector(prev_pts, status);
-        reduceVector(cur_pts, status);
-        reduceVector(forw_pts, status);
-        reduceVector(ids, status);
-        reduceVector(cur_un_pts, status);
-        reduceVector(track_cnt, status);
+
+        /*除了第一次通过goodFeaturesToTrack求得角点外，
+        其他都是通过calcOpticalFlowPyrLK求得的，
+        而且每次都用status把相同的部分保留下来*/
+
+        /*
+            所以最后prev_pts，cur_pts，forw_pts都只有相同的角点被保留下来了，最后角点数目会越来越少，如果不做处理，最后size一定会变成0
+            为了保证有效的角点数目，因此在后面的程序中检查了当前有效的角点数forw_pts.size()，如果小于MAX_CNT的话，就调用goodFeaturesToTrack，多算出MAX_CNT - forw_pts.size()个角点，
+            添加到forw_pts后面，保证forw_pts的特征数量一致保持在MAX_CNT
+            但是这里有个问题，goodFeaturesToTrack新计算出来的点有可能在forw_pts已经存在了，也可能不存在
+            虽然经过了补充，prev_pts的特征数目会比cur_pts和forw_pts少，但是前面的特征还是一一对应的，可以用status来处理
+            注意：经过status处理后！那么，prev_pts  一直保存的是prev_pts，cur_pts, forw_pts都包含的特征，而且一直在被更新
+
+            cur_pts 保存的是cur_pts,forw_pts都包含的特征，
+            而且因为经过goodFeaturesToTrack的添加，
+            因此会比  prev_pts 个数多。
+            在这里，forw_pts还没被添加新点，
+            因此此时cur_pts 和 forw_pts还是一样的点数
+        */
+
+        reduceVector(prev_pts, status);   //前前帧：第一次的时候prev_pts是空的
+        reduceVector(cur_pts, status);    //前帧：第一次的时候cur_pts在经过status处理前是通过goodFeaturesToTrack求得MAX_CNT个点，
+        // 后面也通过goodFeaturesToTrack补充了新的角点，使他一直保持MAX_CNT个
+
+        reduceVector(forw_pts, status);   //当前帧：forw_pts 在经过status处理前，是通过 calcOpticalFlowPyrLK 求得的
+        reduceVector(ids, status);        //前帧，ids 第一次的时候，在经过status处理前，个数 等于 前帧的个数，而且值都是-1
+        reduceVector(cur_un_pts, status); //前帧，cur_un_pts在经过status处理前，是cur_pts经过校正后的特征点
+        reduceVector(track_cnt, status);  //前帧，track_cnt第一次的时候，在经过status处理前，个数等于前帧的个数，而且值都是1
+
         ROS_DEBUG("temporal optical flow costs: %fms", t_o.toc());
     }
 
-    for (auto &n : track_cnt)
+    for (auto &n : track_cnt)  //vector<int> track_cnt，这里n++会导致track_cnt向量中的元素递增，track_cnt反映了该特征连续在几幅图像中出现过
         n++;
 
-    if (PUB_THIS_FRAME)
+    if (PUB_THIS_FRAME)  // 这意味着如果降频，原图像参加了cv光流的计算，但是没有去除相应的噪点和goodfeature更新角点的过程
     {
-        rejectWithF();
+        rejectWithF();  //利用ransac 剔除prev_pts，cur_pts，forw_pts，ids，cur_un_pts，track_cnt 中一些不可信的点
+
         ROS_DEBUG("set mask begins");
         TicToc t_m;
-        setMask();
+        setMask();      //如果有鱼眼mask，去掉mask黑色部分的特征
         ROS_DEBUG("set mask costs %fms", t_m.toc());
 
         ROS_DEBUG("detect feature begins");
         TicToc t_t;
         int n_max_cnt = MAX_CNT - static_cast<int>(forw_pts.size());
+
+        /**
+         * 
+         * 当光流计算出来的相同的角点少于MAX_CNT后，就重新调用goodFeaturesToTrack更新角点
+         * 
+         * */
+
         if (n_max_cnt > 0)
         {
             if(mask.empty())
@@ -146,7 +189,15 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
                 cout << "mask type wrong " << endl;
             if (mask.size() != forw_img.size())
                 cout << "wrong size " << endl;
+
             cv::goodFeaturesToTrack(forw_img, n_pts, MAX_CNT - forw_pts.size(), 0.01, MIN_DIST, mask);
+            /*
+                forw_img等图像都没经过畸变校正，直到求出特征点后才再后面做畸变校正并存入到另一个向量 cur_un_pts 中
+                n_pts 是返回的角点坐标
+                MAX_CNT - forw_pts.size()是返回的最大角点数目；0.01是角点的品质因子
+                MIN_DIST 通过yml读取，目前设置为30。初选角点，如果在它周围MIN_DIST范围内出现比他更强的角点，则删除该角点。
+                mask：指定感兴趣的区域，如不需要在整幅图上寻找感兴趣的角点，可以用mask设置ROI区域。例如原需要用mask的fisheye就不计算整个区域
+            */
         }
         else
             n_pts.clear();
@@ -155,14 +206,28 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
         ROS_DEBUG("add feature begins");
         TicToc t_a;
         addPoints();
+
+        /*
+        通过上面我们首次计算出MAX_CNT个角点，然后addPoints();
+        给 forw_pts 添加角点坐标，
+        给ids添加等于新增角点个数的 -1，
+        给 track_cnt 添加等于角点个数的 1
+        只有函数 updateID 才会更新 ids，使他不为-1，
+        而 updateID 才feature_tracker_node.cpp 中才调用
+        */
+
         ROS_DEBUG("selectFeature costs: %fms", t_a.toc());
     }
+
+    /*在函数的最后，cur_pts 更新为当前帧，prev_pts、prev_un_pts 更新为上一帧（首次的时候为NULL）*/
     prev_img = cur_img;
     prev_pts = cur_pts;
     prev_un_pts = cur_un_pts;
     cur_img = forw_img;
     cur_pts = forw_pts;
-    undistortedPoints();
+
+    undistortedPoints(); // 将cur_pts 做畸变校正，结果存入 cur_un_pts
+
     prev_time = cur_time;
 }
 

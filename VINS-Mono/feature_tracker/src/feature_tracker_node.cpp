@@ -18,39 +18,55 @@ queue<sensor_msgs::ImageConstPtr> img_buf;
 ros::Publisher pub_img,pub_match;
 ros::Publisher pub_restart;
 
-FeatureTracker trackerData[NUM_OF_CAM];
+FeatureTracker trackerData[NUM_OF_CAM];  // 所有�?�理和数�?类型都通过这个类的数组处理
+
 double first_image_time;
 int pub_count = 1;
 bool first_image_flag = true;
 double last_image_time = 0;
 bool init_pub = 0;
 
+/*核心函数*/
 void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
 {
-    if(first_image_flag)
+    if(first_image_flag)  // 首帧�?记时间戳，不处理，直�?return
     {
         first_image_flag = false;
         first_image_time = img_msg->header.stamp.toSec();
         last_image_time = img_msg->header.stamp.toSec();
         return;
     }
+
+
+
     // detect unstable camera stream
+    //如果前后两帧图像时延超过1s || 甚至后一帧时间戳比前一帧还�? ==> 说明图像流不稳定，则发送restart_flag到topics�?，重�?算法
     if (img_msg->header.stamp.toSec() - last_image_time > 1.0 || img_msg->header.stamp.toSec() < last_image_time)
     {
         ROS_WARN("image discontinue! reset the feature tracker!");
         first_image_flag = true; 
         last_image_time = 0;
         pub_count = 1;
-        std_msgs::Bool restart_flag;
+
+        std_msgs::Bool restart_flag;  // 发布的重�?消息
         restart_flag.data = true;
         pub_restart.publish(restart_flag);
         return;
     }
     last_image_time = img_msg->header.stamp.toSec();
+
+
+
     // frequency control
+
+    // FREQ在yml文件�?设置：当yml文件�?设置�?0，在readParameters(n)函数�?，重新�?�置为FREQ  �?100�?
+    // 此时一般pushlish的�?�率等于图像原帧�?
+    // �?有图像帧率小于FREQ的时候才会发布图像信�?，但�?所有原帧率的图像都参与了�?�算，可以实现后续node的降�?
+
     if (round(1.0 * pub_count / (img_msg->header.stamp.toSec() - first_image_time)) <= FREQ)
     {
         PUB_THIS_FRAME = true;
+
         // reset the frequency control
         if (abs(1.0 * pub_count / (img_msg->header.stamp.toSec() - first_image_time) - FREQ) < 0.01 * FREQ)
         {
@@ -61,6 +77,15 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
     else
         PUB_THIS_FRAME = false;
 
+    /*
+        后面针�?�图像msg的格式进行了要求�?
+        �?识别灰度图格�?8UC1和MONO8�?
+        并最终将编码都转�?为MONO8格式�?
+        但其实MONO8格式�?8UC1�?一样的�?
+        没做什么变�?。最后将图像经过cv_bridge库转�?为opencv的常用格式�?
+
+        ros图像msg类型，转�?为cv类型，图像指针为 cv_bridge::CvImageConstPtr ptr
+    */
     cv_bridge::CvImageConstPtr ptr;
     if (img_msg->encoding == "8UC1")
     {
@@ -78,8 +103,12 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
         ptr = cv_bridge::toCvCopy(img_msg, sensor_msgs::image_encodings::MONO8);
 
     cv::Mat show_img = ptr->image;
+
+    /*
+        读取到图像并�?成cv格式后，正式开始�?�理�?
+    */
     TicToc t_r;
-    for (int i = 0; i < NUM_OF_CAM; i++)
+    for (int i = 0; i < NUM_OF_CAM; i++)  //因为�?单目，所�? trackerData �?有一维，也就�?所有的处理都通过 �? FeatureTracker实现，具体通过该类的一�?函数readImage实现�?
     {
         ROS_DEBUG("processing camera %d", i);
         if (i != 1 || !STEREO_TRACK)
@@ -100,6 +129,12 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
 #endif
     }
 
+    /*
+        遍历ids，将新添加的特征点编号，每个特征的编号id�?一无二�?
+        前后两帧�?相同特征的编号是一样的，而且相同id的特征在图像�?一定是连续出现的，
+        因为不连�?的话，当新出现的时候会给他一�?新的id�?
+    */
+
     for (unsigned int i = 0;; i++)
     {
         bool completed = false;
@@ -109,6 +144,14 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
         if (!completed)
             break;
     }
+
+    /**
+     *  track_cnt反映了�?�应特征连续在几幅图像中出现�?
+        �?有连�?两�?�以上都出现在图像里的特征�?�publish
+        每个特征的id号是�?一无二的，所有图像中通过光流!连续!检测到的特征的编号�?一样的。�?�果该特征中途丢失，再回来�?�测到，id就不一样了
+        此�?�，因为goodFeaturesToTrack函数，有�?能存在同一�?特征在同一幅图像中�?标了两�??id，但不影响前后帧上的同特征标号相同这一特�?
+        校�?�畸变后的[(u-cx)/fx,(v-cy)/fy,1], id_of_point, u_of_point, v_of_point,(校�?�前) velocity_x_of_point都是向量，是一整幅图的信息
+     **/
 
    if (PUB_THIS_FRAME)
    {
@@ -141,7 +184,7 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
                     p.y = un_pts[j].y;
                     p.z = 1;
 
-                    feature_points->points.push_back(p);
+                    feature_points->points.push_back(p);    //校�?�畸变后的[(u-cx)/fx,(v-cy)/fy,1]
                     id_of_point.values.push_back(p_id * NUM_OF_CAM + i);
                     u_of_point.values.push_back(cur_pts[j].x);
                     v_of_point.values.push_back(cur_pts[j].y);
@@ -150,11 +193,13 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
                 }
             }
         }
-        feature_points->channels.push_back(id_of_point);
-        feature_points->channels.push_back(u_of_point);
-        feature_points->channels.push_back(v_of_point);
-        feature_points->channels.push_back(velocity_x_of_point);
-        feature_points->channels.push_back(velocity_y_of_point);
+
+        feature_points->channels.push_back(id_of_point);   //特征的id
+        feature_points->channels.push_back(u_of_point);   //(u-cx)/fx
+        feature_points->channels.push_back(v_of_point);   //(v-cy)/fy
+        feature_points->channels.push_back(velocity_x_of_point);  //光流x方向速度除以焦距x �?(deltu/fx)/dt，校正后的像素�?�算出的
+        feature_points->channels.push_back(velocity_y_of_point);  //光流y方向速度除以焦距y �?(deltv/fy)/dt，校正后的像素�?�算出的
+
         ROS_DEBUG("publish %f, at %f", feature_points->header.stamp.toSec(), ros::Time::now().toSec());
         // skip the first image; since no optical speed on frist image
         if (!init_pub)
@@ -209,16 +254,21 @@ int main(int argc, char **argv)
     ros::NodeHandle n("~");
     ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
     
-    readParameters(n);  // ��ȡ����
+    readParameters(n);  //读取参数
+
     /*
-        ÿ��node�����¶�����readParameter������
-        �����µ�parameters.cpp��.hpp����Ϊ�����ڲ�ͬ�Ľ��̣���ȡ�ľ������ݶ��в�ͬ��
+        每个node都重新定义了readParameter函数�?
+        都有新的parameters.cpp�?.hpp，因为是属于不同的进程，读取的具体内容都有不同�?
     */
 
     for (int i = 0; i < NUM_OF_CAM; i++)
-        trackerData[i].readIntrinsicParameter(CAM_NAMES[i]);
+        trackerData[i].readIntrinsicParameter(CAM_NAMES[i]);  //CAM_NAMES[i]是config_file,也就是yml文件//�?持四种模型：kannala_brandt，mei，scaramuzza，pinhole
+    /*
+        不同的camera类型对应不同的模板，然后对应到不同的文件�?
+        例�?�pinhole类型对应了PinholeCamera.cc和PinholeCamera.h，是PinholeCamera类�?
+    */
 
-    if(FISHEYE)
+    if(FISHEYE)  //如果是fisheye，�?��?�取相应的mask文件，�?�果不是，就不执行，mask为全255�?
     {
         for (int i = 0; i < NUM_OF_CAM; i++)
         {
@@ -233,15 +283,20 @@ int main(int argc, char **argv)
         }
     }
 
+    //订阅了图像信息IMAGE_TOPIC, 回调函数img_callback�?干了所有事�?
     ros::Subscriber sub_img = n.subscribe(IMAGE_TOPIC, 100, img_callback);
 
+
+    //初�?�化需要发布的三�?�消�?
     pub_img = n.advertise<sensor_msgs::PointCloud>("feature", 1000);
     pub_match = n.advertise<sensor_msgs::Image>("feature_img",1000);
     pub_restart = n.advertise<std_msgs::Bool>("restart",1000);
+
     /*
     if (SHOW_TRACK)
         cv::namedWindow("vis", cv::WINDOW_NORMAL);
     */
+
     ros::spin();
     return 0;
 }
