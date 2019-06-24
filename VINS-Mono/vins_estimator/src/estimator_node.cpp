@@ -12,8 +12,8 @@
 #include "parameters.h"
 #include "utility/visualization.h"
 
-
-Estimator estimator;
+ 
+Esimator estimator;  //构造函数初始化一些参数为  单位矩阵，零矩阵，或者零
 
 std::condition_variable con;
 double current_time = -1;
@@ -338,12 +338,46 @@ void process()
     }
 }
 
+
+/*
+
+（1）readParameters(n);//读取config文件夹下的相关yml文件
+（2）estimator.setParameter();  //主要设置estimate中的外参旋转ric和平移tic的初值，以及feature中的ric初值，外参来自config文件
+（3）registerPub(n);        //ros advertise初始化，发布消息前的工作
+
+（4）ros::Subscriber sub_imu = n.subscribe(IMU_TOPIC, 2000, imu_callback,ros::TransportHints().tcpNoDelay());//transport_hints，允许你指定hints到roscpp的传输层，如更喜欢使用UPD传输，使用没延迟的TCP等
+    其中（4）中调用了imu_callback回调函数，该回调函数做了一些工作：
+
+    ①imu_buf.push(imu_msg); //imu_msg原始数据放入imu_buf
+    ②predict(imu_msg)
+        //vio初始时刻建立的坐标系暂时称为世界坐标系w
+        //imu自己的坐标系称为body坐标系b
+        //predict函数计算了dt时间段的世界坐标系w下的平均加速度（通过前后两次的w坐标系下的加速度的平均值得到），加计平均值un_acc采用的是减去偏置和估计的重力之后的加计值
+        //predict函数计算了b系相对于w系的旋转四元数tmp_Q，通过上次tmp_Q乘以本次增量四元数得到，增量四元数通过角速度平均值乘以时间dt得到（因为角度小的时候，四元数可以近似用旋转角计算，进而近似用欧拉角计算）
+        //prddict函数最终计算目标量：tmp_V速度，tmp_P位置，tmp_Q四元数都是相对于w系的
+    ③pubLatestOdometry(tmp_P, tmp_Q, tmp_V, header);//tmp_P, tmp_Q, tmp_V通过函数predict(imu_msg)计算，然后发布到"imu_propagate"topic上
+
+    接着回到main函数：
+（5）ros::Subscriber sub_image = n.subscribe("/feature_tracker/feature", 2000, feature_callback);
+（6）ros::Subscriber sub_restart = n.subscribe("/feature_tracker/restart", 2000, restart_callback);
+（7）ros::Subscriber sub_relo_points = n.subscribe("/pose_graph/match_points", 2000, relocalization_callback);
+    这三个订阅的回调函数其中(5)(7)把数据存在相关的buf里：feature_buf, relo_buf
+    (6)如果收到是restart 为true，则调用estimate的clearState()，然后再重新setParameter()设置外参，然后重新开始。
+
+
+最后是正式开始处理的函数，都放在Process这个大函数中了，整个Process函数是一个线程，没有再多起线程（边缘化的时候起了4个线程计算jacobi，
+但是计算完就结束了，不是一直执行，这个后面再详细说）
+（8）std::thread measurement_process{process};
+
+*/
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "vins_estimator");
     ros::NodeHandle n("~");
     ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
-    readParameters(n);
+
+    readParameters(n);  //读取参数
     estimator.setParameter();
 #ifdef EIGEN_DONT_PARALLELIZE
     ROS_DEBUG("EIGEN_DONT_PARALLELIZE");
@@ -353,6 +387,7 @@ int main(int argc, char **argv)
     registerPub(n);
 
     ros::Subscriber sub_imu = n.subscribe(IMU_TOPIC, 2000, imu_callback, ros::TransportHints().tcpNoDelay());
+
     ros::Subscriber sub_image = n.subscribe("/feature_tracker/feature", 2000, feature_callback);
     ros::Subscriber sub_restart = n.subscribe("/feature_tracker/restart", 2000, restart_callback);
     ros::Subscriber sub_relo_points = n.subscribe("/pose_graph/match_points", 2000, relocalization_callback);
