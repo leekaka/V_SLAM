@@ -34,5 +34,19 @@ VINS_MONO 进程分为三个node:
 
 ![代码结构](https://github.com/leekaka/github_pics/blob/master/VINS_MONO/%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6.png?raw=true)
 
+#### 2.1 Feature_tracker_node
+该node除了main的主线程之外，只有图像处理一个子线程img_callback
+
+#### 2.2 Vins_estimator_node
+
+#### 2.3 Pose_graph节点
+位姿优化里面除了主线程之外，新起了三个线程：
+
+#### 2.4 Ceres优化库详解
+
+### 3. VINS移植可能遇到的问题及重要函数推导：
+
+
+
 
 
