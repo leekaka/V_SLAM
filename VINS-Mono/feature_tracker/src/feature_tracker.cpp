@@ -80,10 +80,10 @@ void FeatureTracker::addPoints()
 
 
 /*
-    1¡¢readImageº¯Êı½«Í¼ÏñµÄÌØÕ÷µãÒÔ¼°¹âÁ÷ËÙ¶È¶¼¼ÆËã³öÀ´£¬´æ´¢ÔÚtrackerData[i]µÄ±äÁ¿£¬
-    2¡¢Ğ£ÕıºóµÄÌØÕ÷µã´æ´¢ÔÚcur_un_pts£¨±¾Ö¡£¬°üº¬ĞÂÌí¼ÓµÄÌØÕ÷£©ºÍ pre_un_pts£¨ÉÏÖ¡£¬ºÍ±¾Ö¡Ìí¼ÓĞÂµãÖ®Ç°µÄÌØÕ÷µãÒÑ¾­¶ÔÆë£©ÖĞ£¬
-    ¹âÁ÷ËÙ¶È pts_velocity ¡¢cur_ptsºÍpre_ptsÊÇÎ´¾­¹ıĞ£ÕıµÄÏñËØÎ»ÖÃ
-    3¡¢cur_un_ptsºÍpre_un_pts²¢²»ÊÇ¼òµ¥µÄÏñËØÎ»ÖÃ£¬¶øÊÇ[(u-cx)/fx,[(v-cy)/fy];pts_velocityÒ²²»ÊÇµ¥´¿µÄÏñËØËÙ¶È£¬¶øÊÇ£¨ÏñËØËÙ¶È/fx£©£¬¼´ [(deltu/fx)/dt,(deltv/fy)/dt]
+    1ã€readImageå‡½æ•°å°†å›¾åƒçš„ç‰¹å¾ç‚¹ä»¥åŠå…‰æµé€Ÿåº¦éƒ½è®¡ç®—å‡ºæ¥ï¼Œå­˜å‚¨åœ¨trackerData[i]çš„å˜é‡ï¼Œ
+    2ã€æ ¡æ­£åçš„ç‰¹å¾ç‚¹å­˜å‚¨åœ¨cur_un_ptsï¼ˆæœ¬å¸§ï¼ŒåŒ…å«æ–°æ·»åŠ çš„ç‰¹å¾ï¼‰å’Œ pre_un_ptsï¼ˆä¸Šå¸§ï¼Œå’Œæœ¬å¸§æ·»åŠ æ–°ç‚¹ä¹‹å‰çš„ç‰¹å¾ç‚¹å·²ç»å¯¹é½ï¼‰ä¸­ï¼Œ
+    å…‰æµé€Ÿåº¦ pts_velocity ã€cur_ptså’Œpre_ptsæ˜¯æœªç»è¿‡æ ¡æ­£çš„åƒç´ ä½ç½®
+    3ã€cur_un_ptså’Œpre_un_ptså¹¶ä¸æ˜¯ç®€å•çš„åƒç´ ä½ç½®ï¼Œè€Œæ˜¯[(u-cx)/fx,[(v-cy)/fy];pts_velocityä¹Ÿä¸æ˜¯å•çº¯çš„åƒç´ é€Ÿåº¦ï¼Œè€Œæ˜¯ï¼ˆåƒç´ é€Ÿåº¦/fxï¼‰ï¼Œå³ [(deltu/fx)/dt,(deltv/fy)/dt]
 */
 void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
 {
@@ -91,7 +91,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
     TicToc t_r;
     cur_time = _cur_time;
 
-    /*Ê×ÏÈÈç¹ûEQUALIZEÎª1£¬ÏÈ¶ÔÍ¼ÏñÁÁ¶È½øĞĞÁËµ÷Õû*/
+    /*é¦–å…ˆå¦‚æœEQUALIZEä¸º1ï¼Œå…ˆå¯¹å›¾åƒäº®åº¦è¿›è¡Œäº†è°ƒæ•´*/
     if (EQUALIZE)  
     {
         cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(3.0, cv::Size(8, 8));
@@ -103,7 +103,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
         img = _img;
 
     
-    /*Èç¹ûÊÇÊ×´Î¼ÆËã£¬ÄÇÃ´ÏÈÌø¹ı¹âÁ÷¼ÆËãº¯Êı£¬Ìøµ½  goodFeaturesToTrack */
+    /*å¦‚æœæ˜¯é¦–æ¬¡è®¡ç®—ï¼Œé‚£ä¹ˆå…ˆè·³è¿‡å…‰æµè®¡ç®—å‡½æ•°ï¼Œè·³åˆ°  goodFeaturesToTrack */
     if (forw_img.empty())
     {
         prev_img = cur_img = forw_img = img;
@@ -121,54 +121,54 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
         vector<uchar> status;
         vector<float> err;
 
-        /*ËÍÈë¹âÁ÷¼ÆËãµÄÍ¼ÏñºÍµã¶¼ÊÇÎ´×ö»û±äĞ£ÕıµÄµã*/
-        cv::calcOpticalFlowPyrLK(cur_img, forw_img, cur_pts, forw_pts, status, err, cv::Size(21, 21), 3);  // ĞÂ¼ÆËã³öÀ´µÄÌØÕ÷µã forw_pts
+        /*é€å…¥å…‰æµè®¡ç®—çš„å›¾åƒå’Œç‚¹éƒ½æ˜¯æœªåšç•¸å˜æ ¡æ­£çš„ç‚¹*/
+        cv::calcOpticalFlowPyrLK(cur_img, forw_img, cur_pts, forw_pts, status, err, cv::Size(21, 21), 3);  // æ–°è®¡ç®—å‡ºæ¥çš„ç‰¹å¾ç‚¹ forw_pts
 
-        for (int i = 0; i < int(forw_pts.size()); i++)  //inBorder ±£Ö¤ĞÂ¼ÆËã³öÀ´µÄÓĞĞ§ÌØÕ÷forw_pts Î»ÓÚÍ¼ÏñÄÚ, ½«ÓĞĞ§µÄ£¬µ«ÊÇÎ»ÖÃÕıºÃÔÚ±ß½çÉÏµÄÌØÕ÷µãÈ¥µô
+        for (int i = 0; i < int(forw_pts.size()); i++)  //inBorder ä¿è¯æ–°è®¡ç®—å‡ºæ¥çš„æœ‰æ•ˆç‰¹å¾forw_pts ä½äºå›¾åƒå†…, å°†æœ‰æ•ˆçš„ï¼Œä½†æ˜¯ä½ç½®æ­£å¥½åœ¨è¾¹ç•Œä¸Šçš„ç‰¹å¾ç‚¹å»æ‰
             if (status[i] && !inBorder(forw_pts[i]))
                 status[i] = 0;
 
-        /*³ıÁËµÚÒ»´ÎÍ¨¹ıgoodFeaturesToTrackÇóµÃ½ÇµãÍâ£¬
-        ÆäËû¶¼ÊÇÍ¨¹ıcalcOpticalFlowPyrLKÇóµÃµÄ£¬
-        ¶øÇÒÃ¿´Î¶¼ÓÃstatus°ÑÏàÍ¬µÄ²¿·Ö±£ÁôÏÂÀ´*/
+        /*é™¤äº†ç¬¬ä¸€æ¬¡é€šè¿‡goodFeaturesToTrackæ±‚å¾—è§’ç‚¹å¤–ï¼Œ
+        å…¶ä»–éƒ½æ˜¯é€šè¿‡calcOpticalFlowPyrLKæ±‚å¾—çš„ï¼Œ
+        è€Œä¸”æ¯æ¬¡éƒ½ç”¨statusæŠŠç›¸åŒçš„éƒ¨åˆ†ä¿ç•™ä¸‹æ¥*/
 
         /*
-            ËùÒÔ×îºóprev_pts£¬cur_pts£¬forw_pts¶¼Ö»ÓĞÏàÍ¬µÄ½Çµã±»±£ÁôÏÂÀ´ÁË£¬×îºó½ÇµãÊıÄ¿»áÔ½À´Ô½ÉÙ£¬Èç¹û²»×ö´¦Àí£¬×îºósizeÒ»¶¨»á±ä³É0
-            ÎªÁË±£Ö¤ÓĞĞ§µÄ½ÇµãÊıÄ¿£¬Òò´ËÔÚºóÃæµÄ³ÌĞòÖĞ¼ì²éÁËµ±Ç°ÓĞĞ§µÄ½ÇµãÊıforw_pts.size()£¬Èç¹ûĞ¡ÓÚMAX_CNTµÄ»°£¬¾Íµ÷ÓÃgoodFeaturesToTrack£¬¶àËã³öMAX_CNT - forw_pts.size()¸ö½Çµã£¬
-            Ìí¼Óµ½forw_ptsºóÃæ£¬±£Ö¤forw_ptsµÄÌØÕ÷ÊıÁ¿Ò»ÖÂ±£³ÖÔÚMAX_CNT
-            µ«ÊÇÕâÀïÓĞ¸öÎÊÌâ£¬goodFeaturesToTrackĞÂ¼ÆËã³öÀ´µÄµãÓĞ¿ÉÄÜÔÚforw_ptsÒÑ¾­´æÔÚÁË£¬Ò²¿ÉÄÜ²»´æÔÚ
-            ËäÈ»¾­¹ıÁË²¹³ä£¬prev_ptsµÄÌØÕ÷ÊıÄ¿»á±Ècur_ptsºÍforw_ptsÉÙ£¬µ«ÊÇÇ°ÃæµÄÌØÕ÷»¹ÊÇÒ»Ò»¶ÔÓ¦µÄ£¬¿ÉÒÔÓÃstatusÀ´´¦Àí
-            ×¢Òâ£º¾­¹ıstatus´¦Àíºó£¡ÄÇÃ´£¬prev_pts  Ò»Ö±±£´æµÄÊÇprev_pts£¬cur_pts, forw_pts¶¼°üº¬µÄÌØÕ÷£¬¶øÇÒÒ»Ö±ÔÚ±»¸üĞÂ
+            æ‰€ä»¥æœ€åprev_ptsï¼Œcur_ptsï¼Œforw_ptséƒ½åªæœ‰ç›¸åŒçš„è§’ç‚¹è¢«ä¿ç•™ä¸‹æ¥äº†ï¼Œæœ€åè§’ç‚¹æ•°ç›®ä¼šè¶Šæ¥è¶Šå°‘ï¼Œå¦‚æœä¸åšå¤„ç†ï¼Œæœ€åsizeä¸€å®šä¼šå˜æˆ0
+            ä¸ºäº†ä¿è¯æœ‰æ•ˆçš„è§’ç‚¹æ•°ç›®ï¼Œå› æ­¤åœ¨åé¢çš„ç¨‹åºä¸­æ£€æŸ¥äº†å½“å‰æœ‰æ•ˆçš„è§’ç‚¹æ•°forw_pts.size()ï¼Œå¦‚æœå°äºMAX_CNTçš„è¯ï¼Œå°±è°ƒç”¨goodFeaturesToTrackï¼Œå¤šç®—å‡ºMAX_CNT - forw_pts.size()ä¸ªè§’ç‚¹ï¼Œ
+            æ·»åŠ åˆ°forw_ptsåé¢ï¼Œä¿è¯forw_ptsçš„ç‰¹å¾æ•°é‡ä¸€è‡´ä¿æŒåœ¨MAX_CNT
+            ä½†æ˜¯è¿™é‡Œæœ‰ä¸ªé—®é¢˜ï¼ŒgoodFeaturesToTrackæ–°è®¡ç®—å‡ºæ¥çš„ç‚¹æœ‰å¯èƒ½åœ¨forw_ptså·²ç»å­˜åœ¨äº†ï¼Œä¹Ÿå¯èƒ½ä¸å­˜åœ¨
+            è™½ç„¶ç»è¿‡äº†è¡¥å……ï¼Œprev_ptsçš„ç‰¹å¾æ•°ç›®ä¼šæ¯”cur_ptså’Œforw_ptså°‘ï¼Œä½†æ˜¯å‰é¢çš„ç‰¹å¾è¿˜æ˜¯ä¸€ä¸€å¯¹åº”çš„ï¼Œå¯ä»¥ç”¨statusæ¥å¤„ç†
+            æ³¨æ„ï¼šç»è¿‡statuså¤„ç†åï¼é‚£ä¹ˆï¼Œprev_pts  ä¸€ç›´ä¿å­˜çš„æ˜¯prev_ptsï¼Œcur_pts, forw_ptséƒ½åŒ…å«çš„ç‰¹å¾ï¼Œè€Œä¸”ä¸€ç›´åœ¨è¢«æ›´æ–°
 
-            cur_pts ±£´æµÄÊÇcur_pts,forw_pts¶¼°üº¬µÄÌØÕ÷£¬
-            ¶øÇÒÒòÎª¾­¹ıgoodFeaturesToTrackµÄÌí¼Ó£¬
-            Òò´Ë»á±È  prev_pts ¸öÊı¶à¡£
-            ÔÚÕâÀï£¬forw_pts»¹Ã»±»Ìí¼ÓĞÂµã£¬
-            Òò´Ë´ËÊ±cur_pts ºÍ forw_pts»¹ÊÇÒ»ÑùµÄµãÊı
+            cur_pts ä¿å­˜çš„æ˜¯cur_pts,forw_ptséƒ½åŒ…å«çš„ç‰¹å¾ï¼Œ
+            è€Œä¸”å› ä¸ºç»è¿‡goodFeaturesToTrackçš„æ·»åŠ ï¼Œ
+            å› æ­¤ä¼šæ¯”  prev_pts ä¸ªæ•°å¤šã€‚
+            åœ¨è¿™é‡Œï¼Œforw_ptsè¿˜æ²¡è¢«æ·»åŠ æ–°ç‚¹ï¼Œ
+            å› æ­¤æ­¤æ—¶cur_pts å’Œ forw_ptsè¿˜æ˜¯ä¸€æ ·çš„ç‚¹æ•°
         */
 
-        reduceVector(prev_pts, status);   //Ç°Ç°Ö¡£ºµÚÒ»´ÎµÄÊ±ºòprev_ptsÊÇ¿ÕµÄ
-        reduceVector(cur_pts, status);    //Ç°Ö¡£ºµÚÒ»´ÎµÄÊ±ºòcur_ptsÔÚ¾­¹ıstatus´¦ÀíÇ°ÊÇÍ¨¹ıgoodFeaturesToTrackÇóµÃMAX_CNT¸öµã£¬
-        // ºóÃæÒ²Í¨¹ıgoodFeaturesToTrack²¹³äÁËĞÂµÄ½Çµã£¬Ê¹ËûÒ»Ö±±£³ÖMAX_CNT¸ö
+        reduceVector(prev_pts, status);   //å‰å‰å¸§ï¼šç¬¬ä¸€æ¬¡çš„æ—¶å€™prev_ptsæ˜¯ç©ºçš„
+        reduceVector(cur_pts, status);    //å‰å¸§ï¼šç¬¬ä¸€æ¬¡çš„æ—¶å€™cur_ptsåœ¨ç»è¿‡statuså¤„ç†å‰æ˜¯é€šè¿‡goodFeaturesToTrackæ±‚å¾—MAX_CNTä¸ªç‚¹ï¼Œ
+        // åé¢ä¹Ÿé€šè¿‡goodFeaturesToTrackè¡¥å……äº†æ–°çš„è§’ç‚¹ï¼Œä½¿ä»–ä¸€ç›´ä¿æŒMAX_CNTä¸ª
 
-        reduceVector(forw_pts, status);   //µ±Ç°Ö¡£ºforw_pts ÔÚ¾­¹ıstatus´¦ÀíÇ°£¬ÊÇÍ¨¹ı calcOpticalFlowPyrLK ÇóµÃµÄ
-        reduceVector(ids, status);        //Ç°Ö¡£¬ids µÚÒ»´ÎµÄÊ±ºò£¬ÔÚ¾­¹ıstatus´¦ÀíÇ°£¬¸öÊı µÈÓÚ Ç°Ö¡µÄ¸öÊı£¬¶øÇÒÖµ¶¼ÊÇ-1
-        reduceVector(cur_un_pts, status); //Ç°Ö¡£¬cur_un_ptsÔÚ¾­¹ıstatus´¦ÀíÇ°£¬ÊÇcur_pts¾­¹ıĞ£ÕıºóµÄÌØÕ÷µã
-        reduceVector(track_cnt, status);  //Ç°Ö¡£¬track_cntµÚÒ»´ÎµÄÊ±ºò£¬ÔÚ¾­¹ıstatus´¦ÀíÇ°£¬¸öÊıµÈÓÚÇ°Ö¡µÄ¸öÊı£¬¶øÇÒÖµ¶¼ÊÇ1
+        reduceVector(forw_pts, status);   //å½“å‰å¸§ï¼šforw_pts åœ¨ç»è¿‡statuså¤„ç†å‰ï¼Œæ˜¯é€šè¿‡ calcOpticalFlowPyrLK æ±‚å¾—çš„
+        reduceVector(ids, status);        //å‰å¸§ï¼Œids ç¬¬ä¸€æ¬¡çš„æ—¶å€™ï¼Œåœ¨ç»è¿‡statuså¤„ç†å‰ï¼Œä¸ªæ•° ç­‰äº å‰å¸§çš„ä¸ªæ•°ï¼Œè€Œä¸”å€¼éƒ½æ˜¯-1
+        reduceVector(cur_un_pts, status); //å‰å¸§ï¼Œcur_un_ptsåœ¨ç»è¿‡statuså¤„ç†å‰ï¼Œæ˜¯cur_ptsç»è¿‡æ ¡æ­£åçš„ç‰¹å¾ç‚¹
+        reduceVector(track_cnt, status);  //å‰å¸§ï¼Œtrack_cntç¬¬ä¸€æ¬¡çš„æ—¶å€™ï¼Œåœ¨ç»è¿‡statuså¤„ç†å‰ï¼Œä¸ªæ•°ç­‰äºå‰å¸§çš„ä¸ªæ•°ï¼Œè€Œä¸”å€¼éƒ½æ˜¯1
 
         ROS_DEBUG("temporal optical flow costs: %fms", t_o.toc());
     }
 
-    for (auto &n : track_cnt)  //vector<int> track_cnt£¬ÕâÀïn++»áµ¼ÖÂtrack_cntÏòÁ¿ÖĞµÄÔªËØµİÔö£¬track_cnt·´Ó³ÁË¸ÃÌØÕ÷Á¬ĞøÔÚ¼¸·ùÍ¼ÏñÖĞ³öÏÖ¹ı
+    for (auto &n : track_cnt)  //vector<int> track_cntï¼Œè¿™é‡Œn++ä¼šå¯¼è‡´track_cntå‘é‡ä¸­çš„å…ƒç´ é€’å¢ï¼Œtrack_cntåæ˜ äº†è¯¥ç‰¹å¾è¿ç»­åœ¨å‡ å¹…å›¾åƒä¸­å‡ºç°è¿‡
         n++;
 
-    if (PUB_THIS_FRAME)  // ÕâÒâÎ¶×ÅÈç¹û½µÆµ£¬Ô­Í¼Ïñ²Î¼ÓÁËcv¹âÁ÷µÄ¼ÆËã£¬µ«ÊÇÃ»ÓĞÈ¥³ıÏàÓ¦µÄÔëµãºÍgoodfeature¸üĞÂ½ÇµãµÄ¹ı³Ì
+    if (PUB_THIS_FRAME)  // è¿™æ„å‘³ç€å¦‚æœé™é¢‘ï¼ŒåŸå›¾åƒå‚åŠ äº†cvå…‰æµçš„è®¡ç®—ï¼Œä½†æ˜¯æ²¡æœ‰å»é™¤ç›¸åº”çš„å™ªç‚¹å’Œgoodfeatureæ›´æ–°è§’ç‚¹çš„è¿‡ç¨‹
     {
-        rejectWithF();  //ÀûÓÃransac ÌŞ³ıprev_pts£¬cur_pts£¬forw_pts£¬ids£¬cur_un_pts£¬track_cnt ÖĞÒ»Ğ©²»¿ÉĞÅµÄµã
+        rejectWithF();  //åˆ©ç”¨ransac å‰”é™¤prev_ptsï¼Œcur_ptsï¼Œforw_ptsï¼Œidsï¼Œcur_un_ptsï¼Œtrack_cnt ä¸­ä¸€äº›ä¸å¯ä¿¡çš„ç‚¹
 
         ROS_DEBUG("set mask begins");
         TicToc t_m;
-        setMask();      //Èç¹ûÓĞÓãÑÛmask£¬È¥µômaskºÚÉ«²¿·ÖµÄÌØÕ÷
+        setMask();      //å¦‚æœæœ‰é±¼çœ¼maskï¼Œå»æ‰maské»‘è‰²éƒ¨åˆ†çš„ç‰¹å¾
         ROS_DEBUG("set mask costs %fms", t_m.toc());
 
         ROS_DEBUG("detect feature begins");
@@ -177,7 +177,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
 
         /**
          * 
-         * µ±¹âÁ÷¼ÆËã³öÀ´µÄÏàÍ¬µÄ½ÇµãÉÙÓÚMAX_CNTºó£¬¾ÍÖØĞÂµ÷ÓÃgoodFeaturesToTrack¸üĞÂ½Çµã
+         * å½“å…‰æµè®¡ç®—å‡ºæ¥çš„ç›¸åŒçš„è§’ç‚¹å°‘äºMAX_CNTåï¼Œå°±é‡æ–°è°ƒç”¨goodFeaturesToTrackæ›´æ–°è§’ç‚¹
          * 
          * */
 
@@ -192,11 +192,11 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
 
             cv::goodFeaturesToTrack(forw_img, n_pts, MAX_CNT - forw_pts.size(), 0.01, MIN_DIST, mask);
             /*
-                forw_imgµÈÍ¼Ïñ¶¼Ã»¾­¹ı»û±äĞ£Õı£¬Ö±µ½Çó³öÌØÕ÷µãºó²ÅÔÙºóÃæ×ö»û±äĞ£Õı²¢´æÈëµ½ÁíÒ»¸öÏòÁ¿ cur_un_pts ÖĞ
-                n_pts ÊÇ·µ»ØµÄ½Çµã×ø±ê
-                MAX_CNT - forw_pts.size()ÊÇ·µ»ØµÄ×î´ó½ÇµãÊıÄ¿£»0.01ÊÇ½ÇµãµÄÆ·ÖÊÒò×Ó
-                MIN_DIST Í¨¹ıyml¶ÁÈ¡£¬Ä¿Ç°ÉèÖÃÎª30¡£³õÑ¡½Çµã£¬Èç¹ûÔÚËüÖÜÎ§MIN_DIST·¶Î§ÄÚ³öÏÖ±ÈËû¸üÇ¿µÄ½Çµã£¬ÔòÉ¾³ı¸Ã½Çµã¡£
-                mask£ºÖ¸¶¨¸ĞĞËÈ¤µÄÇøÓò£¬Èç²»ĞèÒªÔÚÕû·ùÍ¼ÉÏÑ°ÕÒ¸ĞĞËÈ¤µÄ½Çµã£¬¿ÉÒÔÓÃmaskÉèÖÃROIÇøÓò¡£ÀıÈçÔ­ĞèÒªÓÃmaskµÄfisheye¾Í²»¼ÆËãÕû¸öÇøÓò
+                forw_imgç­‰å›¾åƒéƒ½æ²¡ç»è¿‡ç•¸å˜æ ¡æ­£ï¼Œç›´åˆ°æ±‚å‡ºç‰¹å¾ç‚¹åæ‰å†åé¢åšç•¸å˜æ ¡æ­£å¹¶å­˜å…¥åˆ°å¦ä¸€ä¸ªå‘é‡ cur_un_pts ä¸­
+                n_pts æ˜¯è¿”å›çš„è§’ç‚¹åæ ‡
+                MAX_CNT - forw_pts.size()æ˜¯è¿”å›çš„æœ€å¤§è§’ç‚¹æ•°ç›®ï¼›0.01æ˜¯è§’ç‚¹çš„å“è´¨å› å­
+                MIN_DIST é€šè¿‡ymlè¯»å–ï¼Œç›®å‰è®¾ç½®ä¸º30ã€‚åˆé€‰è§’ç‚¹ï¼Œå¦‚æœåœ¨å®ƒå‘¨å›´MIN_DISTèŒƒå›´å†…å‡ºç°æ¯”ä»–æ›´å¼ºçš„è§’ç‚¹ï¼Œåˆ™åˆ é™¤è¯¥è§’ç‚¹ã€‚
+                maskï¼šæŒ‡å®šæ„Ÿå…´è¶£çš„åŒºåŸŸï¼Œå¦‚ä¸éœ€è¦åœ¨æ•´å¹…å›¾ä¸Šå¯»æ‰¾æ„Ÿå…´è¶£çš„è§’ç‚¹ï¼Œå¯ä»¥ç”¨maskè®¾ç½®ROIåŒºåŸŸã€‚ä¾‹å¦‚åŸéœ€è¦ç”¨maskçš„fisheyeå°±ä¸è®¡ç®—æ•´ä¸ªåŒºåŸŸ
             */
         }
         else
@@ -208,25 +208,25 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
         addPoints();
 
         /*
-        Í¨¹ıÉÏÃæÎÒÃÇÊ×´Î¼ÆËã³öMAX_CNT¸ö½Çµã£¬È»ºóaddPoints();
-        ¸ø forw_pts Ìí¼Ó½Çµã×ø±ê£¬
-        ¸øidsÌí¼ÓµÈÓÚĞÂÔö½Çµã¸öÊıµÄ -1£¬
-        ¸ø track_cnt Ìí¼ÓµÈÓÚ½Çµã¸öÊıµÄ 1
-        Ö»ÓĞº¯Êı updateID ²Å»á¸üĞÂ ids£¬Ê¹Ëû²»Îª-1£¬
-        ¶ø updateID ²Åfeature_tracker_node.cpp ÖĞ²Åµ÷ÓÃ
+        é€šè¿‡ä¸Šé¢æˆ‘ä»¬é¦–æ¬¡è®¡ç®—å‡ºMAX_CNTä¸ªè§’ç‚¹ï¼Œç„¶åaddPoints();
+        ç»™ forw_pts æ·»åŠ è§’ç‚¹åæ ‡ï¼Œ
+        ç»™idsæ·»åŠ ç­‰äºæ–°å¢è§’ç‚¹ä¸ªæ•°çš„ -1ï¼Œ
+        ç»™ track_cnt æ·»åŠ ç­‰äºè§’ç‚¹ä¸ªæ•°çš„ 1
+        åªæœ‰å‡½æ•° updateID æ‰ä¼šæ›´æ–° idsï¼Œä½¿ä»–ä¸ä¸º-1ï¼Œ
+        è€Œ updateID æ‰feature_tracker_node.cpp ä¸­æ‰è°ƒç”¨
         */
 
         ROS_DEBUG("selectFeature costs: %fms", t_a.toc());
     }
 
-    /*ÔÚº¯ÊıµÄ×îºó£¬cur_pts ¸üĞÂÎªµ±Ç°Ö¡£¬prev_pts¡¢prev_un_pts ¸üĞÂÎªÉÏÒ»Ö¡£¨Ê×´ÎµÄÊ±ºòÎªNULL£©*/
+    /*åœ¨å‡½æ•°çš„æœ€åï¼Œcur_pts æ›´æ–°ä¸ºå½“å‰å¸§ï¼Œprev_ptsã€prev_un_pts æ›´æ–°ä¸ºä¸Šä¸€å¸§ï¼ˆé¦–æ¬¡çš„æ—¶å€™ä¸ºNULLï¼‰*/
     prev_img = cur_img;
     prev_pts = cur_pts;
     prev_un_pts = cur_un_pts;
     cur_img = forw_img;
     cur_pts = forw_pts;
 
-    undistortedPoints(); // ½«cur_pts ×ö»û±äĞ£Õı£¬½á¹û´æÈë cur_un_pts
+    undistortedPoints(); // å°†cur_pts åšç•¸å˜æ ¡æ­£ï¼Œç»“æœå­˜å…¥ cur_un_pts
 
     prev_time = cur_time;
 }
