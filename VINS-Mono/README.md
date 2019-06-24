@@ -23,7 +23,8 @@ Linux端程序基于ROS系统，通过发布和订阅消息的方式实现进程
 
 ### 2.代码详解
 **代码结构图**
-![代码结构]https://github.com/leekaka/github_pics/blob/master/VINS_MONO/%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6.png?raw=true
+
+![代码结构](https://github.com/leekaka/github_pics/blob/master/VINS_MONO/%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6.png?raw=true)
 
 
 
