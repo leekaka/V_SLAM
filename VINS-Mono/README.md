@@ -24,6 +24,15 @@ Linux端程序基于ROS系统，通过发布和订阅消息的方式实现进程
 ### 2.代码详解
 **代码结构图**
 
+概论里提到基于ROS系统，通过发布和订阅消息的方式实现进程间的通信，通过rosbag或者用户自己定义的节点发布IMU和CAMERA信息。
+VINS_MONO 进程分为三个node: 
+
++ feature_tracker_node: 前端，处理图像特征
++ vins_estimator:      主要进程，负责实现vio
++ pose_graph：		回环检测
+
+三个进程在代码框图中所占的部分如下：
+
 ![代码结构](https://github.com/leekaka/github_pics/blob/master/VINS_MONO/%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6.png?raw=true)
 
 
