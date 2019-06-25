@@ -39,6 +39,13 @@ bool init_feature = 0;
 bool init_imu = 1;
 double last_imu_t = 0;
 
+/*
+//vio初始时刻建立的坐标系暂时称为世界坐标系w
+//imu自己的坐标系称为body坐标系b
+//predict函数计算了dt时间段的世界坐标系w下的平均加速度（通过前后两次的w坐标系下的加速度的平均值得到），加计平均值un_acc采用的是减去偏置和估计的重力之后的加计值
+//predict函数计算了b系相对于w系的旋转四元数tmp_Q，通过上次tmp_Q乘以本次增量四元数得到，增量四元数通过角速度平均值乘以时间dt得到（因为角度小的时候，四元数可以近似用旋转角计算，进而近似用欧拉角计算）
+//prddict函数最终计算目标量：tmp_V速度，tmp_P位置，tmp_Q四元数都是相对于w系的*/
+*/
 void predict(const sensor_msgs::ImuConstPtr &imu_msg)
 {
     double t = imu_msg->header.stamp.toSec();
@@ -63,12 +70,12 @@ void predict(const sensor_msgs::ImuConstPtr &imu_msg)
 
     Eigen::Vector3d un_acc_0 = tmp_Q * (acc_0 - tmp_Ba) - estimator.g;
 
-    Eigen::Vector3d un_gyr = 0.5 * (gyr_0 + angular_velocity) - tmp_Bg;
-    tmp_Q = tmp_Q * Utility::deltaQ(un_gyr * dt);
+    Eigen::Vector3d un_gyr = 0.5 * (gyr_0 + angular_velocity) - tmp_Bg;  // 平均角速度
+    tmp_Q = tmp_Q * Utility::deltaQ(un_gyr * dt);                        // 四元数更新 乘法
 
     Eigen::Vector3d un_acc_1 = tmp_Q * (linear_acceleration - tmp_Ba) - estimator.g;
 
-    Eigen::Vector3d un_acc = 0.5 * (un_acc_0 + un_acc_1);
+    Eigen::Vector3d un_acc = 0.5 * (un_acc_0 + un_acc_1);           // 前后两帧的加速度平均（世界坐标系且减去重力）
 
     tmp_P = tmp_P + dt * tmp_V + 0.5 * dt * dt * un_acc;
     tmp_V = tmp_V + dt * un_acc;
@@ -135,6 +142,9 @@ getMeasurements()
     return measurements;
 }
 
+/*核心函數，输入IMU数据
+输出 Pos、Q、vel
+*/
 void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
 {
     if (imu_msg->header.stamp.toSec() <= last_imu_t)
@@ -145,7 +155,7 @@ void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
     last_imu_t = imu_msg->header.stamp.toSec();
 
     m_buf.lock();
-    imu_buf.push(imu_msg);
+    imu_buf.push(imu_msg);   //imu_msg原始数据放入imu_buf
     m_buf.unlock();
     con.notify_one();
 
@@ -153,11 +163,13 @@ void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
 
     {
         std::lock_guard<std::mutex> lg(m_state);
-        predict(imu_msg);
+        predict(imu_msg);   // 计算IMU原始数据
+
         std_msgs::Header header = imu_msg->header;
         header.frame_id = "world";
         if (estimator.solver_flag == Estimator::SolverFlag::NON_LINEAR)
-            pubLatestOdometry(tmp_P, tmp_Q, tmp_V, header);
+            pubLatestOdometry(tmp_P, tmp_Q, tmp_V, header);  
+            //tmp_P, tmp_Q, tmp_V通过函数 predict(imu_msg)计算，然后发布到"imu_propagate"topic上
     }
 }
 
