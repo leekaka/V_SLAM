@@ -102,6 +102,8 @@ void update()
 
 }
 
+
+// 返回 pair<>对
 std::vector<std::pair<std::vector<sensor_msgs::ImuConstPtr>, sensor_msgs::PointCloudConstPtr>>
 getMeasurements()
 {
@@ -223,12 +225,16 @@ void process()
     while (true)
     {
         std::vector<std::pair<std::vector<sensor_msgs::ImuConstPtr>, sensor_msgs::PointCloudConstPtr>> measurements;
+
+
         std::unique_lock<std::mutex> lk(m_buf);
         con.wait(lk, [&]
                  {
             return (measurements = getMeasurements()).size() != 0;
                  });
         lk.unlock();
+
+
         m_estimator.lock();
         for (auto &measurement : measurements)
         {
@@ -238,7 +244,8 @@ void process()
             {
                 double t = imu_msg->header.stamp.toSec();
                 double img_t = img_msg->header.stamp.toSec() + estimator.td;
-                if (t <= img_t)
+
+                if (t <= img_t) // 落后的时候
                 { 
                     if (current_time < 0)
                         current_time = t;
@@ -251,6 +258,7 @@ void process()
                     rx = imu_msg->angular_velocity.x;
                     ry = imu_msg->angular_velocity.y;
                     rz = imu_msg->angular_velocity.z;
+                    
                     estimator.processIMU(dt, Vector3d(dx, dy, dz), Vector3d(rx, ry, rz));
                     //printf("imu: dt:%f a: %f %f %f w: %f %f %f\n",dt, dx, dy, dz, rx, ry, rz);
 
@@ -270,7 +278,8 @@ void process()
                     dz = w1 * dz + w2 * imu_msg->linear_acceleration.z;
                     rx = w1 * rx + w2 * imu_msg->angular_velocity.x;
                     ry = w1 * ry + w2 * imu_msg->angular_velocity.y;
-                    rz = w1 * rz + w2 * imu_msg->angular_velocity.z;
+                    rz = w1 * rz + w2 * imu_msg->angular_velocity.z;        // 做了一个差值
+
                     estimator.processIMU(dt_1, Vector3d(dx, dy, dz), Vector3d(rx, ry, rz));
                     //printf("dimu: dt:%f a: %f %f %f w: %f %f %f\n",dt_1, dx, dy, dz, rx, ry, rz);
                 }
@@ -341,6 +350,8 @@ void process()
             //ROS_ERROR("end: %f, at %f", img_msg->header.stamp.toSec(), ros::Time::now().toSec());
         }
         m_estimator.unlock();
+
+
         m_buf.lock();
         m_state.lock();
         if (estimator.solver_flag == Estimator::SolverFlag::NON_LINEAR)
