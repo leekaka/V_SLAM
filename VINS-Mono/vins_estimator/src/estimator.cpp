@@ -130,6 +130,11 @@ void Estimator::processIMU(double dt, const Vector3d &linear_acceleration, const
     gyr_0 = angular_velocity;
 }
 
+
+/*  
+    处理图像的核心函数
+
+*/
 void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> &image, const std_msgs::Header &header)
 {
     ROS_DEBUG("new image coming ------------------------------------------");
@@ -141,9 +146,37 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 
     */
     if (f_manager.addFeatureCheckParallax(frame_count, image, td))  //检查视差 td是图像和imu的时间差
-        marginalization_flag = MARGIN_OLD;
+        marginalization_flag = MARGIN_OLD;          // 0 accept Keyframe
     else
-        marginalization_flag = MARGIN_SECOND_NEW;
+        marginalization_flag = MARGIN_SECOND_NEW;  // 1 reject Non-keyframe
+
+    /*
+        变量说明：
+
+        局部变量：
+        Imageframe：ImageFrame 类型，包含了map <featureId,vector<pair<cameraid,Matrix信息>>>
+        IntegrationBase *pre_integration;存储了一幅图像的所有特征Id，以及距离前一帧图像的IMU信息(RT)
+        全局变量:
+        tmp_pre_integration: //tmp_pre_integration 是全局变量，内容和estimator中的pre_integration一致
+
+        Estimator的成员变量：
+        Headers：WINDOW_SIZE+1大小的数组，存储了窗口里的时间戳信息
+        all_image_frame：map<时间戳, ImageFrame> 
+
+        //将每幅图像的特征map和时间戳都存入all_image_frame中，在后面的slideWindow里，在删除后面图像的逻辑中，
+        删除了all_image_frame中不是关键帧的一些图像，但是slideWindow里删前面图像时，并没有删除all_image_frame 中前面的图像
+
+        FeatureManager的成员变量：
+        Estimator有个成员变量FeatureManager f_manager;而FeatureManager有个成员变量feature，下面主要说feature的内容：
+        feature：list<FeatureId> 存储了WINDOW_SIZE中的所有图像的特征信息信息。  
+        每个元素是一幅图像的信息。每个元素为FeatureId形式。
+        FeatureId包含vector<FeaturePerFrame> feature_per_frame，基本格式为feature_id+startframe
+
+        局部变量：
+        sfm_f: 是initialStructure()中的局部变量，类型为vector<SFMFeature>，或者写成vector<featureid,<frame_count,Matrix信息>>，
+        注意这里面的frame_count是初始化函数里的frame_count，不是WINDOW_SIZE里的frame_count。这个变量有点类似于feature，
+        但又不一样，首先它存储的是用于初始化的所有图像里的特征信息，其次，他是根据featureid分类的。
+    */
 
     ROS_DEBUG("this frame is--------------------%s", marginalization_flag ? "reject" : "accept");
     ROS_DEBUG("%s", marginalization_flag ? "Non-keyframe" : "Keyframe");
@@ -161,8 +194,18 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
         ROS_INFO("calibrating extrinsic param, rotation movement is needed");
         if (frame_count != 0)
         {
-            vector<pair<Vector3d, Vector3d>> corres = f_manager.getCorresponding(frame_count - 1, frame_count);
+            vector<pair<Vector3d, Vector3d>> corres = f_manager.getCorresponding(frame_count - 1, frame_count);  //将上一帧和本帧  都出现的对应特征的投影射线配对,根据feature_id配对
+
             Matrix3d calib_ric;
+            /*
+                然后校准外参
+                //pre_integrations[frame_count]通过  tmp_pre_integration   在processIMU中计算， 计算出了两帧图像之间由imu计算出来的   delta_p,delta_v,delta_q(四元数)
+                //根据特征匹配关系  corres 计算纯由   图像计算的旋转矩阵
+                //通过   松耦合的方式，单独计算imu  和  图像的旋转矩阵，然后求两个旋转矩阵之间的   转化矩阵， 即外参
+                //只有在用户没有给定外参的时候才会进来      CalibrationExRotation，校准完成后也不会再进来，该函数里面有个frame_count++
+                //这个frame_count是InitialEXRotation  类里的变量，不是Estimator里的变量，所以++对外面的图像无效，而是计算参与初始化外参矩阵的图像帧数
+                //只有当参 与 外参计算的图像帧大于  WINDOW_SIZE  且解出非零解  的时候才会返回true
+            */
             if (initial_ex_rotation.CalibrationExRotation(corres, pre_integrations[frame_count]->delta_q, calib_ric))
             {
                 ROS_WARN("initial extrinsic rotation calib success");
@@ -174,22 +217,40 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
         }
     }
 
-    if (solver_flag == INITIAL)
+    /* 重点分支 */
+    if (solver_flag == INITIAL)  // 1.初始化分支
     {
+        /*
+
+        //如果没有输入外参，必须在最初的WINDOW_SIZE个图像帧之间校准成功了，才能顺利进到frame_count == WINDOW_SIZE这个分支里
+        //如果没有在WINDOW_SIZE之前校准成功，会执行slideWindow();一直在删除某一帧图像(根据WINDOW_SIZE是否是关键帧，删除窗口中最早的一帧或者是WINDOW_SIZE-1帧)
+        //校准外参没成功，虽然estimator中一直在删除图像，但是之前所有的图像都已经送入CalibrationExRotation函数中了，并不会不删除，而是不断增加参与外参计算的图像和imu信息
+        //如果一直没有初始化成功，因为slideWindow()的处理，导致frame_count一直等于WINDOW_SIZE，一直卡在if分支里，不会执行frame_count++
+        //如果输入了初始外参，就不会有这个问题，最开始的WINDOW_SIZE个图像帧一直在完成frame_count++,  当等于WINDOW_SIZE就开始进入if分支
+        //初始化initialStructure()成功后，solver_flag改变，就不会进入上面的if分支了
+        */
         if (frame_count == WINDOW_SIZE)
         {
+            //(header.stamp.toSec() - initial_timestamp) > 0.1初次会进去，之后每过100ms进入一次，不进来应该是为了留够时间更新WINDOW_SIZE窗口里的图像
+            //直到result=true之后，整个if (solver_flag == INITIAL)都不会进来了，自然该分支也不会进来
+
             bool result = false;
             if( ESTIMATE_EXTRINSIC != 2 && (header.stamp.toSec() - initial_timestamp) > 0.1)
             {
                result = initialStructure();
-               initial_timestamp = header.stamp.toSec();
+               initial_timestamp = header.stamp.toSec();   
             }
-            if(result)
+
+            if(result)  
             {
                 solver_flag = NON_LINEAR;
+
+                //ceres再优化了位置，外参，偏置，特征的estimated_depth等，还计算了 marginalization 的残差和雅各比矩阵，并参加ceres优化
                 solveOdometry();
-                slideWindow();
-                f_manager.removeFailures();
+
+                slideWindow();  //删除图像
+                
+                f_manager.removeFailures();  //如果计算某个特征的三维位置失败，去掉该特征
                 ROS_INFO("Initialization finish!");
                 last_R = Rs[WINDOW_SIZE];
                 last_P = Ps[WINDOW_SIZE];
@@ -199,6 +260,11 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
             }
             else
                 slideWindow();
+
+                //必须frame_count == WINDOW_SIZE，才会执行相关操作
+                //如果WINDOW_SIZE的图像是关键帧，那么删除整个WINDOW_SIZE窗口中的最早的一帧图像
+                //如果第WINDOW_SIZE不是关键帧,删除掉frame_count的前一帧，也就是WINDOW_SIZE-1帧，也就是将当前帧替换掉上一次的关键帧
+
         }
         else
             frame_count++;
@@ -207,9 +273,10 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     {
         TicToc t_solve;
         solveOdometry();
+        
         ROS_DEBUG("solver costs: %fms", t_solve.toc());
 
-        if (failureDetection())
+        if (failureDetection())  // //通过判断前后两帧的相同特征点数，偏置大小，位置差，高度差，角度差来判断计算出来的结果是否合理
         {
             ROS_WARN("failure detection!");
             failure_occur = 1;
@@ -234,6 +301,21 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
         last_P0 = Ps[0];
     }
 }
+
+/*
+    initialStructure 这个函数里面干的很多事情，涉及到很多函数。
+
+    /在WINDOW_SIZE 窗口里挑选最先满足和最后一帧[WINDOW_SIZE]帧的视差超过30，
+    且能和[WINDOW_SIZE]帧一起求解出    pnp有效结果的   一帧图像进行计算R，T,  称为l帧
+    //之后计算了all_image_frame中第一帧到现在的所有图像的旋转平移和特征三维位置
+    //（不止计算了WINDOW_SIZE中的图像，WINDOW_SIZE中的图像叫做关键帧，其他不是，非关键帧只计算了R，T，没计算不在关键帧上的特征点三维坐标）
+    //通过ceres优化了所有图像的旋转平移和三维点坐标。这些计算出来的量同一的尺度因子，和真实的坐标都差一个尺度因子。
+    //最后计算出来的坐标系原点是l帧，旋转平移也是以l为原点，也就是从l帧转换到当前帧的旋转和平移，而不是两帧之间的。
+    //但是在函数的最后，将q和t求了反转，本来是第l帧到当前帧的变换矩阵，最后变成了从当前帧转到l帧
+    //图像求出的旋转平移记录在了all_image_frame的frame的R，T变量中
+    //计算出了重力方向，角计偏置和尺度因子,最后将Ps(乘过尺度因子),Rs,Vs都替换为图像计算的结果，并都转换为大地坐标，其中Rs是图像相对于大地坐标系的旋转，
+    g也转换成了大地坐标系下的值，基本就是[0,0,9.8]
+*/
 bool Estimator::initialStructure()
 {
     TicToc t_sfm;
@@ -287,11 +369,30 @@ bool Estimator::initialStructure()
     Matrix3d relative_R;
     Vector3d relative_T;
     int l;
+
+    /*
+        relativePose(relative_R, relative_T, l)
+        //只在WINDOW_SIZE窗口里挑选最先满足和最后一帧[WINDOW_SIZE]帧的视差超过30，
+        且能和[WINDOW_SIZE]帧一起求解出pnp有效结果的一帧图像进行计算R，T
+        //计算成功的话返回true，l 是用于和[WINDOW_SIZE]帧图像计算pnp的图像的索引
+    */
     if (!relativePose(relative_R, relative_T, l))
     {
         ROS_INFO("Not enough features or parallax; Move device around");
         return false;
     }
+
+    /*
+        sfm.construct(…)
+
+        //WINDOW_SIZE中的图像先通过 l帧求出一个包含尺度因子的旋转和平移，
+        然后通过l帧求出三维特征点，然后  根据  pnp，统一了  WINDOW_SIZE  中所有图像的尺度因子，计算所有帧的旋转平移以及三维点
+        //最后通过ceres优化了   窗口里所有的旋转平移和三维坐标（重投影残差最小）
+        //输入变量frame_count + 1，relative_R, relative_T,传出变量  Q[WINDOW_SIZE+1],   T[WINDOW_SIZE+1],   sfm_tracked_points[featureid,positon[3]]
+        //最后计算出来的坐标系原点是l帧，旋转平移也是以l为原点，
+        也就是从l帧转换到当前帧的旋转和平移，而不是两帧之间的。
+        但是在函数的最后，将q和t求了反转，本来是第l帧到当前帧的变换矩阵，最后变成了从当前帧转到  l 帧
+    */
     GlobalSFM sfm;
     if(!sfm.construct(frame_count + 1, Q, T, l,
               relative_R, relative_T,
@@ -370,6 +471,17 @@ bool Estimator::initialStructure()
         frame_it->second.R = R_pnp * RIC[0].transpose();
         frame_it->second.T = T_pnp;
     }
+
+    /*
+        //计算出了重力方向，角计偏置和尺度因子，
+        //将Ps转成由图像计算的位置乘以尺度因子之后的值，将Rs变成由图像计算的旋转，Vs为优化后的图像速度；
+        // 所有的量都通过ceres进行过优化；
+        //最后将Ps,Rs,Vs都转换为大地坐标，g也转换成了大地坐标系下的值，基本就是[0,0,9.8]
+        //因为计算出了角计的偏置，设加计偏置为0，重新repropagate计算了整个imu的相关量
+        //ps::该函数还将feature中的estimated_depth乘上了尺度因子
+        这个值非常重要，这个 estimated_depth    可以将没有尺度因子的三维坐标转化为有尺度因子的三维坐标
+        因为初始化成功后的ceres优化 只用到了三维坐标，所以显得格外重要
+    */
     if (visualInitialAlign())
         return true;
     else
@@ -386,6 +498,15 @@ bool Estimator::visualInitialAlign()
     VectorXd x;
     //solve scale
     bool result = VisualIMUAlignment(all_image_frame, Bgs, g, x);
+
+    /*
+        求解了图像初始化时候的重力方向, 这时候g  并不是{0,0,9.8}
+        而是在初始化坐标系下的重力，在xyz方向上都有分量， 角计偏置和尺度因子
+        解出的x的维度是(all_frame_count * 3 + 3 + 1)*1,= [dv0.dv1.dv2,...,dvn,g,s]
+        dvn等是每两帧之间速度，都是三维向量，最后一项是尺度因子，倒数第四项到第二项为重力因子
+        该函数里计算完角计偏置后，认为加计偏置是0，repropagate计算了all_image_frame中的imu部分
+    */
+
     if(!result)
     {
         ROS_DEBUG("solve g failed!");
@@ -489,6 +610,11 @@ bool Estimator::relativePose(Matrix3d &relative_R, Vector3d &relative_T, int &l)
     return false;
 }
 
+/*
+这个函数是在初始化成功后才会使用，也就是说在initialStructure()成功之后使用，
+原因是，该函数利用初始化的得到的尺度因子(乘在了estimated_depth上)和角计偏置，可以用于ceres优化。
+该函数首先f_manager.triangulate(…)，利用每个点的estimated_depth计算了每个点的真实的三维坐标。
+*/
 void Estimator::solveOdometry()
 {
     if (frame_count < WINDOW_SIZE)
@@ -496,7 +622,7 @@ void Estimator::solveOdometry()
     if (solver_flag == NON_LINEAR)
     {
         TicToc t_tri;
-        f_manager.triangulate(Ps, tic, ric);
+        f_manager.triangulate(Ps, tic, ric);  // 三角化
         ROS_DEBUG("triangulation costs %f", t_tri.toc());
         optimization();
     }

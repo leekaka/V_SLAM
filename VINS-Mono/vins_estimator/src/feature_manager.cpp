@@ -49,8 +49,6 @@ int FeatureManager::getFeatureCount()
     start_frame(该特征开始存在的图像id)
     向量vector<FeaturePerFrame>feature_per_frame
     其中向量feature_per_frame是由来自不同图像的同一种特征计算出来的投影射线，像素坐标和像素速度组成的，因为来自不同图像，会有不同，因此是个向量
-
-
 */
 bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> &image, double td)
 {

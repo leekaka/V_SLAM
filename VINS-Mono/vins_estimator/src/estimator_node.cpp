@@ -231,6 +231,10 @@ void relocalization_callback(const sensor_msgs::PointCloudConstPtr &points_msg)
 }
 
 // thread: visual-inertial odometry
+
+/*
+    这个主函数有点复杂呀
+*/
 void process()
 {
     while (true)
@@ -376,7 +380,14 @@ void process()
             //然后在上面的for循环中被解算成相同的 feature_id
             进而根据camera_id的不同，构成的pair不同 而放在的同一个feature id对应的向量里 所以上面的pair写为了向量
             */
+
             estimator.processImage(image, img_msg->header);
+
+            /*
+            Vins_estimator_node里面用到了两次ceres优化，
+            一次为初始化函数中的sfm.construct，利用重投影残差最小，优化了窗口里的所有平移旋转和三维坐标；
+            另一次是在solveOdometry()中调用了optimization()，基本上优化了所有设计的参量。
+            */
 
             double whole_t = t_s.toc();
             printStatistics(estimator, whole_t);
@@ -391,15 +402,12 @@ void process()
             pubTF(estimator, header);
             pubKeyframe(estimator);
 
-
-
             if (relo_msg != NULL)
                 pubRelocalization(estimator);
             //ROS_ERROR("end: %f, at %f", img_msg->header.stamp.toSec(), ros::Time::now().toSec());
         }
 
         m_estimator.unlock();
-
 
         m_buf.lock();
         m_state.lock();
