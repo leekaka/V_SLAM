@@ -81,6 +81,16 @@ void Estimator::clearState()
     drift_correct_t = Vector3d::Zero();
 }
 
+/*
+实现功能：计算出相对初始坐标系 w系的位置、速度和旋转矩阵:Ps[j],Vs[j],Rs[j]，
+和predict函数的计算过程基本一致，加计都减去了重力分量
+
+//IntegrationBase初始化中只是初始化了一些变量，没有做相关函数操作
+//当pre_integrations[11]中的元素是首次被初始化的时候，才执行该分支；但是每处理完一帧图像后，在 process_Image 的进程中，会通过 slideWindow 函数将该指针重新置为null
+//因此每一次新的一组msg（也就是新来一帧图像和imu pair，都会重新进入该分支，所以acc_0, gyr_0等是两帧图像之间的首次imu的值，函数计算的所有量也是两帧之间的量
+//对于同一帧图像，对应了多个数量的imu，每个imu都会调用processIMU，大多数情况下，处理完一个pair中的所有imu，frame_count都是同一个值。
+frame_count 对应的是一帧图像 
+*/
 void Estimator::processIMU(double dt, const Vector3d &linear_acceleration, const Vector3d &angular_velocity)
 {
     if (!first_imu)
@@ -94,6 +104,7 @@ void Estimator::processIMU(double dt, const Vector3d &linear_acceleration, const
     {
         pre_integrations[frame_count] = new IntegrationBase{acc_0, gyr_0, Bas[frame_count], Bgs[frame_count]};
     }
+
     if (frame_count != 0)
     {
         pre_integrations[frame_count]->push_back(dt, linear_acceleration, angular_velocity);
@@ -104,6 +115,7 @@ void Estimator::processIMU(double dt, const Vector3d &linear_acceleration, const
         linear_acceleration_buf[frame_count].push_back(linear_acceleration);
         angular_velocity_buf[frame_count].push_back(angular_velocity);
 
+    
         int j = frame_count;         
         Vector3d un_acc_0 = Rs[j] * (acc_0 - Bas[j]) - g;
         Vector3d un_gyr = 0.5 * (gyr_0 + angular_velocity) - Bgs[j];
@@ -121,7 +133,13 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 {
     ROS_DEBUG("new image coming ------------------------------------------");
     ROS_DEBUG("Adding feature points %lu", image.size());
-    if (f_manager.addFeatureCheckParallax(frame_count, image, td))
+
+    /*
+        f_manager是一个FeatureManager类型的对象，
+        主要包含了list<FeatureId> feature 这个列表。
+
+    */
+    if (f_manager.addFeatureCheckParallax(frame_count, image, td))  //检查视差 td是图像和imu的时间差
         marginalization_flag = MARGIN_OLD;
     else
         marginalization_flag = MARGIN_SECOND_NEW;
@@ -1125,6 +1143,12 @@ void Estimator::slideWindowOld()
         f_manager.removeBack();
 }
 
+
+/*
+    调用setReloFrame函数,虽然在measure的for循环中，但是读取的是从/pose_graph/match_points订阅的图像特征以及旋转平移信息，每次都读最近的一条消息。
+    //调用函数setReloFrame，只是将特征点，旋转平移放入estimator中(match_points、prev_relo_t、prev_relo_r)，
+    并找出该帧relo_msg和图像对应的时间戳，得到该帧的relo_Pose
+*/
 void Estimator::setReloFrame(double _frame_stamp, int _frame_index, vector<Vector3d> &_match_points, Vector3d _relo_t, Matrix3d _relo_r)
 {
     relo_frame_stamp = _frame_stamp;
@@ -1135,7 +1159,7 @@ void Estimator::setReloFrame(double _frame_stamp, int _frame_index, vector<Vecto
     prev_relo_r = _relo_r;
     for(int i = 0; i < WINDOW_SIZE; i++)
     {
-        if(relo_frame_stamp == Headers[i].stamp.toSec())
+        if(relo_frame_stamp == Headers[i].stamp.toSec())  //   并找出该帧relo_msg和图像对应的时间戳，得到该帧的 relo_Pose
         {
             relo_frame_local_index = i;
             relocalization_info = 1;

@@ -102,6 +102,10 @@ void update()
 
 }
 
+
+/*
+如果数据满足要求，返回某一帧的图像信息以及该帧和上一帧之间的所有imu信息：imu和图像组成pair。
+*/
 std::vector<std::pair<std::vector<sensor_msgs::ImuConstPtr>, sensor_msgs::PointCloudConstPtr>>
 getMeasurements()
 {
@@ -112,7 +116,7 @@ getMeasurements()
         if (imu_buf.empty() || feature_buf.empty())
             return measurements;
 
-        if (!(imu_buf.back()->header.stamp.toSec() > feature_buf.front()->header.stamp.toSec() + estimator.td))
+        if (!(imu_buf.back()->header.stamp.toSec() > feature_buf.front()->header.stamp.toSec() + estimator.td))  //注意这里的imu_buf.back() 和 imu_buf.front()
         {
             //ROS_WARN("wait for imu, only should happen at the beginning");
             sum_of_wait++;
@@ -125,8 +129,10 @@ getMeasurements()
             feature_buf.pop();
             continue;
         }
-        sensor_msgs::PointCloudConstPtr img_msg = feature_buf.front();
+
+        sensor_msgs::PointCloudConstPtr img_msg = feature_buf.front();  // 取img
         feature_buf.pop();
+
 
         std::vector<sensor_msgs::ImuConstPtr> IMUs;
         while (imu_buf.front()->header.stamp.toSec() < img_msg->header.stamp.toSec() + estimator.td)
@@ -134,10 +140,17 @@ getMeasurements()
             IMUs.emplace_back(imu_buf.front());
             imu_buf.pop();
         }
+
+        /*
+        多取了时间戳大于(取到后从imu_buf中丢弃)或者等于图像时间戳的一帧imu
+        (该帧取后并没有从imu_buf中被丢弃，取下帧图像时可作为头帧被取到)，
+        为了可以在process函数里将加计和角计  插值得到img时间戳时刻的acc，gyro近似值
+        */
         IMUs.emplace_back(imu_buf.front());
         if (IMUs.empty())
             ROS_WARN("no imu between two image");
-        measurements.emplace_back(IMUs, img_msg);
+
+        measurements.emplace_back(IMUs, img_msg);  // 一帧图对应了很多的 IMU 
     }
     return measurements;
 }
@@ -230,9 +243,11 @@ void process()
                  });
         lk.unlock();
         m_estimator.lock();
+
         for (auto &measurement : measurements)
         {
             auto img_msg = measurement.second;
+
             double dx = 0, dy = 0, dz = 0, rx = 0, ry = 0, rz = 0;
             for (auto &imu_msg : measurement.first)
             {
@@ -251,6 +266,7 @@ void process()
                     rx = imu_msg->angular_velocity.x;
                     ry = imu_msg->angular_velocity.y;
                     rz = imu_msg->angular_velocity.z;
+
                     estimator.processIMU(dt, Vector3d(dx, dy, dz), Vector3d(rx, ry, rz));
                     //printf("imu: dt:%f a: %f %f %f w: %f %f %f\n",dt, dx, dy, dz, rx, ry, rz);
 
@@ -265,23 +281,34 @@ void process()
                     ROS_ASSERT(dt_1 + dt_2 > 0);
                     double w1 = dt_2 / (dt_1 + dt_2);
                     double w2 = dt_1 / (dt_1 + dt_2);
+
                     dx = w1 * dx + w2 * imu_msg->linear_acceleration.x;
                     dy = w1 * dy + w2 * imu_msg->linear_acceleration.y;
                     dz = w1 * dz + w2 * imu_msg->linear_acceleration.z;
                     rx = w1 * rx + w2 * imu_msg->angular_velocity.x;
                     ry = w1 * ry + w2 * imu_msg->angular_velocity.y;
                     rz = w1 * rz + w2 * imu_msg->angular_velocity.z;
-                    estimator.processIMU(dt_1, Vector3d(dx, dy, dz), Vector3d(rx, ry, rz));
+
+                    estimator.processIMU(dt_1, Vector3d(dx, dy, dz), Vector3d(rx, ry, rz));  // 将加计和角计值都送入imu处理的主要函数
                     //printf("dimu: dt:%f a: %f %f %f w: %f %f %f\n",dt_1, dx, dy, dz, rx, ry, rz);
                 }
             }
+
             // set relocalization frame
             sensor_msgs::PointCloudConstPtr relo_msg = NULL;
+
             while (!relo_buf.empty())
             {
                 relo_msg = relo_buf.front();
                 relo_buf.pop();
             }
+
+            /*
+                //每个relo_msg首先包含的是一幅图像的所有特征点，所谓的match_points，其实是特征点relo_msg->points[0-size].x y z
+                //每个relo_msg还包含了本帧图像相对于w系的？平移:relo_msg->channels[0].values[0-2];旋转:relo_msg->channels[0].values[3-6];
+                //每个relo_msg包含了本帧图像的id:relo_msg->channels[0].values[7]
+            */
+
             if (relo_msg != NULL)
             {
                 vector<Vector3d> match_points;
@@ -296,37 +323,64 @@ void process()
                 }
                 Vector3d relo_t(relo_msg->channels[0].values[0], relo_msg->channels[0].values[1], relo_msg->channels[0].values[2]);
                 Quaterniond relo_q(relo_msg->channels[0].values[3], relo_msg->channels[0].values[4], relo_msg->channels[0].values[5], relo_msg->channels[0].values[6]);
+                
                 Matrix3d relo_r = relo_q.toRotationMatrix();
+
                 int frame_index;
                 frame_index = relo_msg->channels[0].values[7];
+
                 estimator.setReloFrame(frame_stamp, frame_index, match_points, relo_t, relo_r);
+                //将特征点，旋转平移放入estimator中(match_points、prev_relo_t、prev_relo_r)，并找出该帧relo_msg和图像对应的时间戳，得到该帧的 relo_Pose
             }
 
             ROS_DEBUG("processing vision data with stamp %f \n", img_msg->header.stamp.toSec());
 
             TicToc t_s;
+
             map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> image;
+
             for (unsigned int i = 0; i < img_msg->points.size(); i++)
             {
                 int v = img_msg->channels[0].values[i] + 0.5;
+                
                 int feature_id = v / NUM_OF_CAM;
+
                 int camera_id = v % NUM_OF_CAM;
+
                 double x = img_msg->points[i].x;
                 double y = img_msg->points[i].y;
                 double z = img_msg->points[i].z;
+
                 double p_u = img_msg->channels[1].values[i];
                 double p_v = img_msg->channels[2].values[i];
+
                 double velocity_x = img_msg->channels[3].values[i];
                 double velocity_y = img_msg->channels[4].values[i];
+
                 ROS_ASSERT(z == 1);
                 Eigen::Matrix<double, 7, 1> xyz_uv_velocity;
                 xyz_uv_velocity << x, y, z, p_u, p_v, velocity_x, velocity_y;
                 image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);
             }
+
+            /*
+            //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
+            //map image的first是不同的  feature_id
+            second是该特征id对应的      相机id和具体信息(特征点投影射线(已校正) 原像素位置(未校正)，速度(已校正算出的))
+            //本来second应该是一个由<camera_id,  xyz_uv_velocity> 构成的pair来构成的向量，如果是一个相机
+            实际上一幅图像img_msg的一种特征应该只对应一个pair 因此这个vector应该只有一个元素
+
+            //如果是两个相机，一次传过由两幅图像的特征构成的一个img_msg
+            两个图像上的相同的feature id也被编码为和相机号码有关的不同的值，都统一放在一个向量points中
+
+            //然后在上面的for循环中被解算成相同的 feature_id
+            进而根据camera_id的不同，构成的pair不同 而放在的同一个feature id对应的向量里 所以上面的pair写为了向量
+            */
             estimator.processImage(image, img_msg->header);
 
             double whole_t = t_s.toc();
             printStatistics(estimator, whole_t);
+
             std_msgs::Header header = img_msg->header;
             header.frame_id = "world";
 
@@ -336,11 +390,17 @@ void process()
             pubPointCloud(estimator, header);
             pubTF(estimator, header);
             pubKeyframe(estimator);
+
+
+
             if (relo_msg != NULL)
                 pubRelocalization(estimator);
             //ROS_ERROR("end: %f, at %f", img_msg->header.stamp.toSec(), ros::Time::now().toSec());
         }
+
         m_estimator.unlock();
+
+
         m_buf.lock();
         m_state.lock();
         if (estimator.solver_flag == Estimator::SolverFlag::NON_LINEAR)
