@@ -109,23 +109,30 @@ void Estimator::processIMU(double dt, const Vector3d &linear_acceleration, const
     {
         pre_integrations[frame_count]->push_back(dt, linear_acceleration, angular_velocity);
         //if(solver_flag != NON_LINEAR)
-            tmp_pre_integration->push_back(dt, linear_acceleration, angular_velocity);
+        
+        tmp_pre_integration->push_back(dt, linear_acceleration, angular_velocity);
 
         dt_buf[frame_count].push_back(dt);
         linear_acceleration_buf[frame_count].push_back(linear_acceleration);
         angular_velocity_buf[frame_count].push_back(angular_velocity);
 
     
-        int j = frame_count;         
+        int j = frame_count;      //对于同一帧图像的IMU做积分处理求 姿态 和位置 速度等信息
+
         Vector3d un_acc_0 = Rs[j] * (acc_0 - Bas[j]) - g;       //计算和之前的imu_callbak一样
         Vector3d un_gyr = 0.5 * (gyr_0 + angular_velocity) - Bgs[j];
+
+
         Rs[j] *= Utility::deltaQ(un_gyr * dt).toRotationMatrix();
+
         Vector3d un_acc_1 = Rs[j] * (linear_acceleration - Bas[j]) - g;
         Vector3d un_acc = 0.5 * (un_acc_0 + un_acc_1);
 
         Ps[j] += dt * Vs[j] + 0.5 * dt * dt * un_acc;
         Vs[j] += dt * un_acc;
     }
+
+
     acc_0 = linear_acceleration;
     gyr_0 = angular_velocity;
 }
@@ -133,7 +140,6 @@ void Estimator::processIMU(double dt, const Vector3d &linear_acceleration, const
 
 /*  
     处理图像的核心函数
-
 */
 void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> &image, const std_msgs::Header &header)
 {
@@ -143,10 +149,11 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     /*
         f_manager是一个FeatureManager类型的对象，
         主要包含了list<FeatureId> feature 这个列表。
-
     */
     if (f_manager.addFeatureCheckParallax(frame_count, image, td))  //检查视差 td是图像和imu的时间差
         marginalization_flag = MARGIN_OLD;          // 0 accept Keyframe
+
+
     else
         marginalization_flag = MARGIN_SECOND_NEW;  // 1 reject Non-keyframe
 
@@ -164,29 +171,33 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
         all_image_frame：map<时间戳, ImageFrame> 
 
         //将每幅图像的特征map和时间戳都存入all_image_frame中，在后面的slideWindow里，在删除后面图像的逻辑中，
-        删除了all_image_frame中不是关键帧的一些图像，但是slideWindow里删前面图像时，并没有删除all_image_frame 中前面的图像
+        删除了all_image_frame  中不是关键帧的一些图像，但是slideWindow 里删前面图像时，并没有删除  all_image_frame 中前面的图像
 
         FeatureManager的成员变量：
-        Estimator有个成员变量FeatureManager f_manager;而FeatureManager有个成员变量feature，下面主要说feature的内容：
-        feature：list<FeatureId> 存储了WINDOW_SIZE中的所有图像的特征信息信息。  
-        每个元素是一幅图像的信息。每个元素为FeatureId形式。
-        FeatureId包含vector<FeaturePerFrame> feature_per_frame，基本格式为feature_id+startframe
+        Estimator有个成员变量  FeatureManager f_manager;  而FeatureManager 有个成员变量feature，下面主要说feature的内容：
+        feature：list<FeatureId> 存储了 WINDOW_SIZE 中的所有图像的特征信息信息。  
+        每个元素是一幅图像的信息。每个元素为 FeatureId形式。
+        FeatureId 包含vector<FeaturePerFrame> feature_per_frame，基本格式为feature_id+startframe
 
         局部变量：
-        sfm_f: 是initialStructure()中的局部变量，类型为vector<SFMFeature>，或者写成vector<featureid,<frame_count,Matrix信息>>，
+        sfm_f: 是 initialStructure()中的局部变量，类型为vector<SFMFeature>，或者写成vector<featureid,<frame_count,Matrix信息>>，
         注意这里面的frame_count是初始化函数里的frame_count，不是WINDOW_SIZE里的frame_count。这个变量有点类似于feature，
-        但又不一样，首先它存储的是用于初始化的所有图像里的特征信息，其次，他是根据featureid分类的。
+        但又不一样，首先它存储的是用于初始化的所有图像里的特征信息， 其次，他是根据featureid分类的。
     */
 
     ROS_DEBUG("this frame is--------------------%s", marginalization_flag ? "reject" : "accept");
     ROS_DEBUG("%s", marginalization_flag ? "Non-keyframe" : "Keyframe");
     ROS_DEBUG("Solving %d", frame_count);
     ROS_DEBUG("number of feature: %d", f_manager.getFeatureCount());
+
+
     Headers[frame_count] = header;
 
     ImageFrame imageframe(image, header.stamp.toSec());
     imageframe.pre_integration = tmp_pre_integration;
+
     all_image_frame.insert(make_pair(header.stamp.toSec(), imageframe));
+
     tmp_pre_integration = new IntegrationBase{acc_0, gyr_0, Bas[frame_count], Bgs[frame_count]};
 
     if(ESTIMATE_EXTRINSIC == 2)
@@ -307,8 +318,11 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 
     /在WINDOW_SIZE 窗口里挑选最先满足和最后一帧[WINDOW_SIZE]帧的视差超过30，
     且能和[WINDOW_SIZE]帧一起求解出    pnp有效结果的   一帧图像进行计算R，T,  称为l帧
+
     //之后计算了all_image_frame中第一帧到现在的所有图像的旋转平移和特征三维位置
+
     //（不止计算了WINDOW_SIZE中的图像，WINDOW_SIZE中的图像叫做关键帧，其他不是，非关键帧只计算了R，T，没计算不在关键帧上的特征点三维坐标）
+
     //通过ceres优化了所有图像的旋转平移和三维点坐标。这些计算出来的量同一的尺度因子，和真实的坐标都差一个尺度因子。
     //最后计算出来的坐标系原点是l帧，旋转平移也是以l为原点，也就是从l帧转换到当前帧的旋转和平移，而不是两帧之间的。
     //但是在函数的最后，将q和t求了反转，本来是第l帧到当前帧的变换矩阵，最后变成了从当前帧转到l帧
@@ -331,6 +345,7 @@ bool Estimator::initialStructure()
         }
         Vector3d aver_g;
         aver_g = sum_g * 1.0 / ((int)all_image_frame.size() - 1);
+
         double var = 0;
         for (frame_it = all_image_frame.begin(), frame_it++; frame_it != all_image_frame.end(); frame_it++)
         {
@@ -347,11 +362,13 @@ bool Estimator::initialStructure()
             //return false;
         }
     }
+
     // global sfm
     Quaterniond Q[frame_count + 1];
     Vector3d T[frame_count + 1];
     map<int, Vector3d> sfm_tracked_points;
     vector<SFMFeature> sfm_f;
+    
     for (auto &it_per_id : f_manager.feature)
     {
         int imu_j = it_per_id.start_frame - 1;

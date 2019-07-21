@@ -116,6 +116,8 @@ getMeasurements()
         if (imu_buf.empty() || feature_buf.empty())
             return measurements;
 
+        /* imu的最后时间戳 还小于图像时间 ，则需要等待IMU */
+
         if (!(imu_buf.back()->header.stamp.toSec() > feature_buf.front()->header.stamp.toSec() + estimator.td))  //注意这里的imu_buf.back() 和 imu_buf.front()
         {
             //ROS_WARN("wait for imu, only should happen at the beginning");
@@ -123,6 +125,7 @@ getMeasurements()
             return measurements;
         }
 
+        /* imu的最前时间戳已经大于图像时间，则需要扔掉 图像*/
         if (!(imu_buf.front()->header.stamp.toSec() < feature_buf.front()->header.stamp.toSec() + estimator.td))
         {
             ROS_WARN("throw img, only should happen at the beginning");
@@ -146,7 +149,7 @@ getMeasurements()
         (该帧取后并没有从imu_buf中被丢弃，取下帧图像时可作为头帧被取到)，
         为了可以在process函数里将加计和角计  插值得到img时间戳时刻的acc，gyro近似值
         */
-        IMUs.emplace_back(imu_buf.front());
+        IMUs.emplace_back(imu_buf.front()); // 多取了时间戳大于(取到后从imu_buf中丢弃)或者等于图像时间戳的一帧imu 而且 这里没有丢弃imu
         if (IMUs.empty())
             ROS_WARN("no imu between two image");
 
@@ -275,14 +278,16 @@ void process()
                     //printf("imu: dt:%f a: %f %f %f w: %f %f %f\n",dt, dx, dy, dz, rx, ry, rz);
 
                 }
-                else
+                else   // 根据IMU的时间戳 做一个插值
                 {
-                    double dt_1 = img_t - current_time;
-                    double dt_2 = t - img_t;
+                    double dt_1 = img_t - current_time;  
+                    double dt_2 = t - img_t;  
+
                     current_time = img_t;
                     ROS_ASSERT(dt_1 >= 0);
                     ROS_ASSERT(dt_2 >= 0);
                     ROS_ASSERT(dt_1 + dt_2 > 0);
+
                     double w1 = dt_2 / (dt_1 + dt_2);
                     double w2 = dt_1 / (dt_1 + dt_2);
 
@@ -343,7 +348,7 @@ void process()
 
             map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> image;
 
-            for (unsigned int i = 0; i < img_msg->points.size(); i++)
+            for (unsigned int i = 0; i < img_msg->points.size(); i++)  //对于图像的每个特征
             {
                 int v = img_msg->channels[0].values[i] + 0.5;
                 
@@ -364,16 +369,15 @@ void process()
                 ROS_ASSERT(z == 1);
                 Eigen::Matrix<double, 7, 1> xyz_uv_velocity;
                 xyz_uv_velocity << x, y, z, p_u, p_v, velocity_x, velocity_y;
-                image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);
+                image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);   // 不同的特征有不同的 feature_id 
             }
 
             /*
             //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
-            //map image的first是不同的  feature_id
-            second是该特征id对应的      相机id和具体信息(特征点投影射线(已校正) 原像素位置(未校正)，速度(已校正算出的))
-            //本来second应该是一个由<camera_id,  xyz_uv_velocity> 构成的pair来构成的向量，如果是一个相机
+            //map image的first是不同的  feature_id  second是该特征id对应的      相机id和具体信息(特征点投影射线(已校正) 原像素位置(未校正)，速度(已校正算出的))
+            
+            //本来second应该是一个由<camera_id,  xyz_uv_velocity> 构成的pair来构成的向量
             实际上一幅图像img_msg的一种特征应该只对应一个pair 因此这个vector应该只有一个元素
-
             //如果是两个相机，一次传过由两幅图像的特征构成的一个img_msg
             两个图像上的相同的feature id也被编码为和相机号码有关的不同的值，都统一放在一个向量points中
 
@@ -381,7 +385,7 @@ void process()
             进而根据camera_id的不同，构成的pair不同 而放在的同一个feature id对应的向量里 所以上面的pair写为了向量
             */
 
-            estimator.processImage(image, img_msg->header);
+            estimator.processImage(image, img_msg->header); // 处理图像函数
 
             /*
             Vins_estimator_node里面用到了两次ceres优化，
