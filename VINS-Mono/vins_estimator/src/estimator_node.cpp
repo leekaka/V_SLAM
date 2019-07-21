@@ -371,12 +371,8 @@ void process()
                 ROS_ASSERT(z == 1);
                 Eigen::Matrix<double, 7, 1> xyz_uv_velocity;
                 xyz_uv_velocity << x, y, z, p_u, p_v, velocity_x, velocity_y;
-<<<<<<< Updated upstream
-                image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);   // 不同的特征有不同的 feature_id 
-=======
-                image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);  //  //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
->>>>>>> Stashed changes
-            }
+ 
+				image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);   // 不同的特征有不同的 feature_id //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
 
             /*
             //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息

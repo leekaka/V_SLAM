@@ -57,13 +57,9 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     double parallax_sum = 0;
     int parallax_num = 0;
     last_track_num = 0;
-<<<<<<< Updated upstream
 
     // image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);
 
-=======
-    
->>>>>>> Stashed changes
     for (auto &id_pts : image)  // FeaturePerId  类型 构成的
     {
         FeaturePerFrame f_per_fra(id_pts.second[0].second, td);

@@ -190,10 +190,6 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     ROS_DEBUG("Solving %d", frame_count);
     ROS_DEBUG("number of feature: %d", f_manager.getFeatureCount());
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     Headers[frame_count] = header;
 
     ImageFrame imageframe(image, header.stamp.toSec());
