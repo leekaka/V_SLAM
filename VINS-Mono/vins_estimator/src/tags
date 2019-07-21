@@ -1,0 +1,37 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+acc_0	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Eigen::Vector3d acc_0;$/;"	v
+con	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^std::condition_variable con;$/;"	v
+current_time	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^double current_time = -1;$/;"	v
+estimator	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Esimator estimator;  \/\/构造函数初始化一些参数为  单位矩阵，零矩阵，或者零$/;"	v
+feature_buf	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^queue<sensor_msgs::PointCloudConstPtr> feature_buf;$/;"	v
+feature_callback	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^void feature_callback(const sensor_msgs::PointCloudConstPtr &feature_msg)$/;"	f	signature:(const sensor_msgs::PointCloudConstPtr &feature_msg)
+getMeasurements	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^getMeasurements()$/;"	f	signature:()
+gyr_0	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Eigen::Vector3d gyr_0;$/;"	v
+i_buf	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^std::mutex i_buf;$/;"	v
+imu_buf	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^queue<sensor_msgs::ImuConstPtr> imu_buf;$/;"	v
+imu_callback	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)$/;"	f	signature:(const sensor_msgs::ImuConstPtr &imu_msg)
+init_feature	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^bool init_feature = 0;$/;"	v
+init_imu	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^bool init_imu = 1;$/;"	v
+last_imu_t	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^double last_imu_t = 0;$/;"	v
+latest_time	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^double latest_time;$/;"	v
+m_buf	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^std::mutex m_buf;$/;"	v
+m_estimator	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^std::mutex m_estimator;$/;"	v
+m_state	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^std::mutex m_state;$/;"	v
+main	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^int main(int argc, char **argv)$/;"	f	signature:(int argc, char **argv)
+predict	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^void predict(const sensor_msgs::ImuConstPtr &imu_msg)$/;"	f	signature:(const sensor_msgs::ImuConstPtr &imu_msg)
+process	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^void process()$/;"	f	signature:()
+relo_buf	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^queue<sensor_msgs::PointCloudConstPtr> relo_buf;$/;"	v
+relocalization_callback	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^void relocalization_callback(const sensor_msgs::PointCloudConstPtr &points_msg)$/;"	f	signature:(const sensor_msgs::PointCloudConstPtr &points_msg)
+restart_callback	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^void restart_callback(const std_msgs::BoolConstPtr &restart_msg)$/;"	f	signature:(const std_msgs::BoolConstPtr &restart_msg)
+sum_of_wait	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^int sum_of_wait = 0;$/;"	v
+tmp_Ba	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Eigen::Vector3d tmp_Ba;$/;"	v
+tmp_Bg	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Eigen::Vector3d tmp_Bg;$/;"	v
+tmp_P	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Eigen::Vector3d tmp_P;$/;"	v
+tmp_Q	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Eigen::Quaterniond tmp_Q;$/;"	v
+tmp_V	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^Eigen::Vector3d tmp_V;$/;"	v
+update	/home/kali/kaka/MyGithub/V_SLAM/VINS-Mono/vins_estimator/src/estimator_node.cpp	/^void update()$/;"	f	signature:()
