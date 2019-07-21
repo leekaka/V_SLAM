@@ -82,8 +82,8 @@ void Estimator::clearState()
 }
 
 /*
-实现功能：计算出相对初始坐标系 w系的位置、速度和旋转矩阵:Ps[j],Vs[j],Rs[j]，
-和predict函数的计算过程基本一致，加计都减去了重力分量
+实现功能：计算出相对  初始坐标系 w系的位置、速度和旋转矩阵:Ps[j],Vs[j],Rs[j]，
+和predict函数的计算过程基本一致，加计都减去了重力分量   核心： 只计算了两帧图像间的IMU姿态变换
 
 //IntegrationBase初始化中只是初始化了一些变量，没有做相关函数操作
 //当pre_integrations[11]中的元素是首次被初始化的时候，才执行该分支；但是每处理完一帧图像后，在 process_Image 的进程中，会通过 slideWindow 函数将该指针重新置为null
@@ -190,7 +190,10 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     ROS_DEBUG("Solving %d", frame_count);
     ROS_DEBUG("number of feature: %d", f_manager.getFeatureCount());
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     Headers[frame_count] = header;
 
     ImageFrame imageframe(image, header.stamp.toSec());
@@ -205,7 +208,7 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
         ROS_INFO("calibrating extrinsic param, rotation movement is needed");
         if (frame_count != 0)
         {
-            vector<pair<Vector3d, Vector3d>> corres = f_manager.getCorresponding(frame_count - 1, frame_count);  //将上一帧和本帧  都出现的对应特征的投影射线配对,根据feature_id配对
+            vector<pair<Vector3d, Vector3d>> corres = f_manager.getCorresponding(frame_count - 1, frame_count);  //将上一帧和本帧都出现的对应特征的投影射线配对,根据feature_id配对
 
             Matrix3d calib_ric;
             /*

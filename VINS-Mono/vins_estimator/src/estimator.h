@@ -74,6 +74,8 @@ class Estimator
     Vector3d Ps[(WINDOW_SIZE + 1)];
     Vector3d Vs[(WINDOW_SIZE + 1)];
     Matrix3d Rs[(WINDOW_SIZE + 1)];
+
+    
     Vector3d Bas[(WINDOW_SIZE + 1)];
     Vector3d Bgs[(WINDOW_SIZE + 1)];
     double td;

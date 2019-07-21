@@ -18,7 +18,7 @@ queue<sensor_msgs::ImageConstPtr> img_buf;
 ros::Publisher pub_img,pub_match;
 ros::Publisher pub_restart;
 
-FeatureTracker trackerData[NUM_OF_CAM];  // 所有处理和数据类型都通过这个类的数组处理
+FeatureTracker trackerData[NUM_OF_CAM];                  // 所有处理和数据类型都通过这个类的数组处理
 
 double first_image_time;
 int pub_count = 1;
@@ -38,8 +38,7 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
     }
 
 
-
-    // detect unstable camera stream
+    // detect unstable camera streamstream
     //如果前后两帧图像时延超过1s || 甚至后一帧时间戳比前一帧还前 ==> 说明图像流不稳定，则发送restart_flag到topics中，重启算法
     if (img_msg->header.stamp.toSec() - last_image_time > 1.0 || img_msg->header.stamp.toSec() < last_image_time)
     {
@@ -54,6 +53,9 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
         return;
     }
     last_image_time = img_msg->header.stamp.toSec();
+
+
+
 
 
 
@@ -82,7 +84,7 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
         只识别灰度图格式8UC1和MONO8，
         并最终将编码都转换为MONO8格式，
         但其实MONO8格式和8UC1是一样的，
-        没做什么变换。最后将图像经过cv_bridge库转换为opencv的常用格式。
+        没做什么变换。最后将图像经过cv_bridge库   转换为opencv的常用格式。
 
         ros图像msg类型，转换为cv类型，图像指针为 cv_bridge::CvImageConstPtr ptr
     */
@@ -146,9 +148,9 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
     }
 
     /**
-     *  track_cnt反映了对应特征连续在几幅图像中出现过
-        只有连续两次以上都出现在图像里的特征被publish
-        每个特征的id号是独一无二的，所有图像中通过光流!连续!检测到的特征的编号是一样的。如果该特征中途丢失，再回来检测到，id就不一样了
+     *  track_cnt  反映了 对应特征 连续在几幅图像中出现过
+        只有    连续两次以上都出现在图像里的特征  被publish
+        每个特征的id号  是独一无二的，所有图像中通过光流!连续!检测到的特征的编号是一样的。  如果该特征中途丢失，再回来检测到，id就不一样了
         此外，因为goodFeaturesToTrack函数，有可能存在同一个特征在同一幅图像中被标了两次id，但不影响前后帧上的同特征标号相同这一特性
         校正畸变后的[(u-cx)/fx,(v-cy)/fy,1], id_of_point, u_of_point, v_of_point,(校正前) velocity_x_of_point都是向量，是一整幅图的信息
      **/
@@ -156,6 +158,8 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
    if (PUB_THIS_FRAME)
    {
         pub_count++;
+
+        
         sensor_msgs::PointCloudPtr feature_points(new sensor_msgs::PointCloud);
         sensor_msgs::ChannelFloat32 id_of_point;
         sensor_msgs::ChannelFloat32 u_of_point;
@@ -260,7 +264,6 @@ int main(int argc, char **argv)
         每个node都重新定义了readParameter函数，
         都有新的parameters.cpp或.hpp，因为是属于不同的进程，读取的具体内容都有不同。
     */
-
     for (int i = 0; i < NUM_OF_CAM; i++)
         trackerData[i].readIntrinsicParameter(CAM_NAMES[i]);  //CAM_NAMES[i]是config_file,也就是yml文件//支持四种模型：kannala_brandt，mei，scaramuzza，pinhole
     /*
@@ -292,11 +295,11 @@ int main(int argc, char **argv)
     pub_match = n.advertise<sensor_msgs::Image>("feature_img",1000);
     pub_restart = n.advertise<std_msgs::Bool>("restart",1000);
 
+
     /*
     if (SHOW_TRACK)
         cv::namedWindow("vis", cv::WINDOW_NORMAL);
     */
-
     ros::spin();
     return 0;
 }

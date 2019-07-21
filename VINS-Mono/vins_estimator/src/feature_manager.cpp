@@ -43,7 +43,7 @@ int FeatureManager::getFeatureCount()
 
 /*
     f_manager是一个FeatureManager类型的对象，
-    主要包含了list<FeatureId> feature这个列表。
+    主要包含了list<FeatureId> feature 这个列表。
 
     FeatureId类型的元素包含了feature_id(同一种特征的id是相同的)
     start_frame(该特征开始存在的图像id)
@@ -57,9 +57,13 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     double parallax_sum = 0;
     int parallax_num = 0;
     last_track_num = 0;
+<<<<<<< Updated upstream
 
     // image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);
 
+=======
+    
+>>>>>>> Stashed changes
     for (auto &id_pts : image)  // FeaturePerId  类型 构成的
     {
         FeaturePerFrame f_per_fra(id_pts.second[0].second, td);
@@ -84,7 +88,8 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
 
     //如果feature_id和之前的不同，那么就加入到列表里
     //如果是第一帧图像
-    //如果是第一帧图像或者是新图像在feature list中的相同id已经小于20个，说明前后两帧图像位移比较大，相同特征个数减少，直接返回true，认为是关键帧
+    //如果是第一帧图像
+    //或者是新图像在feature list中的相同id已经小于20个，说明前后两帧图像位移比较大，相同特征个数减少，直接返回true，认为是关键帧
     if (frame_count < 2 || last_track_num < 20)
         return true;
 

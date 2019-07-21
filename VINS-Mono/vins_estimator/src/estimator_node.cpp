@@ -61,6 +61,7 @@ void predict(const sensor_msgs::ImuConstPtr &imu_msg)
     double dx = imu_msg->linear_acceleration.x;
     double dy = imu_msg->linear_acceleration.y;
     double dz = imu_msg->linear_acceleration.z;
+    
     Eigen::Vector3d linear_acceleration{dx, dy, dz};
 
     double rx = imu_msg->angular_velocity.x;
@@ -163,7 +164,7 @@ getMeasurements()
 */
 void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
 {
-    if (imu_msg->header.stamp.toSec() <= last_imu_t)
+    if (imu_msg->header.stamp.toSec() <= last_imu_t) // 时间戳不对
     {
         ROS_WARN("imu message in disorder!");
         return;
@@ -171,7 +172,7 @@ void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
     last_imu_t = imu_msg->header.stamp.toSec();
 
     m_buf.lock();
-    imu_buf.push(imu_msg);   //imu_msg原始数据放入imu_buf
+    imu_buf.push(imu_msg);   // imu_msg 原始数据放入  imu_buf
     m_buf.unlock();
     con.notify_one();
 
@@ -179,7 +180,7 @@ void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
 
     {
         std::lock_guard<std::mutex> lg(m_state);
-        predict(imu_msg);   // 计算IMU原始数据
+        predict(imu_msg);   // 计算IMU原
 
         std_msgs::Header header = imu_msg->header;
         header.frame_id = "world";
@@ -251,7 +252,7 @@ void process()
         lk.unlock();
         m_estimator.lock();
 
-        for (auto &measurement : measurements)
+        for (auto &measurement : measurements)  // 测量值有两部分，一个是IMU，一个是点云指针
         {
             auto img_msg = measurement.second;
 
@@ -259,8 +260,8 @@ void process()
             for (auto &imu_msg : measurement.first)
             {
                 double t = imu_msg->header.stamp.toSec();
-                double img_t = img_msg->header.stamp.toSec() + estimator.td;
-                if (t <= img_t)
+                double img_t = img_msg->header.stamp.toSec() + estimator.td; //时间戳小于本帧图像的imu信息，else中通过插值，计算图像时间戳时刻的加计和角计值。                                                                       
+                if (t <= img_t)                                              //之后将加计和角计值都送入imu处理的主要函数：
                 { 
                     if (current_time < 0)
                         current_time = t;
@@ -291,7 +292,7 @@ void process()
                     double w1 = dt_2 / (dt_1 + dt_2);
                     double w2 = dt_1 / (dt_1 + dt_2);
 
-                    dx = w1 * dx + w2 * imu_msg->linear_acceleration.x;
+                    dx = w1 * dx + w2 * imu_msg->linear_acceleration.x;   //时间戳做权重
                     dy = w1 * dy + w2 * imu_msg->linear_acceleration.y;
                     dz = w1 * dz + w2 * imu_msg->linear_acceleration.z;
                     rx = w1 * rx + w2 * imu_msg->angular_velocity.x;
@@ -338,6 +339,7 @@ void process()
                 int frame_index;
                 frame_index = relo_msg->channels[0].values[7];
 
+                //调用setReloFrame函数,虽然在measure的for循环中，但是读取的是从/pose_graph/match_points订阅的图像特征以及旋转平移信息，每次都读最近的一条消息。
                 estimator.setReloFrame(frame_stamp, frame_index, match_points, relo_t, relo_r);
                 //将特征点，旋转平移放入estimator中(match_points、prev_relo_t、prev_relo_r)，并找出该帧relo_msg和图像对应的时间戳，得到该帧的 relo_Pose
             }
@@ -369,7 +371,11 @@ void process()
                 ROS_ASSERT(z == 1);
                 Eigen::Matrix<double, 7, 1> xyz_uv_velocity;
                 xyz_uv_velocity << x, y, z, p_u, p_v, velocity_x, velocity_y;
+<<<<<<< Updated upstream
                 image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);   // 不同的特征有不同的 feature_id 
+=======
+                image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);  //  //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
+>>>>>>> Stashed changes
             }
 
             /*
@@ -438,7 +444,7 @@ void process()
         //imu自己的坐标系称为body坐标系b
         //predict函数计算了dt时间段的世界坐标系w下的平均加速度（通过前后两次的w坐标系下的加速度的平均值得到），加计平均值un_acc采用的是减去偏置和估计的重力之后的加计值
         //predict函数计算了b系相对于w系的旋转四元数tmp_Q，通过上次tmp_Q乘以本次增量四元数得到，增量四元数通过角速度平均值乘以时间dt得到（因为角度小的时候，四元数可以近似用旋转角计算，进而近似用欧拉角计算）
-        //prddict函数最终计算目标量：tmp_V速度，tmp_P位置，tmp_Q四元数都是相对于w系的
+        //prddict函数最终计算目标量：tmp_V速度，tmp_P位置，tmp_Q 四元数都是相对于w系的
     ③pubLatestOdometry(tmp_P, tmp_Q, tmp_V, header);//tmp_P, tmp_Q, tmp_V通过函数predict(imu_msg)计算，然后发布到"imu_propagate"topic上
 
     接着回到main函数：
