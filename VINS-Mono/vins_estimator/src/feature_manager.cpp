@@ -57,6 +57,9 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     double parallax_sum = 0;
     int parallax_num = 0;
     last_track_num = 0;
+
+    // image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);
+
     for (auto &id_pts : image)  // FeaturePerId  类型 构成的
     {
         FeaturePerFrame f_per_fra(id_pts.second[0].second, td);
@@ -89,7 +92,7 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     for (auto &it_per_id : feature)
     {
         //下面这个if包含的意思为：for循环轮询的时候，
-        //该特征首次出现的图像帧 距离当前帧超过或正好两帧 && 该特征从首次出现帧到当前帧之间最多只掉了一帧，而在其他帧中都出现了
+        //该特征首次出现的图像帧 距离当前帧超过或正好两帧 && 该特征从首次出现帧  到  当前帧之间最多只掉了一帧，而在其他帧中都出现了
         //parallax_sum,parallax_num 在每幅图像调用该函数的时候都会重新置为0，因此parallax_sum,parallax_num 都是计算之前的list feature中的所有特征到 当前帧的视差总和
         if (it_per_id.start_frame <= frame_count - 2 &&
             it_per_id.start_frame + int(it_per_id.feature_per_frame.size()) - 1 >= frame_count - 1)
