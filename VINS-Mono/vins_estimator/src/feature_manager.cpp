@@ -42,13 +42,7 @@ int FeatureManager::getFeatureCount()
 }
 
 /*
-    f_manager是一个FeatureManager类型的对象，
-    主要包含了list<FeatureId> feature 这个列表。
-
-    FeatureId类型的元素包含了feature_id(同一种特征的id是相同的)
-    start_frame(该特征开始存在的图像id)
-    向量vector<FeaturePerFrame>feature_per_frame
-    其中向量feature_per_frame是由来自不同图像的同一种特征计算出来的投影射线，像素坐标和像素速度组成的，因为来自不同图像，会有不同，因此是个向量
+    检查视差函数
 */
 bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> &image, double td)
 {
@@ -58,11 +52,11 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     int parallax_num = 0;
     last_track_num = 0;
 
-    // image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);
+    // image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);  每一特征都有  feature_id
 
-    for (auto &id_pts : image)  // FeaturePerId  类型 构成的
+    for (auto &id_pts : image)  // FeaturePerId
     {
-        FeaturePerFrame f_per_fra(id_pts.second[0].second, td);
+        FeaturePerFrame f_per_fra(id_pts.second[0].second, td);  
 
         int feature_id = id_pts.first;
         auto it = find_if(feature.begin(), feature.end(), [feature_id](const FeaturePerId &it)
@@ -70,31 +64,25 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
             return it.feature_id == feature_id;
                           });
 
-        if (it == feature.end())  // 没找到
+        if (it == feature.end())  //
         {
             feature.push_back(FeaturePerId(feature_id, frame_count));
             feature.back().feature_per_frame.push_back(f_per_fra);
         }
-        else if (it->feature_id == feature_id) // 找到了 新图像里有相同feature_id的，就往里面添加
+        else if (it->feature_id == feature_id) //
         {
             it->feature_per_frame.push_back(f_per_fra);
             last_track_num++;
         }
     }
 
-    //如果feature_id和之前的不同，那么就加入到列表里
-    //如果是第一帧图像
-    //如果是第一帧图像
-    //或者是新图像在feature list中的相同id已经小于20个，说明前后两帧图像位移比较大，相同特征个数减少，直接返回true，认为是关键帧
-    if (frame_count < 2 || last_track_num < 20)
+
+    if (frame_count < 2 || last_track_num < 20)     //特征点数小于20
         return true;
 
-    //如果特征数量大于20个
+
     for (auto &it_per_id : feature)
     {
-        //下面这个if包含的意思为：for循环轮询的时候，
-        //该特征首次出现的图像帧 距离当前帧超过或正好两帧 && 该特征从首次出现帧  到  当前帧之间最多只掉了一帧，而在其他帧中都出现了
-        //parallax_sum,parallax_num 在每幅图像调用该函数的时候都会重新置为0，因此parallax_sum,parallax_num 都是计算之前的list feature中的所有特征到 当前帧的视差总和
         if (it_per_id.start_frame <= frame_count - 2 &&
             it_per_id.start_frame + int(it_per_id.feature_per_frame.size()) - 1 >= frame_count - 1)
         {
@@ -141,7 +129,7 @@ vector<pair<Vector3d, Vector3d>> FeatureManager::getCorresponding(int frame_coun
     vector<pair<Vector3d, Vector3d>> corres;
     for (auto &it : feature)
     {
-        if (it.start_frame <= frame_count_l && it.endFrame() >= frame_count_r)
+        if (it.start_frame <= frame_count_l && it.endFrame() >= frame_count_r)  // 上一帧和下一帧都在区间内
         {
             Vector3d a = Vector3d::Zero(), b = Vector3d::Zero();
             int idx_l = frame_count_l - it.start_frame;

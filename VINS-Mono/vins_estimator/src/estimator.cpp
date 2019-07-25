@@ -153,7 +153,6 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     if (f_manager.addFeatureCheckParallax(frame_count, image, td))  //检查视差 td是图像和imu的时间差
         marginalization_flag = MARGIN_OLD;          // 0 accept Keyframe
 
-
     else
         marginalization_flag = MARGIN_SECOND_NEW;  // 1 reject Non-keyframe
 
@@ -199,7 +198,7 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 
     tmp_pre_integration = new IntegrationBase{acc_0, gyr_0, Bas[frame_count], Bgs[frame_count]};
 
-    if(ESTIMATE_EXTRINSIC == 2)
+    if(ESTIMATE_EXTRINSIC == 2)   // 松耦合对齐，校准相机和IMU之间 的 转化矩阵
     {
         ROS_INFO("calibrating extrinsic param, rotation movement is needed");
         if (frame_count != 0)
