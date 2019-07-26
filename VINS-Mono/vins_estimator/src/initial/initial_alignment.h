@@ -10,7 +10,7 @@
 using namespace Eigen;
 using namespace std;
 
-class ImageFrame
+class ImageFrame  // 这种类其实就是c中结构体的作用
 {
     public:
         ImageFrame(){};

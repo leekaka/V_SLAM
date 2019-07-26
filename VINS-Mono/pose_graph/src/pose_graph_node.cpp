@@ -291,7 +291,7 @@ void extrinsic_callback(const nav_msgs::Odometry::ConstPtr &pose_msg)
     m_process.unlock();
 }
 
-void process()
+void process()  
 {
     if (!LOOP_CLOSURE)
         return;
@@ -335,6 +335,9 @@ void process()
         }
         m_buf.unlock();
 
+
+
+
         if (pose_msg != NULL)
         {
             //printf(" pose time %f \n", pose_msg->header.stamp.toSec());
@@ -374,6 +377,7 @@ void process()
                 ptr = cv_bridge::toCvCopy(image_msg, sensor_msgs::image_encodings::MONO8);
             
             cv::Mat image = ptr->image;
+            
             // build keyframe
             Vector3d T = Vector3d(pose_msg->pose.pose.position.x,
                                   pose_msg->pose.pose.position.y,

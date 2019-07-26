@@ -13,7 +13,7 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
     frame_count++;
     Rc.push_back(solveRelativeR(corres));
     Rimu.push_back(delta_q_imu.toRotationMatrix());
-    Rc_g.push_back(ric.inverse() * delta_q_imu * ric);
+    Rc_g.push_back(ric.inverse() * delta_q_imu * ric);      //ric 是初始假设的 相机和IMU之间的转换矩阵
 
     Eigen::MatrixXd A(frame_count * 4, 4);
     A.setZero();
@@ -27,12 +27,13 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
         ROS_DEBUG(
             "%d %f", i, angular_distance);
 
-        double huber = angular_distance > 5.0 ? 5.0 / angular_distance : 1.0;
+        double huber = angular_distance > 5.0 ? 5.0 / angular_distance : 1.0;  // 求得权重
         ++sum_ok;
         Matrix4d L, R;
 
-        double w = Quaterniond(Rc[i]).w();
-        Vector3d q = Quaterniond(Rc[i]).vec();
+        double w = Quaterniond(Rc[i]).w();  // 标量
+        Vector3d q = Quaterniond(Rc[i]).vec();  // 矢量
+        
         L.block<3, 3>(0, 0) = w * Matrix3d::Identity() + Utility::skewSymmetric(q);
         L.block<3, 1>(0, 3) = q;
         L.block<1, 3>(3, 0) = -q.transpose();
@@ -58,7 +59,7 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
     Vector3d ric_cov;
     ric_cov = svd.singularValues().tail<3>();
     
-    if (frame_count >= WINDOW_SIZE && ric_cov(1) > 0.25)
+    if (frame_count >= WINDOW_SIZE && ric_cov(1) > 0.25)  // 大于某个阈值0.25
     {
         calib_ric_result = ric;
         return true;
@@ -67,7 +68,7 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
         return false;
 }
 
-Matrix3d InitialEXRotation::solveRelativeR(const vector<pair<Vector3d, Vector3d>> &corres)
+Matrix3d InitialEXRotation::solveRelativeR(const vector<pair<Vector3d, Vector3d>> &corres)  // 根据两帧之间对应的3d点求解相对姿态
 {
     if (corres.size() >= 9)
     {

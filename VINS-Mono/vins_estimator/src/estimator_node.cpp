@@ -78,8 +78,8 @@ void predict(const sensor_msgs::ImuConstPtr &imu_msg)
 
     Eigen::Vector3d un_acc = 0.5 * (un_acc_0 + un_acc_1);           // 前后两帧的加速度平均（世界坐标系且减去重力）
 
-    tmp_P = tmp_P + dt * tmp_V + 0.5 * dt * dt * un_acc;
-    tmp_V = tmp_V + dt * un_acc;
+    tmp_P = tmp_P + dt * tmp_V + 0.5 * dt * dt * un_acc;  // s = s + vt + 1/2a*t^2
+    tmp_V = tmp_V + dt * un_acc;                          // v = v + a*t
 
     acc_0 = linear_acceleration;
     gyr_0 = angular_velocity;
@@ -180,7 +180,7 @@ void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
 
     {
         std::lock_guard<std::mutex> lg(m_state);
-        predict(imu_msg);   // 计算IMU原
+        predict(imu_msg);   // 计算IMU原始数据
 
         std_msgs::Header header = imu_msg->header;
         header.frame_id = "world";
@@ -239,7 +239,7 @@ void relocalization_callback(const sensor_msgs::PointCloudConstPtr &points_msg)
 /*
     这个主函数有点复杂呀
 */
-void process()
+void process()          //处理IMU和图像数据
 {
     while (true)
     {
@@ -358,11 +358,11 @@ void process()
 
                 int camera_id = v % NUM_OF_CAM;
 
-                double x = img_msg->points[i].x;
+                double x = img_msg->points[i].x;   
                 double y = img_msg->points[i].y;
                 double z = img_msg->points[i].z;
 
-                double p_u = img_msg->channels[1].values[i];
+                double p_u = img_msg->channels[1].values[i];   
                 double p_v = img_msg->channels[2].values[i];
 
                 double velocity_x = img_msg->channels[3].values[i];

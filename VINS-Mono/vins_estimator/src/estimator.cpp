@@ -153,7 +153,6 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     if (f_manager.addFeatureCheckParallax(frame_count, image, td))  //检查视差 td是图像和imu的时间差
         marginalization_flag = MARGIN_OLD;          // 0 accept Keyframe
 
-
     else
         marginalization_flag = MARGIN_SECOND_NEW;  // 1 reject Non-keyframe
 
@@ -199,7 +198,7 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 
     tmp_pre_integration = new IntegrationBase{acc_0, gyr_0, Bas[frame_count], Bgs[frame_count]};
 
-    if(ESTIMATE_EXTRINSIC == 2)
+    if(ESTIMATE_EXTRINSIC == 2)   // 松耦合对齐，校准相机和IMU之间 的 转化矩阵
     {
         ROS_INFO("calibrating extrinsic param, rotation movement is needed");
         if (frame_count != 0)
@@ -315,10 +314,10 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
 /*
     initialStructure 这个函数里面干的很多事情，涉及到很多函数。
 
-    /在WINDOW_SIZE 窗口里挑选最先满足和最后一帧[WINDOW_SIZE]帧的视差超过30，
+    /在WINDOW_SIZE 窗口里挑选     最先满足和最后一帧[WINDOW_SIZE]帧的视差超过30，
     且能和[WINDOW_SIZE]帧一起求解出    pnp有效结果的   一帧图像进行计算R，T,  称为l帧
 
-    //之后计算了all_image_frame中第一帧到现在的所有图像的旋转平移和特征三维位置
+    //之后计算了all_image_frame中第一帧到现在的所有图像的  旋转平移和特征三维位置
 
     //（不止计算了WINDOW_SIZE中的图像，WINDOW_SIZE中的图像叫做关键帧，其他不是，非关键帧只计算了R，T，没计算不在关键帧上的特征点三维坐标）
 
@@ -465,6 +464,8 @@ bool Estimator::initialStructure()
                 }
             }
         }
+
+        
         cv::Mat K = (cv::Mat_<double>(3, 3) << 1, 0, 0, 0, 1, 0, 0, 0, 1);     
         if(pts_3_vector.size() < 6)
         {
@@ -472,11 +473,15 @@ bool Estimator::initialStructure()
             ROS_DEBUG("Not enough points for solve pnp !");
             return false;
         }
+
+
         if (! cv::solvePnP(pts_3_vector, pts_2_vector, K, D, rvec, t, 1))
         {
             ROS_DEBUG("solve pnp fail!");
             return false;
         }
+
+
         cv::Rodrigues(rvec, r);
         MatrixXd R_pnp,tmp_R_pnp;
         cv::cv2eigen(r, tmp_R_pnp);
@@ -520,7 +525,7 @@ bool Estimator::visualInitialAlign()
         而是在初始化坐标系下的重力，在xyz方向上都有分量， 角计偏置和尺度因子
         解出的x的维度是(all_frame_count * 3 + 3 + 1)*1,= [dv0.dv1.dv2,...,dvn,g,s]
         dvn等是每两帧之间速度，都是三维向量，最后一项是尺度因子，倒数第四项到第二项为重力因子
-        该函数里计算完角计偏置后，认为加计偏置是0，repropagate计算了all_image_frame中的imu部分
+        该函数里计算完角计偏置后，认为加计偏置是0，repropagate  计算了all_image_frame中的imu部分
     */
 
     if(!result)
