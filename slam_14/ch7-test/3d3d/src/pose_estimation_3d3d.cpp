@@ -35,7 +35,7 @@ int main ( int argc, char** argv )
         float dd1 = float ( d1 ) /5000.0;
         float dd2 = float ( d2 ) /5000.0;
         pts1.push_back ( Point3f ( p1.x*dd1, p1.y*dd1, dd1 ) );
-        pts2.push_back ( Point3f ( p2.x*dd2, p2.y*dd2, dd2 ) );
+        pts2.push_back ( Point3f ( p2.x*dd2, p2.y*dd2, dd2 ) );// 两个像素点的在相机坐标下的3d坐标
     }
 
     cout<<"3d-3d pairs: "<<pts1.size() <<endl;
