@@ -51,6 +51,8 @@ class IntegrationBase
             propagate(dt_buf[i], acc_buf[i], gyr_buf[i]);
     }
 
+
+   //中值积分 有对应的 公式推导
     void midPointIntegration(double _dt, 
                             const Eigen::Vector3d &_acc_0, const Eigen::Vector3d &_gyr_0,
                             const Eigen::Vector3d &_acc_1, const Eigen::Vector3d &_gyr_1,

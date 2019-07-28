@@ -167,6 +167,7 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 			Vector3d P_initial = c_Translation[i - 1];
 			if(!solveFrameByPnP(R_initial, P_initial, i, sfm_f))
 				return false;
+				
 			c_Rotation[i] = R_initial;
 			c_Translation[i] = P_initial;
 			c_Quat[i] = c_Rotation[i];

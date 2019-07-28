@@ -17,17 +17,17 @@ void solveGyroscopeBias(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs)
         VectorXd tmp_b(3);
         tmp_b.setZero();
         Eigen::Quaterniond q_ij(frame_i->second.R.transpose() * frame_j->second.R);
-        tmp_A = frame_j->second.pre_integration->jacobian.template block<3, 3>(O_R, O_BG);
+        tmp_A = frame_j->second.pre_integration->jacobian.template block<3, 3>(O_R, O_BG); //3*12  jacobian 
         tmp_b = 2 * (frame_j->second.pre_integration->delta_q.inverse() * q_ij).vec();
         A += tmp_A.transpose() * tmp_A;
         b += tmp_A.transpose() * tmp_b;
 
-    }
+    }   // A * delta_b = b  求解最小二乘解, 这只是求了Bias的变化量,还需要 累加一次才能得到准确值
     delta_bg = A.ldlt().solve(b);
     ROS_WARN_STREAM("gyroscope bias initial calibration " << delta_bg.transpose());
 
     for (int i = 0; i <= WINDOW_SIZE; i++)
-        Bgs[i] += delta_bg;
+        Bgs[i] += delta_bg;  // 准确值
 
     for (frame_i = all_image_frame.begin(); next(frame_i) != all_image_frame.end( ); frame_i++)
     {
@@ -43,9 +43,12 @@ MatrixXd TangentBasis(Vector3d &g0)
     Vector3d a = g0.normalized();
     Vector3d tmp(0, 0, 1);
     if(a == tmp)
-        tmp << 1, 0, 0;
-    b = (tmp - a * (a.transpose() * tmp)).normalized();
-    c = a.cross(b);
+        tmp << 1, 0, 0;   //
+
+    b = (tmp - a * (a.transpose() * tmp)).normalized();  
+
+    c = a.cross(b);  //两个向量叉乘
+
     MatrixXd bc(3, 2);
     bc.block<3, 1>(0, 0) = b;
     bc.block<3, 1>(0, 1) = c;
@@ -58,7 +61,7 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
     Vector3d lx, ly;
     //VectorXd x;
     int all_frame_count = all_image_frame.size();
-    int n_state = all_frame_count * 3 + 2 + 1;
+    int n_state = all_frame_count * 3 + 2 + 1;   // 和上一个有区别  count*3 + 2 + 1, 这个2 是指w的两个参数
 
     MatrixXd A{n_state, n_state};
     A.setZero();
@@ -70,7 +73,7 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
     for(int k = 0; k < 4; k++)
     {
         MatrixXd lxly(3, 2);
-        lxly = TangentBasis(g0);
+        lxly = TangentBasis(g0);  // 正切的参数 W
         int i = 0;
         for (frame_i = all_image_frame.begin(); next(frame_i) != all_image_frame.end(); frame_i++, i++)
         {
@@ -115,7 +118,9 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
             A = A * 1000.0;
             b = b * 1000.0;
             x = A.ldlt().solve(b);
+            
             VectorXd dg = x.segment<2>(n_state - 3);
+
             g0 = (g0 + lxly * dg).normalized() * G.norm();
             //double s = x(n_state - 1);
     }   
@@ -176,19 +181,25 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
     }
     A = A * 1000.0;
     b = b * 1000.0;
-    x = A.ldlt().solve(b);
-    double s = x(n_state - 1) / 100.0;
+
+    x = A.ldlt().solve(b); // A*x = b
+
+
+    double s = x(n_state - 1) / 100.0;   // 求s
     ROS_DEBUG("estimated scale: %f", s);
+
     g = x.segment<3>(n_state - 4);
+
     ROS_DEBUG_STREAM(" result g     " << g.norm() << " " << g.transpose());
     if(fabs(g.norm() - G.norm()) > 1.0 || s < 0)
     {
         return false;
     }
 
-    RefineGravity(all_image_frame, g, x);
+    RefineGravity(all_image_frame, g, x);   // 优化重力
     s = (x.tail<1>())(0) / 100.0;
     (x.tail<1>())(0) = s;
+
     ROS_DEBUG_STREAM(" refine     " << g.norm() << " " << g.transpose());
     if(s < 0.0 )
         return false;   
@@ -196,11 +207,18 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
         return true;
 }
 
+//视觉与IMU对齐,包括四步
+/*
+    Gyroscope Bias Calibration
+    Velocity Gravity Vector Metric Scal 
+    Gravity Refinement
+    Completing Initialization
+ */
 bool VisualIMUAlignment(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs, Vector3d &g, VectorXd &x)
 {
     solveGyroscopeBias(all_image_frame, Bgs);
 
-    if(LinearAlignment(all_image_frame, g, x))
+    if(LinearAlignment(all_image_frame, g, x))  // 线性对齐
         return true;
     else 
         return false;

@@ -336,8 +336,6 @@ void process()
         m_buf.unlock();
 
 
-
-
         if (pose_msg != NULL)
         {
             //printf(" pose time %f \n", pose_msg->header.stamp.toSec());

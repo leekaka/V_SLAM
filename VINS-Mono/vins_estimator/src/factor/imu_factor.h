@@ -57,13 +57,14 @@ class IMUFactor : public ceres::SizedCostFunction<15, 7, 9, 7, 9>
         }
 #endif
 
-        Eigen::Map<Eigen::Matrix<double, 15, 1>> residual(residuals);
+        Eigen::Map<Eigen::Matrix<double, 15, 1>> residual(residuals);  
         residual = pre_integration->evaluate(Pi, Qi, Vi, Bai, Bgi,
                                             Pj, Qj, Vj, Baj, Bgj);
 
+        // 把 P −1 做 LLT 分解
         Eigen::Matrix<double, 15, 15> sqrt_info = Eigen::LLT<Eigen::Matrix<double, 15, 15>>(pre_integration->covariance.inverse()).matrixL().transpose();
         //sqrt_info.setIdentity();
-        residual = sqrt_info * residual;
+        residual = sqrt_info * residual; 
 
         if (jacobians)
         {

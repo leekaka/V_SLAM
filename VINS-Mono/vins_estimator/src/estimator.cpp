@@ -315,8 +315,7 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     initialStructure 这个函数里面干的很多事情，涉及到很多函数。
 
     /在WINDOW_SIZE 窗口里挑选     最先满足和最后一帧[WINDOW_SIZE]帧的视差超过30，
-    且能和[WINDOW_SIZE]帧一起求解出    pnp有效结果的   一帧图像进行计算R，T,  称为l帧
-
+    且能和[WINDOW_SIZE]帧一起求解出    pnp有效结果的   一帧图像进行计算R，T,  称为l帧   // 核心的l帧
     //之后计算了all_image_frame中第一帧到现在的所有图像的  旋转平移和特征三维位置
 
     //（不止计算了WINDOW_SIZE中的图像，WINDOW_SIZE中的图像叫做关键帧，其他不是，非关键帧只计算了R，T，没计算不在关键帧上的特征点三维坐标）
@@ -327,6 +326,13 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     //图像求出的旋转平移记录在了all_image_frame的frame的R，T变量中
     //计算出了重力方向，角计偏置和尺度因子,最后将Ps(乘过尺度因子),Rs,Vs都替换为图像计算的结果，并都转换为大地坐标，其中Rs是图像相对于大地坐标系的旋转，
     g也转换成了大地坐标系下的值，基本就是[0,0,9.8]
+
+
+    先求取本质矩阵求解位姿，进而三角化特征点，然后PnP求解位姿，不断重复的过程，直到恢复出滑窗内的Features和相机位姿，代码比较清晰。
+    要注意的就是坐标系的和位姿的变换，容易混乱。如以下几个函数： 
+    triangulateTwoFrames ：输入是相机外参(世界到相机)，求解出的3D点是在世界坐标系下。 
+    cv::solvePnP：该API输入是世界坐标系的点，求解出的是世界坐标系到相机坐标系的变换，所以一般需要将结果转置。
+
 */
 bool Estimator::initialStructure()
 {
@@ -399,16 +405,15 @@ bool Estimator::initialStructure()
 
     /*
         sfm.construct(…)
-
         //WINDOW_SIZE中的图像先通过 l帧求出一个包含尺度因子的旋转和平移，
         然后通过l帧求出三维特征点，然后  根据  pnp，统一了  WINDOW_SIZE  中所有图像的尺度因子，计算所有帧的旋转平移以及三维点
         //最后通过ceres优化了   窗口里所有的旋转平移和三维坐标（重投影残差最小）
         //输入变量frame_count + 1，relative_R, relative_T,传出变量  Q[WINDOW_SIZE+1],   T[WINDOW_SIZE+1],   sfm_tracked_points[featureid,positon[3]]
         //最后计算出来的坐标系原点是l帧，旋转平移也是以l为原点，
         也就是从l帧转换到当前帧的旋转和平移，而不是两帧之间的。
-        但是在函数的最后，将q和t求了反转，本来是第l帧到当前帧的变换矩阵，最后变成了从当前帧转到  l 帧
+        但是在函数的最后，将  q 和 t 求了反转，本来是第l帧到当前帧的变换矩阵，  最后变成了从当前帧转到  l 帧
     */
-    GlobalSFM sfm;
+    GlobalSFM sfm;   // 三角化特征点
     if(!sfm.construct(frame_count + 1, Q, T, l,
               relative_R, relative_T,
               sfm_f, sfm_tracked_points))
@@ -489,7 +494,9 @@ bool Estimator::initialStructure()
         MatrixXd T_pnp;
         cv::cv2eigen(t, T_pnp);
         T_pnp = R_pnp * (-T_pnp);
-        frame_it->second.R = R_pnp * RIC[0].transpose();
+
+
+        frame_it->second.R = R_pnp * RIC[0].transpose();   // 得到每一帧的姿态
         frame_it->second.T = T_pnp;
     }
 
