@@ -17,7 +17,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/include/eigen3"
   "/opt/ros/kinetic/include/opencv-3.3.1-dev"
   "/opt/ros/kinetic/include/opencv-3.3.1-dev/opencv"
-  "/home/kali/kaka/slambook/3rdparty/Sophus"
+  "/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus"
   "../include"
   )
 

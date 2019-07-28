@@ -1,1 +1,1 @@
-/usr/bin/c++      CMakeFiles/useSophus.dir/useSophus.cpp.o  -o useSophus -rdynamic /home/kali/kaka/slambook/3rdparty/Sophus/build/libSophus.so -Wl,-rpath,/home/kali/kaka/slambook/3rdparty/Sophus/build 
+/usr/bin/c++      CMakeFiles/useSophus.dir/useSophus.cpp.o  -o useSophus -rdynamic /home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/build/libSophus.so -Wl,-rpath,/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/build 

@@ -1,1 +1,1 @@
-/usr/bin/c++   -g   CMakeFiles/testGeometry.dir/useGeometry.cpp.o  -o testGeometry -rdynamic 
+/usr/bin/c++      CMakeFiles/testGeometry.dir/useGeometry.cpp.o  -o testGeometry -rdynamic 

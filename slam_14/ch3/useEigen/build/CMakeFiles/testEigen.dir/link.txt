@@ -1,1 +1,1 @@
-/usr/bin/c++   -g   CMakeFiles/testEigen.dir/eigenMatrix.cpp.o  -o testEigen -rdynamic 
+/usr/bin/c++      CMakeFiles/testEigen.dir/eigenMatrix.cpp.o  -o testEigen -rdynamic 

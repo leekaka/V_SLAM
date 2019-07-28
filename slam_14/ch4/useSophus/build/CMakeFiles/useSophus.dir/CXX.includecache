@@ -20,11 +20,11 @@ sophus/so3.h
 sophus/se3.h
 /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch4/useSophus/sophus/se3.h
 
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/se3.h
 so3.h
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
 
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
 Eigen/Core
 -
 Eigen/StdVector

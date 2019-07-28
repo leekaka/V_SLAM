@@ -90,7 +90,7 @@ useSophus_EXTERNAL_OBJECTS =
 
 useSophus: CMakeFiles/useSophus.dir/useSophus.cpp.o
 useSophus: CMakeFiles/useSophus.dir/build.make
-useSophus: /home/kali/kaka/slambook/3rdparty/Sophus/build/libSophus.so
+useSophus: /home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/build/libSophus.so
 useSophus: CMakeFiles/useSophus.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch4/useSophus/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable useSophus"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/useSophus.dir/link.txt --verbose=$(VERBOSE)
