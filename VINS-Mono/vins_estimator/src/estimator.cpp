@@ -88,7 +88,7 @@ void Estimator::clearState()
 //IntegrationBase初始化中只是初始化了一些变量，没有做相关函数操作
 //当pre_integrations[11]中的元素是首次被初始化的时候，才执行该分支；但是每处理完一帧图像后，在 process_Image 的进程中，会通过 slideWindow 函数将该指针重新置为null
 //因此每一次新的一组msg（也就是新来一帧图像和imu pair，都会重新进入该分支，所以acc_0, gyr_0等是两帧图像之间的首次imu的值，函数计算的所有量也是两帧之间的量
-//对于同一帧图像，对应了多个数量的imu，每个imu都会调用processIMU，大多数情况下，处理完一个pair中的所有imu，frame_count都是同一个值。
+//对于同一帧图像，对应了多个数量的imu，每个imu都会调用processIMU，大多数情况下，处理完一个pair中的所有imu，frame_count 都是同一个值。
 frame_count 对应的是一帧图像 
 */
 void Estimator::processIMU(double dt, const Vector3d &linear_acceleration, const Vector3d &angular_velocity)

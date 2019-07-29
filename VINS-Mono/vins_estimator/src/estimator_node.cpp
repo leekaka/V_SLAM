@@ -254,7 +254,7 @@ void process()          //处理IMU和图像数据
 
         for (auto &measurement : measurements)  // 测量值有两部分，一个是IMU，一个是点云指针
         {
-            auto img_msg = measurement.second;
+            auto img_msg = measurement.second;   
 
             double dx = 0, dy = 0, dz = 0, rx = 0, ry = 0, rz = 0;
             for (auto &imu_msg : measurement.first)
@@ -339,9 +339,9 @@ void process()          //处理IMU和图像数据
                 int frame_index;
                 frame_index = relo_msg->channels[0].values[7];
 
-                //调用setReloFrame函数,虽然在measure的for循环中，但是读取的是从/pose_graph/match_points订阅的图像特征以及旋转平移信息，每次都读最近的一条消息。
+                //调用setReloFrame函数,虽然在measure的for循环中，但是读取的是从/pose_graph/match_points  订阅的图像特征以及旋转平移信息，每次都读最近的一条消息。
                 estimator.setReloFrame(frame_stamp, frame_index, match_points, relo_t, relo_r);
-                //将特征点，旋转平移放入estimator中(match_points、prev_relo_t、prev_relo_r)，并找出该帧relo_msg和图像对应的时间戳，得到该帧的 relo_Pose
+                //将特征点，旋转平移放入  estimator中(match_points、prev_relo_t、prev_relo_r)，并找出该帧 relo_msg 和图像对应的时间戳，得到该帧的 relo_Pose
             }
 
             ROS_DEBUG("processing vision data with stamp %f \n", img_msg->header.stamp.toSec());
@@ -350,7 +350,7 @@ void process()          //处理IMU和图像数据
 
             map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> image;
 
-            for (unsigned int i = 0; i < img_msg->points.size(); i++)  //对于图像的每个特征
+            for (unsigned int i = 0; i < img_msg->points.size(); i++)  //对于每一帧图像的每个特征都有特定的 feature_id 
             {
                 int v = img_msg->channels[0].values[i] + 0.5;
                 
@@ -373,9 +373,9 @@ void process()          //处理IMU和图像数据
                 xyz_uv_velocity << x, y, z, p_u, p_v, velocity_x, velocity_y;
  
 				image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);   // 不同的特征有不同的 feature_id //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
-
+            }
             /*
-            //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
+            //image是个map,这个map包含  等于相机数目  的图像上 所有的特征信息
             //map image的first是不同的  feature_id  second是该特征id对应的      相机id和具体信息(特征点投影射线(已校正) 原像素位置(未校正)，速度(已校正算出的))
             
             //本来second应该是一个由<camera_id,  xyz_uv_velocity> 构成的pair来构成的向量
@@ -386,7 +386,6 @@ void process()          //处理IMU和图像数据
             //然后在上面的for循环中被解算成相同的 feature_id
             进而根据camera_id的不同，构成的pair不同 而放在的同一个feature id对应的向量里 所以上面的pair写为了向量
             */
-
             estimator.processImage(image, img_msg->header); // 处理图像函数
 
             /*
@@ -414,7 +413,6 @@ void process()          //处理IMU和图像数据
         }
 
         m_estimator.unlock();
-
         m_buf.lock();
         m_state.lock();
         if (estimator.solver_flag == Estimator::SolverFlag::NON_LINEAR)
@@ -460,6 +458,7 @@ void process()          //处理IMU和图像数据
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "vins_estimator");
+
     ros::NodeHandle n("~");
     ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Info);
 
