@@ -15,7 +15,7 @@ using namespace Eigen;
 
 #include "parameters.h"
 
-class FeaturePerFrame
+class FeaturePerFrame    // 虽然是个类，类似于c中struct的作用
 {
   public:
     FeaturePerFrame(const Eigen::Matrix<double, 7, 1> &_point, double td)

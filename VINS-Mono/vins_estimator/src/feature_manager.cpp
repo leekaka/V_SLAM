@@ -43,6 +43,11 @@ int FeatureManager::getFeatureCount()
 
 /*
     检查视差函数
+    FeaturePerFrame  类函数
+    vector<FeaturePerFrame> feature_per_frame;
+    list<FeaturePerId> feature;
+    FeaturePerId(feature_id, frame_count)  这个 feature 存储了 每帧图像的所有特征点
+
 */
 bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vector<pair<int, Eigen::Matrix<double, 7, 1>>>> &image, double td)
 {
@@ -67,7 +72,7 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
         if (it == feature.end())  //
         {
             feature.push_back(FeaturePerId(feature_id, frame_count));
-            feature.back().feature_per_frame.push_back(f_per_fra);
+            feature.back().feature_per_frame.push_back(f_per_fra);     
         }
         else if (it->feature_id == feature_id) //
         {
