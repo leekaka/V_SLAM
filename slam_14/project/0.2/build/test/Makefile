@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kali/kaka/slambook/project/0.2
+CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kali/kaka/slambook/project/0.2/build
+CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/kali/kaka/slambook/project/0.2/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/slambook/project/0.2/build/CMakeFiles /home/kali/kaka/slambook/project/0.2/build/test/CMakeFiles/progress.marks
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/slambook/project/0.2/build/CMakeFiles 0
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/test/CMakeFiles/progress.marks
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/clean
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 test/CMakeFiles/run_vo.dir/rule:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/run_vo.dir/rule
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 test/CMakeFiles/run_vo.dir/rule
 .PHONY : test/CMakeFiles/run_vo.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ run_vo: test/CMakeFiles/run_vo.dir/rule
 
 # fast build rule for target.
 run_vo/fast:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/build
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/build
 .PHONY : run_vo/fast
 
 run_vo.o: run_vo.cpp.o
@@ -131,7 +131,7 @@ run_vo.o: run_vo.cpp.o
 
 # target to build an object file
 run_vo.cpp.o:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.o
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.o
 .PHONY : run_vo.cpp.o
 
 run_vo.i: run_vo.cpp.i
@@ -140,7 +140,7 @@ run_vo.i: run_vo.cpp.i
 
 # target to preprocess a source file
 run_vo.cpp.i:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.i
 .PHONY : run_vo.cpp.i
 
 run_vo.s: run_vo.cpp.s
@@ -149,7 +149,7 @@ run_vo.s: run_vo.cpp.s
 
 # target to generate assembly for a file
 run_vo.cpp.s:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f test/CMakeFiles/run_vo.dir/build.make test/CMakeFiles/run_vo.dir/run_vo.cpp.s
 .PHONY : run_vo.cpp.s
 
 # Help Target
@@ -175,6 +175,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

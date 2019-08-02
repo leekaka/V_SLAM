@@ -1,0 +1,3 @@
+/home/kali/kaka/slambook/ch6/ceres_curve_fitting/build/CMakeFiles/edit_cache.dir
+/home/kali/kaka/slambook/ch6/ceres_curve_fitting/build/CMakeFiles/rebuild_cache.dir
+/home/kali/kaka/slambook/ch6/ceres_curve_fitting/build/CMakeFiles/curve_fitting.dir

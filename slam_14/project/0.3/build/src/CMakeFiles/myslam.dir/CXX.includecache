@@ -88,47 +88,35 @@ myslam/map.h
 opencv2/features2d/features2d.hpp
 -
 
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
-so3.h
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
-
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
-Eigen/Core
--
-Eigen/StdVector
--
-Eigen/Geometry
--
-
-/home/kali/kaka/slambook/project/0.3/src/camera.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/camera.cpp
 myslam/camera.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/camera.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/camera.h
 myslam/config.h
 -
 
-/home/kali/kaka/slambook/project/0.3/src/config.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/config.cpp
 myslam/config.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/config.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/config.h
 
-/home/kali/kaka/slambook/project/0.3/src/frame.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/frame.cpp
 myslam/frame.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/frame.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/frame.h
 
-/home/kali/kaka/slambook/project/0.3/src/g2o_types.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/g2o_types.cpp
 myslam/g2o_types.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/g2o_types.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/g2o_types.h
 
-/home/kali/kaka/slambook/project/0.3/src/map.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/map.cpp
 myslam/map.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/map.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/map.h
 
-/home/kali/kaka/slambook/project/0.3/src/mappoint.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/mappoint.cpp
 myslam/common_include.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/common_include.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/common_include.h
 myslam/mappoint.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/mappoint.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/mappoint.h
 
-/home/kali/kaka/slambook/project/0.3/src/visual_odometry.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/visual_odometry.cpp
 opencv2/highgui/highgui.hpp
 -
 opencv2/imgproc/imgproc.hpp
@@ -140,11 +128,23 @@ algorithm
 boost/timer.hpp
 -
 myslam/config.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/config.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/config.h
 myslam/visual_odometry.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/visual_odometry.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/visual_odometry.h
 myslam/g2o_types.h
-/home/kali/kaka/slambook/project/0.3/src/myslam/g2o_types.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.3/src/myslam/g2o_types.h
+
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/se3.h
+so3.h
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
+
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
+Eigen/Core
+-
+Eigen/StdVector
+-
+Eigen/Geometry
+-
 
 /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h
 opencv2/core/core_c.h

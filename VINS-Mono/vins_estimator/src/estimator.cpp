@@ -358,7 +358,7 @@ bool Estimator::initialStructure()
             var += (tmp_g - aver_g).transpose() * (tmp_g - aver_g);
             //cout << "frame g " << tmp_g.transpose() << endl;
         }
-        var = sqrt(var / ((int)all_image_frame.size() - 1));
+        var = sqrt(var / ((int)all_image_frame.size() - 1)); 
         //ROS_WARN("IMU variation %f!", var);
         if(var < 0.25)
         {
@@ -408,7 +408,8 @@ bool Estimator::initialStructure()
         //WINDOW_SIZE中的图像先通过 l帧求出一个包含尺度因子的旋转和平移，
         然后通过l帧求出三维特征点，然后  根据  pnp，统一了  WINDOW_SIZE  中所有图像的尺度因子，计算所有帧的旋转平移以及三维点
         //最后通过ceres优化了   窗口里所有的旋转平移和三维坐标（重投影残差最小）
-        //输入变量frame_count + 1，relative_R, relative_T,传出变量  Q[WINDOW_SIZE+1],   T[WINDOW_SIZE+1],   sfm_tracked_points[featureid,positon[3]]
+        //输入变量frame_count + 1，relative_R, relative_T,
+        传出变量  Q[WINDOW_SIZE+1],   T[WINDOW_SIZE+1],   sfm_tracked_points[featureid,positon[3]]
         //最后计算出来的坐标系原点是l帧，旋转平移也是以l为原点，
         也就是从l帧转换到当前帧的旋转和平移，而不是两帧之间的。
         但是在函数的最后，将  q 和 t 求了反转，本来是第l帧到当前帧的变换矩阵，  最后变成了从当前帧转到  l 帧
@@ -457,7 +458,7 @@ bool Estimator::initialStructure()
             int feature_id = id_pts.first;
             for (auto &i_p : id_pts.second)
             {
-                it = sfm_tracked_points.find(feature_id);
+                it = sfm_tracked_points.find(feature_id);  // 三角化后的点放在 it 里 只有一个 然后二维点有很多个
                 if(it != sfm_tracked_points.end())
                 {
                     Vector3d world_pts = it->second;
@@ -532,7 +533,7 @@ bool Estimator::visualInitialAlign()
         而是在初始化坐标系下的重力，在xyz方向上都有分量， 角计偏置和尺度因子
         解出的x的维度是(all_frame_count * 3 + 3 + 1)*1,= [dv0.dv1.dv2,...,dvn,g,s]
         dvn等是每两帧之间速度，都是三维向量，最后一项是尺度因子，倒数第四项到第二项为重力因子
-        该函数里计算完角计偏置后，认为加计偏置是0，repropagate  计算了all_image_frame中的imu部分
+        该函数里计算完角计偏置后，认为加计偏置是0，repropagate  计算了all_image_frame中的  imu部分
     */
 
     if(!result)
@@ -626,7 +627,7 @@ bool Estimator::relativePose(Matrix3d &relative_R, Vector3d &relative_T, int &l)
                 sum_parallax = sum_parallax + parallax;
 
             }
-            average_parallax = 1.0 * sum_parallax / int(corres.size());
+            average_parallax = 1.0 * sum_parallax / int(corres.size());   // average_parallax * 460视差超过30  且能 求出 R T
             if(average_parallax * 460 > 30 && m_estimator.solveRelativeRT(corres, relative_R, relative_T))
             {
                 l = i;

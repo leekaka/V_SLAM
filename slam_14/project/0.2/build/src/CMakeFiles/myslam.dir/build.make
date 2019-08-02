@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kali/kaka/slambook/project/0.2
+CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kali/kaka/slambook/project/0.2/build
+CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build
 
 # Include any dependencies generated for this target.
 include src/CMakeFiles/myslam.dir/depend.make
@@ -59,16 +59,16 @@ include src/CMakeFiles/myslam.dir/flags.make
 
 src/CMakeFiles/myslam.dir/frame.cpp.o: src/CMakeFiles/myslam.dir/flags.make
 src/CMakeFiles/myslam.dir/frame.cpp.o: ../src/frame.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/slambook/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/myslam.dir/frame.cpp.o"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/frame.cpp.o -c /home/kali/kaka/slambook/project/0.2/src/frame.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/CMakeFiles/myslam.dir/frame.cpp.o"
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/frame.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/frame.cpp
 
 src/CMakeFiles/myslam.dir/frame.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myslam.dir/frame.cpp.i"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/slambook/project/0.2/src/frame.cpp > CMakeFiles/myslam.dir/frame.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/frame.cpp > CMakeFiles/myslam.dir/frame.cpp.i
 
 src/CMakeFiles/myslam.dir/frame.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myslam.dir/frame.cpp.s"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/slambook/project/0.2/src/frame.cpp -o CMakeFiles/myslam.dir/frame.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/frame.cpp -o CMakeFiles/myslam.dir/frame.cpp.s
 
 src/CMakeFiles/myslam.dir/frame.cpp.o.requires:
 
@@ -83,16 +83,16 @@ src/CMakeFiles/myslam.dir/frame.cpp.o.provides.build: src/CMakeFiles/myslam.dir/
 
 src/CMakeFiles/myslam.dir/mappoint.cpp.o: src/CMakeFiles/myslam.dir/flags.make
 src/CMakeFiles/myslam.dir/mappoint.cpp.o: ../src/mappoint.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/slambook/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/myslam.dir/mappoint.cpp.o"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/mappoint.cpp.o -c /home/kali/kaka/slambook/project/0.2/src/mappoint.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object src/CMakeFiles/myslam.dir/mappoint.cpp.o"
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/mappoint.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/mappoint.cpp
 
 src/CMakeFiles/myslam.dir/mappoint.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myslam.dir/mappoint.cpp.i"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/slambook/project/0.2/src/mappoint.cpp > CMakeFiles/myslam.dir/mappoint.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/mappoint.cpp > CMakeFiles/myslam.dir/mappoint.cpp.i
 
 src/CMakeFiles/myslam.dir/mappoint.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myslam.dir/mappoint.cpp.s"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/slambook/project/0.2/src/mappoint.cpp -o CMakeFiles/myslam.dir/mappoint.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/mappoint.cpp -o CMakeFiles/myslam.dir/mappoint.cpp.s
 
 src/CMakeFiles/myslam.dir/mappoint.cpp.o.requires:
 
@@ -107,16 +107,16 @@ src/CMakeFiles/myslam.dir/mappoint.cpp.o.provides.build: src/CMakeFiles/myslam.d
 
 src/CMakeFiles/myslam.dir/map.cpp.o: src/CMakeFiles/myslam.dir/flags.make
 src/CMakeFiles/myslam.dir/map.cpp.o: ../src/map.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/slambook/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/myslam.dir/map.cpp.o"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/map.cpp.o -c /home/kali/kaka/slambook/project/0.2/src/map.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object src/CMakeFiles/myslam.dir/map.cpp.o"
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/map.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/map.cpp
 
 src/CMakeFiles/myslam.dir/map.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myslam.dir/map.cpp.i"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/slambook/project/0.2/src/map.cpp > CMakeFiles/myslam.dir/map.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/map.cpp > CMakeFiles/myslam.dir/map.cpp.i
 
 src/CMakeFiles/myslam.dir/map.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myslam.dir/map.cpp.s"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/slambook/project/0.2/src/map.cpp -o CMakeFiles/myslam.dir/map.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/map.cpp -o CMakeFiles/myslam.dir/map.cpp.s
 
 src/CMakeFiles/myslam.dir/map.cpp.o.requires:
 
@@ -131,16 +131,16 @@ src/CMakeFiles/myslam.dir/map.cpp.o.provides.build: src/CMakeFiles/myslam.dir/ma
 
 src/CMakeFiles/myslam.dir/camera.cpp.o: src/CMakeFiles/myslam.dir/flags.make
 src/CMakeFiles/myslam.dir/camera.cpp.o: ../src/camera.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/slambook/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/myslam.dir/camera.cpp.o"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/camera.cpp.o -c /home/kali/kaka/slambook/project/0.2/src/camera.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object src/CMakeFiles/myslam.dir/camera.cpp.o"
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/camera.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/camera.cpp
 
 src/CMakeFiles/myslam.dir/camera.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myslam.dir/camera.cpp.i"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/slambook/project/0.2/src/camera.cpp > CMakeFiles/myslam.dir/camera.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/camera.cpp > CMakeFiles/myslam.dir/camera.cpp.i
 
 src/CMakeFiles/myslam.dir/camera.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myslam.dir/camera.cpp.s"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/slambook/project/0.2/src/camera.cpp -o CMakeFiles/myslam.dir/camera.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/camera.cpp -o CMakeFiles/myslam.dir/camera.cpp.s
 
 src/CMakeFiles/myslam.dir/camera.cpp.o.requires:
 
@@ -155,16 +155,16 @@ src/CMakeFiles/myslam.dir/camera.cpp.o.provides.build: src/CMakeFiles/myslam.dir
 
 src/CMakeFiles/myslam.dir/config.cpp.o: src/CMakeFiles/myslam.dir/flags.make
 src/CMakeFiles/myslam.dir/config.cpp.o: ../src/config.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/slambook/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/myslam.dir/config.cpp.o"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/config.cpp.o -c /home/kali/kaka/slambook/project/0.2/src/config.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object src/CMakeFiles/myslam.dir/config.cpp.o"
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/config.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/config.cpp
 
 src/CMakeFiles/myslam.dir/config.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myslam.dir/config.cpp.i"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/slambook/project/0.2/src/config.cpp > CMakeFiles/myslam.dir/config.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/config.cpp > CMakeFiles/myslam.dir/config.cpp.i
 
 src/CMakeFiles/myslam.dir/config.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myslam.dir/config.cpp.s"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/slambook/project/0.2/src/config.cpp -o CMakeFiles/myslam.dir/config.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/config.cpp -o CMakeFiles/myslam.dir/config.cpp.s
 
 src/CMakeFiles/myslam.dir/config.cpp.o.requires:
 
@@ -179,16 +179,16 @@ src/CMakeFiles/myslam.dir/config.cpp.o.provides.build: src/CMakeFiles/myslam.dir
 
 src/CMakeFiles/myslam.dir/visual_odometry.cpp.o: src/CMakeFiles/myslam.dir/flags.make
 src/CMakeFiles/myslam.dir/visual_odometry.cpp.o: ../src/visual_odometry.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/slambook/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/myslam.dir/visual_odometry.cpp.o"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/visual_odometry.cpp.o -c /home/kali/kaka/slambook/project/0.2/src/visual_odometry.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object src/CMakeFiles/myslam.dir/visual_odometry.cpp.o"
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myslam.dir/visual_odometry.cpp.o -c /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/visual_odometry.cpp
 
 src/CMakeFiles/myslam.dir/visual_odometry.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myslam.dir/visual_odometry.cpp.i"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/slambook/project/0.2/src/visual_odometry.cpp > CMakeFiles/myslam.dir/visual_odometry.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/visual_odometry.cpp > CMakeFiles/myslam.dir/visual_odometry.cpp.i
 
 src/CMakeFiles/myslam.dir/visual_odometry.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myslam.dir/visual_odometry.cpp.s"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/slambook/project/0.2/src/visual_odometry.cpp -o CMakeFiles/myslam.dir/visual_odometry.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src/visual_odometry.cpp -o CMakeFiles/myslam.dir/visual_odometry.cpp.s
 
 src/CMakeFiles/myslam.dir/visual_odometry.cpp.o.requires:
 
@@ -246,7 +246,7 @@ myslam_EXTERNAL_OBJECTS =
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_ximgproc3.so.3.3.1
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_xobjdetect3.so.3.3.1
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_xphoto3.so.3.3.1
-../lib/libmyslam.so: /home/kali/kaka/slambook/3rdparty/Sophus/build/libSophus.so
+../lib/libmyslam.so: /home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/build/libSophus.so
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_shape3.so.3.3.1
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_photo3.so.3.3.1
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_datasets3.so.3.3.1
@@ -267,8 +267,8 @@ myslam_EXTERNAL_OBJECTS =
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_imgproc3.so.3.3.1
 ../lib/libmyslam.so: /opt/ros/kinetic/lib/x86_64-linux-gnu/libopencv_core3.so.3.3.1
 ../lib/libmyslam.so: src/CMakeFiles/myslam.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kali/kaka/slambook/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX shared library ../../lib/libmyslam.so"
-	cd /home/kali/kaka/slambook/project/0.2/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/myslam.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX shared library ../../lib/libmyslam.so"
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/myslam.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 src/CMakeFiles/myslam.dir/build: ../lib/libmyslam.so
@@ -285,10 +285,10 @@ src/CMakeFiles/myslam.dir/requires: src/CMakeFiles/myslam.dir/visual_odometry.cp
 .PHONY : src/CMakeFiles/myslam.dir/requires
 
 src/CMakeFiles/myslam.dir/clean:
-	cd /home/kali/kaka/slambook/project/0.2/build/src && $(CMAKE_COMMAND) -P CMakeFiles/myslam.dir/cmake_clean.cmake
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src && $(CMAKE_COMMAND) -P CMakeFiles/myslam.dir/cmake_clean.cmake
 .PHONY : src/CMakeFiles/myslam.dir/clean
 
 src/CMakeFiles/myslam.dir/depend:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kali/kaka/slambook/project/0.2 /home/kali/kaka/slambook/project/0.2/src /home/kali/kaka/slambook/project/0.2/build /home/kali/kaka/slambook/project/0.2/build/src /home/kali/kaka/slambook/project/0.2/build/src/CMakeFiles/myslam.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2 /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/src /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src/CMakeFiles/myslam.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : src/CMakeFiles/myslam.dir/depend
 
