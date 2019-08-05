@@ -9,11 +9,18 @@ void bundleAdjustment (
     // 初始化g2o
     typedef g2o::BlockSolver< g2o::BlockSolverTraits<6,3> > Block;  // pose 维度为 6, landmark 维度为 3
     Block::LinearSolverType* linearSolver = new g2o::LinearSolverCSparse<Block::PoseMatrixType>(); // 线性方程求解器
-    //Block* solver_ptr = new Block ( linearSolver );     // 矩阵块求解器
+    
+	
+	//Block* solver_ptr = new Block ( linearSolver );     // 矩阵块求解器
     Block* solver_ptr = new Block ( unique_ptr<Block::LinearSolverType>(linearSolver) );  
-    //g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg ( solver_ptr );
+    
+	
+	
+	//g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg ( solver_ptr );
     //g2o::OptimizationAlgorithmGaussNewton* solver = new g2o::OptimizationAlgorithmGaussNewton( std::unique_ptr<Block>(solver_ptr) );
     g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg(unique_ptr<Block>(solver_ptr) );
+
+
     g2o::SparseOptimizer optimizer;
     optimizer.setAlgorithm ( solver );
 
@@ -23,7 +30,8 @@ void bundleAdjustment (
     R_mat <<
           R.at<double> ( 0,0 ), R.at<double> ( 0,1 ), R.at<double> ( 0,2 ),
                R.at<double> ( 1,0 ), R.at<double> ( 1,1 ), R.at<double> ( 1,2 ),
-               R.at<double> ( 2,0 ), R.at<double> ( 2,1 ), R.at<double> ( 2,2 );
+               R.at<double> ( 2,0 ), R.at<double> ( 2,1 ), R.at<double> ( 2,2 );  // 旋转矩阵
+	
     pose->setId ( 0 );
     pose->setEstimate ( g2o::SE3Quat (
                             R_mat,

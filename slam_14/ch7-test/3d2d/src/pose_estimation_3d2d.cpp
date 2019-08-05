@@ -35,7 +35,7 @@ int main ( int argc, char** argv )
     cout<<"3d-2d pairs: "<<pts_3d.size() <<endl;
 
     Mat r, t;
-    solvePnP ( pts_3d, pts_2d, K, Mat(), r, t, false ); // 调用OpenCV 的 PnP 求解，可选择EPNP，DLS等方法
+    solvePnP ( pts_3d, pts_2d, K, Mat(), r, t, false ); // 调用OpenCV 的 PnP 求解，可选择EPNP，DLS等方法  // 通过pnp求初始值
     Mat R;
     cv::Rodrigues ( r, R ); // r为旋转向量形式，用Rodrigues公式转换为矩阵
 
@@ -44,5 +44,5 @@ int main ( int argc, char** argv )
 
     cout<<"calling bundle adjustment"<<endl;
 
-    bundleAdjustment ( pts_3d, pts_2d, K, R, t );
+    bundleAdjustment ( pts_3d, pts_2d, K, R, t );  // 优化需要 3d2d点,姿态和相机参数
 }

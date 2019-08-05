@@ -16,9 +16,16 @@ int main ( int argc, char** argv )
         return 1;
     }
 
-    myslam::Config::setParameterFile ( argv[1] );
-    myslam::VisualOdometry::Ptr vo ( new myslam::VisualOdometry );
+    // 输入参数
+    myslam::Config::setParameterFile ( argv[1] );  
 
+
+    // vo 就是入口函数
+    myslam::VisualOdometry::Ptr vo ( new myslam::VisualOdometry ); 
+
+
+
+    // 输入数据文件,包括rgb depth,  rgb_t ,depth_t
     string dataset_dir = myslam::Config::get<string> ( "dataset_dir" );
     cout<<"dataset: "<<dataset_dir<<endl;
     ifstream fin ( dataset_dir+"/associate.txt" );
@@ -43,10 +50,14 @@ int main ( int argc, char** argv )
             break;
     }
 
+
+    // 相机函数的入口
     myslam::Camera::Ptr camera ( new myslam::Camera );
+
+
     
     // visualization
-    cv::viz::Viz3d vis("Visual Odometry");
+    cv::viz::Viz3d vis("Visual Odometry");   // 可视函数的入口
     cv::viz::WCoordinateSystem world_coor(1.0), camera_coor(0.5);
     cv::Point3d cam_pos( 0, -1.0, -1.0 ), cam_focal_point(0,0,0), cam_y_dir(0,1,0);
     cv::Affine3d cam_pose = cv::viz::makeCameraPose( cam_pos, cam_focal_point, cam_y_dir );
@@ -57,6 +68,8 @@ int main ( int argc, char** argv )
     vis.showWidget( "World", world_coor );
     vis.showWidget( "Camera", camera_coor );
 
+
+    // 开始处理 数据
     cout<<"read total "<<rgb_files.size() <<" entries"<<endl;
     for ( int i=0; i<rgb_files.size(); i++ )
     {
@@ -64,6 +77,9 @@ int main ( int argc, char** argv )
         Mat depth = cv::imread ( depth_files[i], -1 );
         if ( color.data==nullptr || depth.data==nullptr )
             break;
+
+
+        // 帧指针,对于每一图像都创建一帧
         myslam::Frame::Ptr pFrame = myslam::Frame::createFrame();
         pFrame->camera_ = camera;
         pFrame->color_ = color;
@@ -71,13 +87,20 @@ int main ( int argc, char** argv )
         pFrame->time_stamp_ = rgb_times[i];
 
         boost::timer timer;
-        vo->addFrame ( pFrame );
+        vo->addFrame ( pFrame );  // VO的实现,一帧一帧输入图像
+
         cout<<"VO costs time: "<<timer.elapsed()<<endl;
         
         if ( vo->state_ == myslam::VisualOdometry::LOST )
             break;
-        SE3 Tcw = pFrame->T_c_w_.inverse();
+
+
+
+        SE3 Tcw = pFrame->T_c_w_.inverse();   // 求出来的姿态做反转求逆
         
+
+
+
         // show the map and the camera pose 
         cv::Affine3d M(
             cv::Affine3d::Mat3( 
