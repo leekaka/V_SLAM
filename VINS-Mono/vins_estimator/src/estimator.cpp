@@ -156,33 +156,6 @@ void Estimator::processImage(const map<int, vector<pair<int, Eigen::Matrix<doubl
     else
         marginalization_flag = MARGIN_SECOND_NEW;  // 1 reject Non-keyframe
 
-    /*
-        变量说明：
-
-        局部变量：
-        Imageframe：ImageFrame 类型，包含了map <featureId,vector<pair<cameraid,Matrix信息>>>
-        IntegrationBase *pre_integration;存储了一幅图像的所有特征Id，以及距离前一帧图像的IMU信息(RT)
-        全局变量:
-        tmp_pre_integration: //tmp_pre_integration 是全局变量，内容和estimator中的pre_integration一致
-
-        Estimator的成员变量：
-        Headers：WINDOW_SIZE+1大小的数组，存储了窗口里的时间戳信息
-        all_image_frame：map<时间戳, ImageFrame> 
-
-        //将每幅图像的特征map和时间戳都存入all_image_frame中，在后面的slideWindow里，在删除后面图像的逻辑中，
-        删除了all_image_frame  中不是关键帧的一些图像，但是slideWindow 里删前面图像时，并没有删除  all_image_frame 中前面的图像
-
-        FeatureManager的成员变量：
-        Estimator有个成员变量  FeatureManager f_manager;  而FeatureManager 有个成员变量feature，下面主要说feature的内容：
-        feature：list<FeatureId> 存储了 WINDOW_SIZE 中的所有图像的特征信息信息。  
-        每个元素是一幅图像的信息。每个元素为 FeatureId形式。
-        FeatureId 包含vector<FeaturePerFrame> feature_per_frame，基本格式为feature_id+startframe
-
-        局部变量：
-        sfm_f: 是 initialStructure()中的局部变量，类型为vector<SFMFeature>，或者写成vector<featureid,<frame_count,Matrix信息>>，
-        注意这里面的frame_count是初始化函数里的frame_count，不是WINDOW_SIZE里的frame_count。这个变量有点类似于feature，
-        但又不一样，首先它存储的是用于初始化的所有图像里的特征信息， 其次，他是根据featureid分类的。
-    */
 
     ROS_DEBUG("this frame is--------------------%s", marginalization_flag ? "reject" : "accept");
     ROS_DEBUG("%s", marginalization_flag ? "Non-keyframe" : "Keyframe");

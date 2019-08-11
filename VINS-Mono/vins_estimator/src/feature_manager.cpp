@@ -82,9 +82,13 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     }
 
 
-    if (frame_count < 2 || last_track_num < 20)     //特征点数小于20
+    if (frame_count < 2 || last_track_num < 20)     //特征点数小于20，那肯定需要新关键帧了
         return true;
 
+
+
+    //该特征首次出现的图像帧  距离当前帧超过或正好两帧 && 该特征从首次出现帧到当前帧之间最多只掉了一帧，而在其他帧中都出现了
+    //parallax_sum,parallax_num在每幅图像调用该函数的时候都会重新置为0，因此parallax_sum,parallax_num都是计算之前的list feature中的所有特征到当前帧的视差总和
 
     for (auto &it_per_id : feature)
     {
