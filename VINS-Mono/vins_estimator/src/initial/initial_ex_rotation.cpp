@@ -17,7 +17,7 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
     Rimu.push_back(delta_q_imu.toRotationMatrix());
 
 
-    Rc_g.push_back(ric.inverse() * delta_q_imu * ric);      //ric是初始化的IMU 和相机之间 的 相对姿态
+    Rc_g.push_back(ric.inverse() * delta_q_imu * ric);      //ric是初始化的IMU 和相机之间 的 相对姿态  RIC ==> Rcb
 
     Eigen::MatrixXd A(frame_count * 4, 4);
 
@@ -36,6 +36,8 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
 
         double huber = angular_distance > 5.0 ? 5.0 / angular_distance : 1.0;  //
         ++sum_ok;
+
+        
         Matrix4d L, R;
 
         double w = Quaterniond(Rc[i]).w();  // 
@@ -61,6 +63,8 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
     Matrix<double, 4, 1> x = svd.matrixV().col(3);
     Quaterniond estimated_R(x);
     ric = estimated_R.toRotationMatrix().inverse();
+
+
     //cout << svd.singularValues().transpose() << endl;
     //cout << ric << endl;
     Vector3d ric_cov;

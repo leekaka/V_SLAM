@@ -10,15 +10,18 @@ void GlobalSFM::triangulatePoint(Eigen::Matrix<double, 3, 4> &Pose0, Eigen::Matr
 	design_matrix.row(1) = point0[1] * Pose0.row(2) - Pose0.row(1);
 	design_matrix.row(2) = point1[0] * Pose1.row(2) - Pose1.row(0);
 	design_matrix.row(3) = point1[1] * Pose1.row(2) - Pose1.row(1);
+
 	Vector4d triangulated_point;
 	triangulated_point =
 		      design_matrix.jacobiSvd(Eigen::ComputeFullV).matrixV().rightCols<1>();
+
 	point_3d(0) = triangulated_point(0) / triangulated_point(3);
 	point_3d(1) = triangulated_point(1) / triangulated_point(3);
 	point_3d(2) = triangulated_point(2) / triangulated_point(3);
 }
 
 
+//3d-2d求姿态
 bool GlobalSFM::solveFrameByPnP(Matrix3d &R_initial, Vector3d &P_initial, int i,
 								vector<SFMFeature> &sfm_f)
 {
@@ -28,6 +31,7 @@ bool GlobalSFM::solveFrameByPnP(Matrix3d &R_initial, Vector3d &P_initial, int i,
 	{
 		if (sfm_f[j].state != true)
 			continue;
+
 		Vector2d point2d;
 		for (int k = 0; k < (int)sfm_f[j].observation.size(); k++)
 		{
@@ -36,6 +40,7 @@ bool GlobalSFM::solveFrameByPnP(Matrix3d &R_initial, Vector3d &P_initial, int i,
 				Vector2d img_pts = sfm_f[j].observation[k].second;
 				cv::Point2f pts_2(img_pts(0), img_pts(1));
 				pts_2_vector.push_back(pts_2);
+
 				cv::Point3f pts_3(sfm_f[j].position[0], sfm_f[j].position[1], sfm_f[j].position[2]);
 				pts_3_vector.push_back(pts_3);
 				break;
@@ -52,6 +57,7 @@ bool GlobalSFM::solveFrameByPnP(Matrix3d &R_initial, Vector3d &P_initial, int i,
 	cv::eigen2cv(R_initial, tmp_r);
 	cv::Rodrigues(tmp_r, rvec);
 	cv::eigen2cv(P_initial, t);
+
 	cv::Mat K = (cv::Mat_<double>(3, 3) << 1, 0, 0, 0, 1, 0, 0, 0, 1);
 	bool pnp_succ;
 	pnp_succ = cv::solvePnP(pts_3_vector, pts_2_vector, K, D, rvec, t, 1);
@@ -65,12 +71,14 @@ bool GlobalSFM::solveFrameByPnP(Matrix3d &R_initial, Vector3d &P_initial, int i,
 	cv::cv2eigen(r, R_pnp);
 	MatrixXd T_pnp;
 	cv::cv2eigen(t, T_pnp);
+
 	R_initial = R_pnp;
 	P_initial = T_pnp;
 	return true;
 
 }
 
+// 根据 两帧 图像 三角化 求出 每个特征点的 3d点
 void GlobalSFM::triangulateTwoFrames(int frame0, Eigen::Matrix<double, 3, 4> &Pose0, 
 									 int frame1, Eigen::Matrix<double, 3, 4> &Pose1,
 									 vector<SFMFeature> &sfm_f)
@@ -80,6 +88,7 @@ void GlobalSFM::triangulateTwoFrames(int frame0, Eigen::Matrix<double, 3, 4> &Po
 	{
 		if (sfm_f[j].state == true)
 			continue;
+
 		bool has_0 = false, has_1 = false;
 		Vector2d point0;
 		Vector2d point1;
@@ -96,6 +105,7 @@ void GlobalSFM::triangulateTwoFrames(int frame0, Eigen::Matrix<double, 3, 4> &Po
 				has_1 = true;
 			}
 		}
+
 		if (has_0 && has_1)
 		{
 			Vector3d point_3d;
@@ -109,11 +119,18 @@ void GlobalSFM::triangulateTwoFrames(int frame0, Eigen::Matrix<double, 3, 4> &Po
 	}
 }
 
-// 	 q w_R_cam t w_R_cam
-//  c_rotation cam_R_w 
-//  c_translation cam_R_w
+// q w_R_cam t w_R_cam
+// c_rotation cam_R_w 
+// c_translation cam_R_w
 // relative_q[i][j]  j_q_i
 // relative_t[i][j]  j_t_ji  (j < i)
+/*
+
+   if(!sfm.construct(frame_count + 1, Q, T, l,
+              relative_R, relative_T,
+              sfm_f, sfm_tracked_points))
+
+*/
 
 /* 核心函数 */
 bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
@@ -124,11 +141,15 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	//cout << "set 0 and " << l << " as known " << endl;
 	// have relative_r relative_t
 	// intial two view
+
 	q[l].w() = 1;
 	q[l].x() = 0;
 	q[l].y() = 0;
 	q[l].z() = 0;
+
 	T[l].setZero();
+
+
 	q[frame_num - 1] = q[l] * Quaterniond(relative_R);
 	T[frame_num - 1] = relative_T;
 
@@ -138,14 +159,17 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	//rotate to cam frame
 	Matrix3d c_Rotation[frame_num];
 	Vector3d c_Translation[frame_num];
+
 	Quaterniond c_Quat[frame_num];
 	double c_rotation[frame_num][4];
 	double c_translation[frame_num][3];
 	Eigen::Matrix<double, 3, 4> Pose[frame_num];
 
+
 	c_Quat[l] = q[l].inverse();
 	c_Rotation[l] = c_Quat[l].toRotationMatrix();
 	c_Translation[l] = -1 * (c_Rotation[l] * T[l]);
+
 	Pose[l].block<3, 3>(0, 0) = c_Rotation[l];
 	Pose[l].block<3, 1>(0, 3) = c_Translation[l];
 
@@ -153,7 +177,9 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	c_Rotation[frame_num - 1] = c_Quat[frame_num - 1].toRotationMatrix();
 	c_Translation[frame_num - 1] = -1 * (c_Rotation[frame_num - 1] * T[frame_num - 1]);
 	Pose[frame_num - 1].block<3, 3>(0, 0) = c_Rotation[frame_num - 1];
-	Pose[frame_num - 1].block<3, 1>(0, 3) = c_Translation[frame_num - 1];
+	Pose[frame_num - 1].block<3, 1>(0, 3) = c_Translation[frame_num - 1];   
+
+	// 这样的话求出来的是 相对于 l 帧是  原点的 旋转  和 、平移  求了个inverse 就是 到 l 帧   
 
 
 	//1: trangulate between l ----- frame_num - 1
@@ -161,15 +187,17 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	for (int i = l; i < frame_num - 1 ; i++)
 	{
 		// solve pnp
-		if (i > l)
+		if (i > l)  // 最开始的时候不会进这个 i=l ，会去先三角化，三角化之后才会有一个3d点出来
 		{
 			Matrix3d R_initial = c_Rotation[i - 1];
 			Vector3d P_initial = c_Translation[i - 1];
+
 			if(!solveFrameByPnP(R_initial, P_initial, i, sfm_f))
 				return false;
 				
 			c_Rotation[i] = R_initial;
 			c_Translation[i] = P_initial;
+
 			c_Quat[i] = c_Rotation[i];
 			Pose[i].block<3, 3>(0, 0) = c_Rotation[i];
 			Pose[i].block<3, 1>(0, 3) = c_Translation[i];
@@ -185,6 +213,8 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	for (int i = l + 1; i < frame_num - 1; i++)
 		triangulateTwoFrames(l, Pose[l], i, Pose[i], sfm_f);
 
+
+
 	//4: solve pnp l-1; triangulate l-1 ----- l
 	//             l-2              l-2 ----- l
 	for (int i = l - 1; i >= 0; i--)
@@ -192,7 +222,7 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 		//solve pnp
 		Matrix3d R_initial = c_Rotation[i + 1];
 		Vector3d P_initial = c_Translation[i + 1];
-		if(!solveFrameByPnP(R_initial, P_initial, i, sfm_f))
+		if(!solveFrameByPnP(R_initial, P_initial, i, sfm_f))  // 只计算Pnp(i的相对姿态)
 			return false;
 		c_Rotation[i] = R_initial;
 		c_Translation[i] = P_initial;
@@ -200,7 +230,7 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 		Pose[i].block<3, 3>(0, 0) = c_Rotation[i];
 		Pose[i].block<3, 1>(0, 3) = c_Translation[i];
 		//triangulate
-		triangulateTwoFrames(i, Pose[i], l, Pose[l], sfm_f);
+		triangulateTwoFrames(i, Pose[i], l, Pose[l], sfm_f);  // 三角化 i 和 l帧的  特征点
 	}
 
 
@@ -246,18 +276,21 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 
 	
 	//cout << " begin full BA " << endl;
-	for (int i = 0; i < frame_num; i++)
+	for (int i = 0; i < frame_num; i++)  // 全局优化，优化每个特征点
 	{
 		//double array for ceres
 		c_translation[i][0] = c_Translation[i].x();
 		c_translation[i][1] = c_Translation[i].y();
 		c_translation[i][2] = c_Translation[i].z();
+
 		c_rotation[i][0] = c_Quat[i].w();
 		c_rotation[i][1] = c_Quat[i].x();
 		c_rotation[i][2] = c_Quat[i].y();
 		c_rotation[i][3] = c_Quat[i].z();
+
 		problem.AddParameterBlock(c_rotation[i], 4, local_parameterization);
 		problem.AddParameterBlock(c_translation[i], 3);
+
 		if (i == l)
 		{
 			problem.SetParameterBlockConstant(c_rotation[i]);
@@ -277,10 +310,10 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 			int l = sfm_f[i].observation[j].first;
 			ceres::CostFunction* cost_function = ReprojectionError3D::Create(
 												sfm_f[i].observation[j].second.x(),
-												sfm_f[i].observation[j].second.y());
+												sfm_f[i].observation[j].second.y()); // 像素
 
     		problem.AddResidualBlock(cost_function, NULL, c_rotation[l], c_translation[l], 
-    								sfm_f[i].position);	 
+    								sfm_f[i].position);	 // 残差
 		}
 
 	}
@@ -302,13 +335,16 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 		//cout << "vision only BA not converge " << endl;
 		return false;
 	}
+
+	// 输出结果
+
 	for (int i = 0; i < frame_num; i++)
 	{
 		q[i].w() = c_rotation[i][0]; 
 		q[i].x() = c_rotation[i][1]; 
 		q[i].y() = c_rotation[i][2]; 
 		q[i].z() = c_rotation[i][3]; 
-		q[i] = q[i].inverse();
+		q[i] = q[i].inverse();                 // 旋转又做了个转置..
 		//cout << "final  q" << " i " << i <<"  " <<q[i].w() << "  " << q[i].vec().transpose() << endl;
 	}
 	for (int i = 0; i < frame_num; i++)
@@ -317,6 +353,7 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 		T[i] = -1 * (q[i] * Vector3d(c_translation[i][0], c_translation[i][1], c_translation[i][2]));
 		//cout << "final  t" << " i " << i <<"  " << T[i](0) <<"  "<< T[i](1) <<"  "<< T[i](2) << endl;
 	}
+
 	for (int i = 0; i < (int)sfm_f.size(); i++)
 	{
 		if(sfm_f[i].state)
@@ -325,4 +362,6 @@ bool GlobalSFM::construct(int frame_num, Quaterniond* q, Vector3d* T, int l,
 	return true;
 
 }
+
+// 这里应该只优化了 姿态和平移  ，三角化的点 应该没有优化？？
 

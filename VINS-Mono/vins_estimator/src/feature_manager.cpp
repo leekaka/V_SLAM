@@ -133,6 +133,8 @@ void FeatureManager::debugShow()
     }
 }
 
+
+// 找两帧之间的特征点
 vector<pair<Vector3d, Vector3d>> FeatureManager::getCorresponding(int frame_count_l, int frame_count_r)
 {
     vector<pair<Vector3d, Vector3d>> corres;

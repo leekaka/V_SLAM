@@ -201,10 +201,12 @@ bool MotionEstimator::solveRelativeRT(const vector<pair<Vector3d, Vector3d>> &co
             rr.push_back(cv::Point2f(corres[i].second(0), corres[i].second(1)));
         }
         cv::Mat mask;
-        cv::Mat E = cv::findFundamentalMat(ll, rr, cv::FM_RANSAC, 0.3 / 460, 0.99, mask);   // 根据两帧图像间的特征点  求解基础矩阵
+        cv::Mat E = cv::findFundamentalMat(ll, rr, cv::FM_RANSAC, 0.3 / 460, 0.99, mask);   //根据两帧图像间的特征点  求解基础矩阵
+
+
         cv::Mat cameraMatrix = (cv::Mat_<double>(3, 3) << 1, 0, 0, 0, 1, 0, 0, 0, 1);
         cv::Mat rot, trans;
-        int inlier_cnt = cv::recoverPose(E, ll, rr, cameraMatrix, rot, trans, mask);
+        int inlier_cnt = cv::recoverPose(E, ll, rr, cameraMatrix, rot, trans, mask);        //从基础矩阵里恢复姿态 变换，且返回内部特征点大小
         //cout << "inlier_cnt " << inlier_cnt << endl;
 
         Eigen::Matrix3d R;
