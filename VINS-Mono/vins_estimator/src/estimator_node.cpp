@@ -121,25 +121,26 @@ getMeasurements()
 
         if (!(imu_buf.back()->header.stamp.toSec() > feature_buf.front()->header.stamp.toSec() + estimator.td))  //注意这里的imu_buf.back() 和 imu_buf.front()
         {
-            //ROS_WARN("wait for imu, only should happen at the beginning");
+            //ROS_WARN("wait for imu, only should happen at the beginning");，因为后面的情况下，IMu时间会在图像时间之后
             sum_of_wait++;
             return measurements;
         }
 
         /* imu的最前时间戳已经大于图像时间，则需要扔掉 图像*/
-        if (!(imu_buf.front()->header.stamp.toSec() < feature_buf.front()->header.stamp.toSec() + estimator.td))
+        if (!(imu_buf.front()->header.stamp.toSec() < feature_buf.front()->header.stamp.toSec() + estimator.td))  // 这里的时间戳比较是整个buf的时间戳比较
         {
             ROS_WARN("throw img, only should happen at the beginning");
             feature_buf.pop();
             continue;
         }
+        // 上述操作保证 了IMu和图像的时间戳同步
 
-        sensor_msgs::PointCloudConstPtr img_msg = feature_buf.front();  // 取img
+        sensor_msgs::PointCloudConstPtr img_msg = feature_buf.front();  // 取  一帧img
         feature_buf.pop();
 
 
         std::vector<sensor_msgs::ImuConstPtr> IMUs;
-        while (imu_buf.front()->header.stamp.toSec() < img_msg->header.stamp.toSec() + estimator.td)
+        while (imu_buf.front()->header.stamp.toSec() < img_msg->header.stamp.toSec() + estimator.td)   // 这里是单个图像估计的时间比较
         {
             IMUs.emplace_back(imu_buf.front());
             imu_buf.pop();
@@ -147,9 +148,11 @@ getMeasurements()
 
         /*
         多取了时间戳大于(取到后从imu_buf中丢弃)或者等于图像时间戳的一帧imu
-        (该帧取后并没有从imu_buf中被丢弃，取下帧图像时可作为头帧被取到)，
-        为了可以在process函数里将加计和角计  插值得到img时间戳时刻的acc，gyro近似值
+        (该帧取后并没有从imu_buf中被丢弃，取下帧图像时可作为头帧被取到)
+
+        为了可以在process函数里将加计和角计  插值得到img时间戳时刻的acc，gyro近似值  这个是个小trick
         */
+
         IMUs.emplace_back(imu_buf.front()); // 多取了时间戳大于(取到后从imu_buf中丢弃)或者等于图像时间戳的一帧imu 而且 这里没有丢弃imu
         if (IMUs.empty())
             ROS_WARN("no imu between two image");
@@ -186,6 +189,7 @@ void imu_callback(const sensor_msgs::ImuConstPtr &imu_msg)
         header.frame_id = "world";
         if (estimator.solver_flag == Estimator::SolverFlag::NON_LINEAR)
             pubLatestOdometry(tmp_P, tmp_Q, tmp_V, header);  
+            
             //tmp_P, tmp_Q, tmp_V通过函数 predict(imu_msg)计算，然后发布到"imu_propagate"topic上
     }
 }
@@ -215,11 +219,17 @@ void restart_callback(const std_msgs::BoolConstPtr &restart_msg)
             feature_buf.pop();
         while(!imu_buf.empty())
             imu_buf.pop();
+
+
         m_buf.unlock();
+
+
         m_estimator.lock();
         estimator.clearState();
         estimator.setParameter();
         m_estimator.unlock();
+
+
         current_time = -1;
         last_imu_t = 0;
     }
@@ -250,9 +260,9 @@ void process()          //处理IMU和图像数据
             return (measurements = getMeasurements()).size() != 0;
                  });
         lk.unlock();
-        m_estimator.lock();
+        m_estimator.lock();  // 上述获取一帧图像会获取一组IMu数据，且时间上对齐了的
 
-        for (auto &measurement : measurements)  // 测量值有两部分，一个是IMU，一个是点云指针
+        for (auto &measurement : measurements)  // 测量值有两部分，一个是IMUbuf，一个是点云指针
         {
             auto img_msg = measurement.second;   
 
@@ -302,7 +312,7 @@ void process()          //处理IMU和图像数据
                     estimator.processIMU(dt_1, Vector3d(dx, dy, dz), Vector3d(rx, ry, rz));  // 将加计和角计值都送入imu处理的主要函数
                     //printf("dimu: dt:%f a: %f %f %f w: %f %f %f\n",dt_1, dx, dy, dz, rx, ry, rz);
                 }
-            }
+            }  //   这样基本保证 IMu数据和图片数据能对齐
 
             // set relocalization frame
             sensor_msgs::PointCloudConstPtr relo_msg = NULL;
@@ -323,7 +333,8 @@ void process()          //处理IMU和图像数据
             {
                 vector<Vector3d> match_points;
                 double frame_stamp = relo_msg->header.stamp.toSec();
-                for (unsigned int i = 0; i < relo_msg->points.size(); i++)
+
+                for (unsigned int i = 0; i < relo_msg->points.size(); i++)  // 特征点
                 {
                     Vector3d u_v_id;
                     u_v_id.x() = relo_msg->points[i].x;
@@ -354,9 +365,9 @@ void process()          //处理IMU和图像数据
             {
                 int v = img_msg->channels[0].values[i] + 0.5;
                 
-                int feature_id = v / NUM_OF_CAM;
+                int feature_id = v / NUM_OF_CAM;  //==>  1/1 = 1 ,2/1 = 2 100/1  ==100
 
-                int camera_id = v % NUM_OF_CAM;
+                int camera_id = v % NUM_OF_CAM;  // 求余数，那会始终是  camera_id  0
 
                 double x = img_msg->points[i].x;   
                 double y = img_msg->points[i].y;
@@ -373,10 +384,12 @@ void process()          //处理IMU和图像数据
                 xyz_uv_velocity << x, y, z, p_u, p_v, velocity_x, velocity_y;
  
 				image[feature_id].emplace_back(camera_id,  xyz_uv_velocity);   // 不同的特征有不同的 feature_id //image是个map,这个map包含等于相机数目  的图像上 所有的特征信息
-            }
+            }// 数据预处理，放进image map中
+
+            
             /*
             //image是个map,这个map包含  等于相机数目  的图像上 所有的特征信息
-            //map image的first是不同的  feature_id  second是该特征id对应的      相机id和具体信息(特征点投影射线(已校正) 原像素位置(未校正)，速度(已校正算出的))
+            //map image的first是不同的  feature_id  second是该特征id对应的   相机id和具体信息(特征点投影射线(已校正) 原像素位置(未校正)，速度(已校正算出的))
             
             //本来second应该是一个由<camera_id,  xyz_uv_velocity> 构成的pair来构成的向量
             实际上一幅图像img_msg的一种特征应该只对应一个pair 因此这个vector应该只有一个元素
@@ -386,7 +399,10 @@ void process()          //处理IMU和图像数据
             //然后在上面的for循环中被解算成相同的 feature_id
             进而根据camera_id的不同，构成的pair不同 而放在的同一个feature id对应的向量里 所以上面的pair写为了向量
             */
+
+           
             estimator.processImage(image, img_msg->header); // 处理图像函数
+
 
             /*
             Vins_estimator_node里面用到了两次ceres优化，
@@ -471,7 +487,7 @@ int main(int argc, char **argv)
 
     registerPub(n);
 
-    ros::Subscriber sub_imu = n.subscribe(IMU_TOPIC, 2000, imu_callback, ros::TransportHints().tcpNoDelay());
+    ros::Subscriber sub_imu = n.subscribe(IMU_TOPIC, 2000, imu_callback, ros::TransportHints().tcpNoDelay());  //订阅了IMU数据topic,从这里获取IMU数据
 
     ros::Subscriber sub_image = n.subscribe("/feature_tracker/feature", 2000, feature_callback);
     ros::Subscriber sub_restart = n.subscribe("/feature_tracker/restart", 2000, restart_callback);

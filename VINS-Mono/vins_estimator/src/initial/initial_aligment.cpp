@@ -19,6 +19,7 @@ void solveGyroscopeBias(map<double, ImageFrame> &all_image_frame, Vector3d* Bgs)
         Eigen::Quaterniond q_ij(frame_i->second.R.transpose() * frame_j->second.R);
         tmp_A = frame_j->second.pre_integration->jacobian.template block<3, 3>(O_R, O_BG); //3*12  jacobian 
         tmp_b = 2 * (frame_j->second.pre_integration->delta_q.inverse() * q_ij).vec();
+
         A += tmp_A.transpose() * tmp_A;
         b += tmp_A.transpose() * tmp_b;
 
@@ -43,7 +44,7 @@ MatrixXd TangentBasis(Vector3d &g0)
     Vector3d a = g0.normalized();
     Vector3d tmp(0, 0, 1);
     if(a == tmp)
-        tmp << 1, 0, 0;   //
+        tmp << 1, 0, 0;    //find b1 and b2
 
     b = (tmp - a * (a.transpose() * tmp)).normalized();  
 
@@ -61,7 +62,7 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
     Vector3d lx, ly;
     //VectorXd x;
     int all_frame_count = all_image_frame.size();
-    int n_state = all_frame_count * 3 + 2 + 1;   // 和上一个有区别  count*3 + 2 + 1, 这个2 是指w的两个参数
+    int n_state = all_frame_count * 3 + 2 + 1;   // 和 上一个有区别  count*3 + 2 + 1, 这个 2 是指w的两个参数
 
     MatrixXd A{n_state, n_state};
     A.setZero();
@@ -70,6 +71,7 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
 
     map<double, ImageFrame>::iterator frame_i;
     map<double, ImageFrame>::iterator frame_j;
+
     for(int k = 0; k < 4; k++)
     {
         MatrixXd lxly(3, 2);
@@ -130,9 +132,10 @@ void RefineGravity(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vector
 bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, VectorXd &x)
 {
     int all_frame_count = all_image_frame.size();
-    int n_state = all_frame_count * 3 + 3 + 1;
+    int n_state = all_frame_count * 3 + 3 + 1;  // 所有帧都有三维速度  都对应相同的 g 和 s
 
     MatrixXd A{n_state, n_state};
+
     A.setZero();
     VectorXd b{n_state};
     b.setZero();
@@ -149,12 +152,15 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
         VectorXd tmp_b(6);
         tmp_b.setZero();
 
-        double dt = frame_j->second.pre_integration->sum_dt;
+        double dt = frame_j->second.pre_integration->sum_dt;  // R = Rbc
 
         tmp_A.block<3, 3>(0, 0) = -dt * Matrix3d::Identity();
         tmp_A.block<3, 3>(0, 6) = frame_i->second.R.transpose() * dt * dt / 2 * Matrix3d::Identity();
-        tmp_A.block<3, 1>(0, 9) = frame_i->second.R.transpose() * (frame_j->second.T - frame_i->second.T) / 100.0;     
+        tmp_A.block<3, 1>(0, 9) = frame_i->second.R.transpose() * (frame_j->second.T - frame_i->second.T) / 100.0;   
+
         tmp_b.block<3, 1>(0, 0) = frame_j->second.pre_integration->delta_p + frame_i->second.R.transpose() * frame_j->second.R * TIC[0] - TIC[0];
+       
+       
         //cout << "delta_p   " << frame_j->second.pre_integration->delta_p.transpose() << endl;
         tmp_A.block<3, 3>(3, 0) = -Matrix3d::Identity();
         tmp_A.block<3, 3>(3, 3) = frame_i->second.R.transpose() * frame_j->second.R;
@@ -167,7 +173,7 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
         //MatrixXd cov_inv = cov.inverse();
         cov_inv.setIdentity();
 
-        MatrixXd r_A = tmp_A.transpose() * cov_inv * tmp_A;
+        MatrixXd r_A = tmp_A.transpose() * cov_inv * tmp_A;//  tmpA = 6*10 == 10 * 6 *6*6 * 6* 10 == > 10 * 10
         VectorXd r_b = tmp_A.transpose() * cov_inv * tmp_b;
 
         A.block<6, 6>(i * 3, i * 3) += r_A.topLeftCorner<6, 6>();
@@ -177,8 +183,10 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
         b.tail<4>() += r_b.tail<4>();
 
         A.block<6, 4>(i * 3, n_state - 4) += r_A.topRightCorner<6, 4>();
-        A.block<4, 6>(n_state - 4, i * 3) += r_A.bottomLeftCorner<4, 6>();
+        A.block<4, 6>(n_state - 4, i * 3) += r_A.bottomLeftCorner<4, 6>();   // 这里稍微有一点没弄明白，怎么一直把小矩阵放进大矩阵的呢
     }
+
+
     A = A * 1000.0;
     b = b * 1000.0;
 
@@ -191,12 +199,15 @@ bool LinearAlignment(map<double, ImageFrame> &all_image_frame, Vector3d &g, Vect
     g = x.segment<3>(n_state - 4);
 
     ROS_DEBUG_STREAM(" result g     " << g.norm() << " " << g.transpose());
+
+
     if(fabs(g.norm() - G.norm()) > 1.0 || s < 0)
     {
         return false;
     }
 
     RefineGravity(all_image_frame, g, x);   // 优化重力
+
     s = (x.tail<1>())(0) / 100.0;
     (x.tail<1>())(0) = s;
 

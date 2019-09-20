@@ -82,9 +82,13 @@ bool FeatureManager::addFeatureCheckParallax(int frame_count, const map<int, vec
     }
 
 
-    if (frame_count < 2 || last_track_num < 20)     //特征点数小于20
+    if (frame_count < 2 || last_track_num < 20)     //特征点数小于20，那肯定需要新关键帧了
         return true;
 
+
+
+    //该特征首次出现的图像帧  距离当前帧超过或正好两帧 && 该特征从首次出现帧到当前帧之间最多只掉了一帧，而在其他帧中都出现了
+    //parallax_sum,parallax_num在每幅图像调用该函数的时候都会重新置为0，因此parallax_sum,parallax_num都是计算之前的list feature中的所有特征到当前帧的视差总和
 
     for (auto &it_per_id : feature)
     {
@@ -129,6 +133,8 @@ void FeatureManager::debugShow()
     }
 }
 
+
+// 找两帧之间的特征点
 vector<pair<Vector3d, Vector3d>> FeatureManager::getCorresponding(int frame_count_l, int frame_count_r)
 {
     vector<pair<Vector3d, Vector3d>> corres;
@@ -211,6 +217,8 @@ VectorXd FeatureManager::getDepthVector()
     return dep_vec;
 }
 
+
+//  这个三角化不是很明白，不是用两张图之间的相抵姿态和特征点来三角化求  3d点的呀？？？？
 void FeatureManager::triangulate(Vector3d Ps[], Vector3d tic[], Matrix3d ric[])
 {
     for (auto &it_per_id : feature)
@@ -221,6 +229,7 @@ void FeatureManager::triangulate(Vector3d Ps[], Vector3d tic[], Matrix3d ric[])
 
         if (it_per_id.estimated_depth > 0)
             continue;
+
         int imu_i = it_per_id.start_frame, imu_j = imu_i - 1;
 
         ROS_ASSERT(NUM_OF_CAM == 1);
@@ -230,6 +239,7 @@ void FeatureManager::triangulate(Vector3d Ps[], Vector3d tic[], Matrix3d ric[])
         Eigen::Matrix<double, 3, 4> P0;
         Eigen::Vector3d t0 = Ps[imu_i] + Rs[imu_i] * tic[0];
         Eigen::Matrix3d R0 = Rs[imu_i] * ric[0];
+
         P0.leftCols<3>() = Eigen::Matrix3d::Identity();
         P0.rightCols<1>() = Eigen::Vector3d::Zero();
 
@@ -251,6 +261,7 @@ void FeatureManager::triangulate(Vector3d Ps[], Vector3d tic[], Matrix3d ric[])
             if (imu_i == imu_j)
                 continue;
         }
+
         ROS_ASSERT(svd_idx == svd_A.rows());
         Eigen::Vector4d svd_V = Eigen::JacobiSVD<Eigen::MatrixXd>(svd_A, Eigen::ComputeThinV).matrixV().rightCols<1>();
         double svd_method = svd_V[2] / svd_V[3];

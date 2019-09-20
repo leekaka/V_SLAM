@@ -4,7 +4,7 @@
 #include <cstdlib>
 #include <chrono>
 
-class TicToc
+class TicToc  //这个时间类可以借鉴的~~挺好的
 {
   public:
     TicToc()
