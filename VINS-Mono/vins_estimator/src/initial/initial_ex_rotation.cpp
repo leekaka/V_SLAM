@@ -12,10 +12,15 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
 {
     frame_count++;
     Rc.push_back(solveRelativeR(corres));
+
+
     Rimu.push_back(delta_q_imu.toRotationMatrix());
-    Rc_g.push_back(ric.inverse() * delta_q_imu * ric);      //ric是初始化的IMU 和相机之间 的 相对姿态
+
+
+    Rc_g.push_back(ric.inverse() * delta_q_imu * ric);      //ric是初始化的IMU 和相机之间 的 相对姿态  RIC ==> Rcb
 
     Eigen::MatrixXd A(frame_count * 4, 4);
+
     A.setZero();
     int sum_ok = 0;
     for (int i = 1; i <= frame_count; i++)
@@ -24,15 +29,19 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
         Quaterniond r2(Rc_g[i]);
 
         double angular_distance = 180 / M_PI * r1.angularDistance(r2);
+
+        
         ROS_DEBUG(
             "%d %f", i, angular_distance);
 
         double huber = angular_distance > 5.0 ? 5.0 / angular_distance : 1.0;  //
         ++sum_ok;
+
+        
         Matrix4d L, R;
 
-        double w = Quaterniond(Rc[i]).w();  // ����
-        Vector3d q = Quaterniond(Rc[i]).vec();  // ʸ��
+        double w = Quaterniond(Rc[i]).w();  // 
+        Vector3d q = Quaterniond(Rc[i]).vec();  // 
         
         L.block<3, 3>(0, 0) = w * Matrix3d::Identity() + Utility::skewSymmetric(q);
         L.block<3, 1>(0, 3) = q;
@@ -50,10 +59,14 @@ bool InitialEXRotation::CalibrationExRotation(vector<pair<Vector3d, Vector3d>> c
         A.block<4, 4>((i - 1) * 4, 0) = huber * (L - R);
     }
 
+    // A * x = 0
+
     JacobiSVD<MatrixXd> svd(A, ComputeFullU | ComputeFullV);
     Matrix<double, 4, 1> x = svd.matrixV().col(3);
     Quaterniond estimated_R(x);
     ric = estimated_R.toRotationMatrix().inverse();
+
+
     //cout << svd.singularValues().transpose() << endl;
     //cout << ric << endl;
     Vector3d ric_cov;
