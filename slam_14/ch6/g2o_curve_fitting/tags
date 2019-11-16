@@ -1,0 +1,27 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CurveFittingEdge	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    CurveFittingEdge( double x ): BaseUnaryEdge(), _x(x) {}$/;"	f	class:CurveFittingEdge	access:public	signature:( double x )
+CurveFittingEdge	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^class CurveFittingEdge: public g2o::BaseUnaryEdge<1,double,CurveFittingVertex>$/;"	c	file:	inherits:g2o::BaseUnaryEdge
+CurveFittingEdge::CurveFittingEdge	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    CurveFittingEdge( double x ): BaseUnaryEdge(), _x(x) {}$/;"	f	class:CurveFittingEdge	access:public	signature:( double x )
+CurveFittingEdge::_x	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    double _x;  \/\/ x 值， y 值为 _measurement$/;"	m	class:CurveFittingEdge	file:	access:public
+CurveFittingEdge::computeError	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    void computeError()$/;"	f	class:CurveFittingEdge	access:public	signature:()
+CurveFittingEdge::read	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool read( istream& in ) {}$/;"	f	class:CurveFittingEdge	access:public	signature:( istream& in )
+CurveFittingEdge::write	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool write( ostream& out ) const {}$/;"	f	class:CurveFittingEdge	access:public	signature:( ostream& out ) const
+CurveFittingVertex	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^class CurveFittingVertex: public g2o::BaseVertex<3, Eigen::Vector3d>$/;"	c	file:	inherits:g2o::BaseVertex
+CurveFittingVertex::oplusImpl	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual void oplusImpl( const double* update ) \/\/ 更新$/;"	f	class:CurveFittingVertex	access:public	signature:( const double* update )
+CurveFittingVertex::read	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool read( istream& in ) {}$/;"	f	class:CurveFittingVertex	access:public	signature:( istream& in )
+CurveFittingVertex::setToOriginImpl	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual void setToOriginImpl() \/\/ 重置$/;"	f	class:CurveFittingVertex	access:public	signature:()
+CurveFittingVertex::write	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool write( ostream& out ) const {}$/;"	f	class:CurveFittingVertex	access:public	signature:( ostream& out ) const
+_x	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    double _x;  \/\/ x 值， y 值为 _measurement$/;"	m	class:CurveFittingEdge	file:	access:public
+computeError	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    void computeError()$/;"	f	class:CurveFittingEdge	access:public	signature:()
+main	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^int main( int argc, char** argv )$/;"	f	signature:( int argc, char** argv )
+oplusImpl	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual void oplusImpl( const double* update ) \/\/ 更新$/;"	f	class:CurveFittingVertex	access:public	signature:( const double* update )
+read	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool read( istream& in ) {}$/;"	f	class:CurveFittingEdge	access:public	signature:( istream& in )
+read	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool read( istream& in ) {}$/;"	f	class:CurveFittingVertex	access:public	signature:( istream& in )
+setToOriginImpl	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual void setToOriginImpl() \/\/ 重置$/;"	f	class:CurveFittingVertex	access:public	signature:()
+write	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool write( ostream& out ) const {}$/;"	f	class:CurveFittingEdge	access:public	signature:( ostream& out ) const
+write	/home/kali/kaka/Open_SLAM/slambook/ch6/g2o_curve_fitting/main.cpp	/^    virtual bool write( ostream& out ) const {}$/;"	f	class:CurveFittingVertex	access:public	signature:( ostream& out ) const

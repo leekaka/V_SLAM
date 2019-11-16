@@ -78,11 +78,11 @@ myslam/common_include.h
 myslam/mappoint.h
 /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.1/src/myslam/mappoint.h
 
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/se3.h
 so3.h
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
 
-/home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
+/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
 Eigen/Core
 -
 Eigen/StdVector

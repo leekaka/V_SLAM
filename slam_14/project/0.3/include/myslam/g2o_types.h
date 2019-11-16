@@ -32,7 +32,7 @@
 #include <g2o/core/robust_kernel.h>
 #include <g2o/core/robust_kernel_impl.h>
 
-namespace myslam
+namespace myslam   // 参数意义:观测值维度\类型\定点
 {
 class EdgeProjectXYZRGBD : public g2o::BaseBinaryEdge<3, Eigen::Vector3d, g2o::VertexSBAPointXYZ, g2o::VertexSE3Expmap>
 {
@@ -60,6 +60,8 @@ public:
     Vector3d point_;
 };
 
+
+// 继承了一元边 ,只有一个定点
 class EdgeProjectXYZ2UVPoseOnly: public g2o::BaseUnaryEdge<2, Eigen::Vector2d, g2o::VertexSE3Expmap >
 {
 public:

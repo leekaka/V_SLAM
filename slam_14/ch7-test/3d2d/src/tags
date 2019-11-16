@@ -1,0 +1,10 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+bundleAdjustment	/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch7-test/3d2d/src/common.cpp	/^void bundleAdjustment ($/;"	f	signature:( const vector< Point3f > points_3d, const vector< Point2f > points_2d, const Mat& K, Mat& R, Mat& t )
+find_feature_matches	/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch7-test/3d2d/src/common.cpp	/^void find_feature_matches ( const Mat& img_1, const Mat& img_2,$/;"	f	signature:( const Mat& img_1, const Mat& img_2, std::vector<KeyPoint>& keypoints_1, std::vector<KeyPoint>& keypoints_2, std::vector< DMatch >& matches )
+main	/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch7-test/3d2d/src/pose_estimation_3d2d.cpp	/^int main ( int argc, char** argv )$/;"	f	signature:( int argc, char** argv )
+pixel2cam	/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch7-test/3d2d/src/common.cpp	/^Point2d pixel2cam ( const Point2d& p, const Mat& K )$/;"	f	signature:( const Point2d& p, const Mat& K )

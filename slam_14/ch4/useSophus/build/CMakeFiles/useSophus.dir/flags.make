@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/kali/kaka/slambook/3rdparty/Sophus -I/usr/include/eigen3 
+CXX_INCLUDES = -I/home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus -I/usr/include/eigen3 
 

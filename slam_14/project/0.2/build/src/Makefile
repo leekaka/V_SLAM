@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/kali/kaka/slambook/project/0.2
+CMAKE_SOURCE_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/kali/kaka/slambook/project/0.2/build
+CMAKE_BINARY_DIR = /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/kali/kaka/slambook/project/0.2/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/slambook/project/0.2/build/CMakeFiles /home/kali/kaka/slambook/project/0.2/build/src/CMakeFiles/progress.marks
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/slambook/project/0.2/build/CMakeFiles 0
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/src/CMakeFiles/progress.marks
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src/CMakeFiles/myslam.dir/rule:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/myslam.dir/rule
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/myslam.dir/rule
 .PHONY : src/CMakeFiles/myslam.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ myslam: src/CMakeFiles/myslam.dir/rule
 
 # fast build rule for target.
 myslam/fast:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/build
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/build
 .PHONY : myslam/fast
 
 camera.o: camera.cpp.o
@@ -131,7 +131,7 @@ camera.o: camera.cpp.o
 
 # target to build an object file
 camera.cpp.o:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/camera.cpp.o
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/camera.cpp.o
 .PHONY : camera.cpp.o
 
 camera.i: camera.cpp.i
@@ -140,7 +140,7 @@ camera.i: camera.cpp.i
 
 # target to preprocess a source file
 camera.cpp.i:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/camera.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/camera.cpp.i
 .PHONY : camera.cpp.i
 
 camera.s: camera.cpp.s
@@ -149,7 +149,7 @@ camera.s: camera.cpp.s
 
 # target to generate assembly for a file
 camera.cpp.s:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/camera.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/camera.cpp.s
 .PHONY : camera.cpp.s
 
 config.o: config.cpp.o
@@ -158,7 +158,7 @@ config.o: config.cpp.o
 
 # target to build an object file
 config.cpp.o:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/config.cpp.o
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/config.cpp.o
 .PHONY : config.cpp.o
 
 config.i: config.cpp.i
@@ -167,7 +167,7 @@ config.i: config.cpp.i
 
 # target to preprocess a source file
 config.cpp.i:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/config.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/config.cpp.i
 .PHONY : config.cpp.i
 
 config.s: config.cpp.s
@@ -176,7 +176,7 @@ config.s: config.cpp.s
 
 # target to generate assembly for a file
 config.cpp.s:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/config.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/config.cpp.s
 .PHONY : config.cpp.s
 
 frame.o: frame.cpp.o
@@ -185,7 +185,7 @@ frame.o: frame.cpp.o
 
 # target to build an object file
 frame.cpp.o:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/frame.cpp.o
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/frame.cpp.o
 .PHONY : frame.cpp.o
 
 frame.i: frame.cpp.i
@@ -194,7 +194,7 @@ frame.i: frame.cpp.i
 
 # target to preprocess a source file
 frame.cpp.i:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/frame.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/frame.cpp.i
 .PHONY : frame.cpp.i
 
 frame.s: frame.cpp.s
@@ -203,7 +203,7 @@ frame.s: frame.cpp.s
 
 # target to generate assembly for a file
 frame.cpp.s:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/frame.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/frame.cpp.s
 .PHONY : frame.cpp.s
 
 map.o: map.cpp.o
@@ -212,7 +212,7 @@ map.o: map.cpp.o
 
 # target to build an object file
 map.cpp.o:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/map.cpp.o
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/map.cpp.o
 .PHONY : map.cpp.o
 
 map.i: map.cpp.i
@@ -221,7 +221,7 @@ map.i: map.cpp.i
 
 # target to preprocess a source file
 map.cpp.i:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/map.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/map.cpp.i
 .PHONY : map.cpp.i
 
 map.s: map.cpp.s
@@ -230,7 +230,7 @@ map.s: map.cpp.s
 
 # target to generate assembly for a file
 map.cpp.s:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/map.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/map.cpp.s
 .PHONY : map.cpp.s
 
 mappoint.o: mappoint.cpp.o
@@ -239,7 +239,7 @@ mappoint.o: mappoint.cpp.o
 
 # target to build an object file
 mappoint.cpp.o:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/mappoint.cpp.o
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/mappoint.cpp.o
 .PHONY : mappoint.cpp.o
 
 mappoint.i: mappoint.cpp.i
@@ -248,7 +248,7 @@ mappoint.i: mappoint.cpp.i
 
 # target to preprocess a source file
 mappoint.cpp.i:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/mappoint.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/mappoint.cpp.i
 .PHONY : mappoint.cpp.i
 
 mappoint.s: mappoint.cpp.s
@@ -257,7 +257,7 @@ mappoint.s: mappoint.cpp.s
 
 # target to generate assembly for a file
 mappoint.cpp.s:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/mappoint.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/mappoint.cpp.s
 .PHONY : mappoint.cpp.s
 
 visual_odometry.o: visual_odometry.cpp.o
@@ -266,7 +266,7 @@ visual_odometry.o: visual_odometry.cpp.o
 
 # target to build an object file
 visual_odometry.cpp.o:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.o
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.o
 .PHONY : visual_odometry.cpp.o
 
 visual_odometry.i: visual_odometry.cpp.i
@@ -275,7 +275,7 @@ visual_odometry.i: visual_odometry.cpp.i
 
 # target to preprocess a source file
 visual_odometry.cpp.i:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.i
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.i
 .PHONY : visual_odometry.cpp.i
 
 visual_odometry.s: visual_odometry.cpp.s
@@ -284,7 +284,7 @@ visual_odometry.s: visual_odometry.cpp.s
 
 # target to generate assembly for a file
 visual_odometry.cpp.s:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.s
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(MAKE) -f src/CMakeFiles/myslam.dir/build.make src/CMakeFiles/myslam.dir/visual_odometry.cpp.s
 .PHONY : visual_odometry.cpp.s
 
 # Help Target
@@ -325,6 +325,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/kali/kaka/slambook/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.2/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

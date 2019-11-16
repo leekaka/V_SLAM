@@ -1,3 +1,0 @@
-/home/kali/kaka/MyGithub/slam/ch6/build/CMakeFiles/edit_cache.dir
-/home/kali/kaka/MyGithub/slam/ch6/build/CMakeFiles/rebuild_cache.dir
-/home/kali/kaka/MyGithub/slam/ch6/build/CMakeFiles/curve_fitting.dir

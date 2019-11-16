@@ -1,4 +1,4 @@
-# Install script for directory: /home/kali/kaka/slambook/project/0.4
+# Install script for directory: /home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.4
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -34,8 +34,8 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/kali/kaka/slambook/project/0.4/build/src/cmake_install.cmake")
-  include("/home/kali/kaka/slambook/project/0.4/build/test/cmake_install.cmake")
+  include("/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.4/build/src/cmake_install.cmake")
+  include("/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.4/build/test/cmake_install.cmake")
 
 endif()
 
@@ -47,5 +47,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/kali/kaka/slambook/project/0.4/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/kali/kaka/MyGithub/V_SLAM/slam_14/project/0.4/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

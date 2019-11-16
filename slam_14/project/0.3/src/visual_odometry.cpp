@@ -42,7 +42,7 @@ VisualOdometry::VisualOdometry() :
     key_frame_min_rot   = Config::get<double> ( "keyframe_rotation" );
     key_frame_min_trans = Config::get<double> ( "keyframe_translation" );
     map_point_erase_ratio_ = Config::get<double> ("map_point_erase_ratio");
-    orb_ = cv::ORB::create ( num_of_features_, scale_factor_, level_pyramid_ );
+    orb_ = cv::ORB::create ( num_of_features_, scale_factor_, level_pyramid_ );  // 初始化的时候直接就创建了ORB的特征提取
 }
 
 VisualOdometry::~VisualOdometry()
@@ -72,6 +72,7 @@ bool VisualOdometry::addFrame ( Frame::Ptr frame )
         computeDescriptors();
         featureMatching();
         poseEstimationPnP();
+
         if ( checkEstimatedPose() == true ) // a good estimation
         {
             curr_->T_c_w_ = T_c_r_estimated_ * ref_->T_c_w_;  // T_c_w = T_c_r*T_r_w 
@@ -123,6 +124,7 @@ void VisualOdometry::featureMatching()
     boost::timer timer;
     vector<cv::DMatch> matches;
     matcher_flann_.match( descriptors_ref_, descriptors_curr_, matches );
+
     // select the best matches
     float min_dis = std::min_element (
                         matches.begin(), matches.end(),
@@ -189,14 +191,16 @@ void VisualOdometry::poseEstimationPnP()
     );
     
     // using bundle adjustment to optimize the pose 
-    typedef g2o::BlockSolver<g2o::BlockSolverTraits<6,2>> Block;
+    typedef g2o::BlockSolver<g2o::BlockSolverTraits<6,2>> Block;  // 相机位姿是6维, 误差是2维
+
     Block::LinearSolverType* linearSolver = new g2o::LinearSolverDense<Block::PoseMatrixType>();
     Block* solver_ptr = new Block( std::unique_ptr<Block::LinearSolverType>(linearSolver) );
     g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg ( std::unique_ptr<Block>(solver_ptr) );
+    
     g2o::SparseOptimizer optimizer;
     optimizer.setAlgorithm ( solver );
     
-    g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();
+    g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();  // 只优化姿态,把姿态放定点,还是用的g2o本身的
     pose->setId ( 0 );
     pose->setEstimate ( g2o::SE3Quat (
         T_c_r_estimated_.rotation_matrix(), 
@@ -209,7 +213,7 @@ void VisualOdometry::poseEstimationPnP()
     {
         int index = inliers.at<int>(i,0);
         // 3D -> 2D projection
-        EdgeProjectXYZ2UVPoseOnly* edge = new EdgeProjectXYZ2UVPoseOnly();
+        EdgeProjectXYZ2UVPoseOnly* edge = new EdgeProjectXYZ2UVPoseOnly(); // 自定义的边 只优化姿态,需要改几个虚函数
         edge->setId(i);
         edge->setVertex(0, pose);
         edge->camera_ = curr_->camera_.get();

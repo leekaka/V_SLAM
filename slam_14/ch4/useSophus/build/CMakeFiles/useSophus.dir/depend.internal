@@ -3,8 +3,8 @@
 
 CMakeFiles/useSophus.dir/useSophus.cpp.o
  /home/kali/kaka/MyGithub/V_SLAM/slam_14/ch4/useSophus/useSophus.cpp
- /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
- /home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
+ /home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/se3.h
+ /home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
  /usr/include/eigen3/Eigen/Cholesky
  /usr/include/eigen3/Eigen/Core
  /usr/include/eigen3/Eigen/Geometry

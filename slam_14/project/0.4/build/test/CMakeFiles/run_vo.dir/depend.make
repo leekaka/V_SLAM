@@ -8,9 +8,9 @@ test/CMakeFiles/run_vo.dir/run_vo.cpp.o: ../include/myslam/frame.h
 test/CMakeFiles/run_vo.dir/run_vo.cpp.o: ../include/myslam/map.h
 test/CMakeFiles/run_vo.dir/run_vo.cpp.o: ../include/myslam/mappoint.h
 test/CMakeFiles/run_vo.dir/run_vo.cpp.o: ../include/myslam/visual_odometry.h
-test/CMakeFiles/run_vo.dir/run_vo.cpp.o: /home/kali/kaka/slambook/3rdparty/Sophus/sophus/se3.h
-test/CMakeFiles/run_vo.dir/run_vo.cpp.o: /home/kali/kaka/slambook/3rdparty/Sophus/sophus/so3.h
 test/CMakeFiles/run_vo.dir/run_vo.cpp.o: ../test/run_vo.cpp
+test/CMakeFiles/run_vo.dir/run_vo.cpp.o: /home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/se3.h
+test/CMakeFiles/run_vo.dir/run_vo.cpp.o: /home/kali/kaka/Open_SLAM/slambook/3rdparty/Sophus/sophus/so3.h
 test/CMakeFiles/run_vo.dir/run_vo.cpp.o: /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv/cxcore.h
 test/CMakeFiles/run_vo.dir/run_vo.cpp.o: /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv2/calib3d.hpp
 test/CMakeFiles/run_vo.dir/run_vo.cpp.o: /opt/ros/kinetic/include/opencv-3.3.1-dev/opencv2/calib3d/calib3d_c.h
