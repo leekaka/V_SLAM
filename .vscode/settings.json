@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "xlocale": "cpp",
-        "xmemory0": "cpp",
-        "deque": "cpp",
-        "list": "cpp",
-        "vector": "cpp"
-    }
-}
