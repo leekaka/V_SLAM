@@ -6,11 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/home/kali/kaka/MyGithub/slam/ch2/libHelloSlam.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch2/libHelloSlam.h
 
-/home/kali/kaka/MyGithub/slam/ch2/useHello.cpp
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch2/useHello.cpp
 iostream
 -
 libHelloSlam.h
-/home/kali/kaka/MyGithub/slam/ch2/libHelloSlam.h
+/home/kali/kaka/MyGithub/V_SLAM/slam_14/ch2/libHelloSlam.h
 
