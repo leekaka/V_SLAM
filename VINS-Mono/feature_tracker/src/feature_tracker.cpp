@@ -80,10 +80,9 @@ void FeatureTracker::addPoints()
 
 
 /*
-    1、readImage函数          将图像的特征点以及光流速度都计算出来，存储在trackerData[i]的变量，
-    2、校正后的                特征点存储在cur_un_pts（本帧，包含新添加的特征）和 pre_un_pts（上帧，和本帧添加新点之前的特征点已经对齐）中，
-                  光流速度 pts_velocity 、cur_pts和pre_pts  是未经过校正的像素位置
-    3、cur_un_pts   和pre_un_pts   并不是简单的像素位置，而是[(u-cx)/fx,[(v-cy)/fy];   pts_velocity也不是单纯的像素速度，而是（像素速度/fx），即 [(deltu/fx)/dt,(deltv/fy)/dt]
+    1、readImage函数将图像的特征点以及光流速度都计算出来，存储在trackerData[i]的变量，
+    2、校正后的特征点存储在cur_un_pts（本帧，包含新添加的特征）和 pre_un_pts（上帧，和本帧添加新点之前的特征点已经对齐）中，光流速度 pts_velocity 、cur_pts和pre_pts  是未经过校正的像素位置
+    3、cur_un_pts 和pre_un_pts 并不是简单的像素位置，而是[(u-cx)/fx,[(v-cy)/fy];   pts_velocity也不是单纯的像素速度，而是（像素速度/fx），即 [(deltu/fx)/dt,(deltv/fy)/dt]
 */
 void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)  //读取图像和时间戳
 {
@@ -160,7 +159,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)  //读取�
         ROS_DEBUG("temporal optical flow costs: %fms", t_o.toc());
     }
 
-    for (auto &n : track_cnt)  //vector<int> track_cnt，这里n++会导致track_cnt向量中的元素递增，track_cnt反映了该特征  连续在几幅图像中出现过
+    for (auto &n : track_cnt)  //vector<int> track_cnt，这里n++会导致track_cnt向量中的元素递增，track_cnt反映了该特征连续在几幅图像中出现过
         n++;
 
     if (PUB_THIS_FRAME)  // 这意味着如果降频，原图像参加了cv光流的计算，但是没有去除相应的噪点和goodfeature更新角点的过程
@@ -201,7 +200,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)  //读取�
             */
         }
         else
-            n_pts.clear();
+            n_pts.clear();   // 如果光流计算的角点数量足够,则不需要添加
         ROS_DEBUG("detect feature costs: %fms", t_t.toc());
 
 
@@ -212,7 +211,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)  //读取�
         /*
         通过上面我们首次计算出MAX_CNT个角点，然后addPoints();
 
-        for (auto &p : n_pts)
+        for (auto &p : n_pts)   // 只有新算出来的角点才算计数到 ids  , 新出来的会置track_cnt为1
         {
             forw_pts.push_back(p);
             ids.push_back(-1);

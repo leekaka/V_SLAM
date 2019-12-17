@@ -6,10 +6,10 @@
 **VINS-Mono源于香港科技大学沈邵劼课题组的开源杰作。相关论文：**
 
   • 	VINS-Mono: A Robust and Versatile Monocular Visual-Inertial State Estimator, Tong Qin, Peiliang Li, Zhenfei Yang, Shaojie Shen arXiv:1708.03852
-  
+
   •	  Autonomous Aerial Navigation Using Monocular Visual-Inertial Fusion, Yi Lin, Fei Gao, Tong Qin, Wenliang Gao, Tianbo Liu, William Wu, Zhenfei Yang, Shaojie Shen, J Field Robotics. 2017;00:1–29. https://doi.org/10.1002/rob.21732
-  
-  
+
+
 开源代码地址：
 Linux端：https://github.com/HKUST-Aerial-Robotics/VINS-Mono
 
@@ -35,13 +35,19 @@ VINS_MONO 进程分为三个node:
 ![代码结构](https://github.com/leekaka/github_pics/blob/master/VINS_MONO/%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6.png?raw=true)
 
 #### 2.1 Feature_tracker_node
-该node除了main的主线程之外，只有图像处理一个子线程img_callback
-图像处理中有个重要的函数，readimag()
-读图片的时候做了特征的提取，主要是用cv函数：
-calcOpticalFlowPyrLK()
-goodFeaturesToTrack()
-两个函数时核心，一个是光流，一个是特征提取，在第一张图时，需要直接进入特征提取，之后就可以使用光流进行特征跟踪了，当光流跟踪的特征个数不够多时，需要再次进入特征提取器进行补充，这里有很多细节的地方需要注意。
+该node除了main的主线程之外，只有图像处理一个子线程img_callback(),在回调函数之前,会读取参数,相机模型,鱼眼Mask等等;
+
+图像处理中有个重要的函数，readimag(img,time),进入读取函数后,首先就会对图片进行预处理,转成cv能处理的类型,之后就是调用cv函数对图片进行特征提取,主要用到了两个函数:
+
++ calcOpticalFlowPyrLK()
++ goodFeaturesToTrack()
+
+一个是光流，一个是特征提取，在第一张图时，需要直接进入特征提取，之后就可以使用光流进行特征跟踪了，当光流跟踪的特征个数不够多时，需要再次进入特征提取器进行补充，这里有很多细节的地方需要注意。
+
+
+
 比如：
+
 
 
 #### 2.2 Vins_estimator_node
