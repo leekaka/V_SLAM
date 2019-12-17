@@ -56,9 +56,6 @@ void img_callback(const sensor_msgs::ImageConstPtr &img_msg)
 
 
 
-
-
-
     // frequency control
 
     // FREQ在yml文件中设置：当yml文件中设置为0，在readParameters(n)函数中，重新设置为FREQ  为100，

@@ -6,10 +6,10 @@
 **VINS-Mono源于香港科技大学沈邵劼课题组的开源杰作。相关论文：**
 
   • 	VINS-Mono: A Robust and Versatile Monocular Visual-Inertial State Estimator, Tong Qin, Peiliang Li, Zhenfei Yang, Shaojie Shen arXiv:1708.03852
-  
+
   •	  Autonomous Aerial Navigation Using Monocular Visual-Inertial Fusion, Yi Lin, Fei Gao, Tong Qin, Wenliang Gao, Tianbo Liu, William Wu, Zhenfei Yang, Shaojie Shen, J Field Robotics. 2017;00:1–29. https://doi.org/10.1002/rob.21732
-  
-  
+
+
 开源代码地址：
 Linux端：https://github.com/HKUST-Aerial-Robotics/VINS-Mono
 
@@ -35,7 +35,8 @@ VINS_MONO 进程分为三个node:
 ![代码结构](https://github.com/leekaka/github_pics/blob/master/VINS_MONO/%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6.png?raw=true)
 
 #### 2.1 Feature_tracker_node
-该node除了main的主线程之外，只有图像处理一个子线程img_callback
+该node除了main的主线程之外，只有图像处理一个子线程img_callback()
+
 图像处理中有个重要的函数，readimag()
 读图片的时候做了特征的提取，主要是用cv函数：
 calcOpticalFlowPyrLK()
