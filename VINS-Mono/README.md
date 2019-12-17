@@ -36,6 +36,13 @@ VINS_MONO 进程分为三个node:
 
 #### 2.1 Feature_tracker_node
 该node除了main的主线程之外，只有图像处理一个子线程img_callback
+图像处理中有个重要的函数，readimag()
+读图片的时候做了特征的提取，主要是用cv函数：
+calcOpticalFlowPyrLK()
+goodFeaturesToTrack()
+两个函数时核心，一个是光流，一个是特征提取，在第一张图时，需要直接进入特征提取，之后就可以使用光流进行特征跟踪了，当光流跟踪的特征个数不够多时，需要再次进入特征提取器进行补充，这里有很多细节的地方需要注意。
+比如：
+
 
 #### 2.2 Vins_estimator_node
 
