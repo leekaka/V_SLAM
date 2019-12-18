@@ -84,15 +84,13 @@ void FeatureTracker::addPoints()
     2、校正后的特征点存储在cur_un_pts（本帧，包含新添加的特征）和 pre_un_pts（上帧，和本帧添加新点之前的特征点已经对齐）中，光流速度 pts_velocity 、cur_pts和pre_pts  是未经过校正的像素位置
     3、cur_un_pts 和pre_un_pts 并不是简单的像素位置，而是[(u-cx)/fx,[(v-cy)/fy];   pts_velocity也不是单纯的像素速度，而是（像素速度/fx），即 [(deltu/fx)/dt,(deltv/fy)/dt]
 */
-void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)  //读取图像和时间戳
-{
+void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time) { //读取图像和时间戳
     cv::Mat img;
     TicToc t_r;
     cur_time = _cur_time;
 
     /*首先如果EQUALIZE为1，先对图像亮度进行了调整*/
-    if (EQUALIZE)  
-    {
+    if (EQUALIZE) {
         cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(3.0, cv::Size(8, 8));
         TicToc t_c;
         clahe->apply(_img, img);
@@ -103,8 +101,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)  //读取�
 
     
     /*如果是首次计算，那么先跳过光流计算函数，跳到  goodFeaturesToTrack */
-    if (forw_img.empty())
-    {
+    if (forw_img.empty()) {
         prev_img = cur_img = forw_img = img;
     }
     else
@@ -328,8 +325,7 @@ void FeatureTracker::showUndistortion(const string &name)
     cv::waitKey(0);
 }
 
-void FeatureTracker::undistortedPoints()
-{
+void FeatureTracker::undistortedPoints() {
     cur_un_pts.clear();
     cur_un_pts_map.clear();
     //cv::undistortPoints(cur_pts, un_pts, K, cv::Mat());
