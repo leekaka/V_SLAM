@@ -35,7 +35,11 @@ VINS_MONO 进程分为三个node:
 ![代码结构](https://github.com/leekaka/github_pics/blob/master/VINS_MONO/%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6.png?raw=true)
 
 #### 2.1 Feature_tracker_node
-该node除了main的主线程之外，只有图像处理一个子线程img_callback(),在回调函数之前,会读取参数,相机模型,鱼眼Mask等等;
+该node除了main的主线程之外，只有图像处理一个子线程img_callback(),在回调函数之前,会读取参数,相机模型,鱼眼Mask等等;有个人的分析写的不错,链接在这里[参考](https://www.cnblogs.com/CV-life/archive/2019/08/30/11436742.html)
+
+![流程图](https://github.com/leekaka/github_pics/blob/master/VINS_MONO/liucheng.jpg)
+
+这种流程图对代码分析挺好使的.
 
 图像处理中有个重要的函数，readimag(img,time),进入读取函数后,首先就会对图片进行预处理,转成cv能处理的类型,之后就是调用cv函数对图片进行特征提取,主要用到了两个函数:
 
