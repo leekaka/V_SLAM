@@ -46,9 +46,13 @@ VINS_MONO 进程分为三个node:
 
 比如几个变量：
 
-ids
+ids表示该特征点的编号,如果该点在某帧断了,后续再次出现会有新的编号,但是不影响该数值能表示相邻两帧相同特征点的编号不变.
 
-track_cnt
+track_cnt表示该特征点出现的次数
+
+cur_un_pts 和pre_un_pts 并不是简单的像素位置，而是[(u-cx)/fx,[(v-cy)/fy];   pts_velocity 也不是单纯的像素速度，而是（像素速度/fx），即 [(deltu/fx)/dt,(deltv/fy)/dt]
+
+相关位置我在代码里有注释,详情可参看代码.
 
 
 

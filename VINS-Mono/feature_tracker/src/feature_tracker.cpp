@@ -33,10 +33,9 @@ FeatureTracker::FeatureTracker()
 {
 }
 
-void FeatureTracker::setMask()
-{
+void FeatureTracker::setMask() {
     if(FISHEYE)
-        mask = fisheye_mask.clone();
+        mask = fisheye_mask.clone();   // 黑色的像素值是0,如果存在鱼眼,则会把黑色像素的去掉,白色的是255,不存在鱼眼,则默认都是255
     else
         mask = cv::Mat(ROW, COL, CV_8UC1, cv::Scalar(255));
     
@@ -50,20 +49,19 @@ void FeatureTracker::setMask()
     sort(cnt_pts_id.begin(), cnt_pts_id.end(), [](const pair<int, pair<cv::Point2f, int>> &a, const pair<int, pair<cv::Point2f, int>> &b)
          {
             return a.first > b.first;
-         });
+         });// 根据tack_cnt排序,这个是表示特征点出现的次数,把所有重要的都放进这个vector
 
     forw_pts.clear();
     ids.clear();
     track_cnt.clear();
 
-    for (auto &it : cnt_pts_id)
-    {
+    for (auto &it : cnt_pts_id) {
         if (mask.at<uchar>(it.second.first) == 255)
         {
             forw_pts.push_back(it.second.first);
             ids.push_back(it.second.second);
             track_cnt.push_back(it.first);
-            cv::circle(mask, it.second.first, MIN_DIST, 0, -1);
+            cv::circle(mask, it.second.first, MIN_DIST, 0, -1); // 这个MIN_DIST还有均匀分布的作用
         }
     }
 }
@@ -82,7 +80,7 @@ void FeatureTracker::addPoints()
 /*
     1、readImage函数将图像的特征点以及光流速度都计算出来，存储在trackerData[i]的变量，
     2、校正后的特征点存储在cur_un_pts（本帧，包含新添加的特征）和 pre_un_pts（上帧，和本帧添加新点之前的特征点已经对齐）中，光流速度 pts_velocity 、cur_pts和pre_pts  是未经过校正的像素位置
-    3、cur_un_pts 和pre_un_pts 并不是简单的像素位置，而是[(u-cx)/fx,[(v-cy)/fy];   pts_velocity也不是单纯的像素速度，而是（像素速度/fx），即 [(deltu/fx)/dt,(deltv/fy)/dt]
+    3、cur_un_pts 和pre_un_pts 并不是简单的像素位置，而是[(u-cx)/fx,[(v-cy)/fy];   pts_velocity 也不是单纯的像素速度，而是（像素速度/fx），即 [(deltu/fx)/dt,(deltv/fy)/dt]
 */
 void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time) { //读取图像和时间戳
     cv::Mat img;
@@ -238,7 +236,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time) { //读取
 
 void FeatureTracker::rejectWithF()
 {
-    if (forw_pts.size() >= 8)
+    if (forw_pts.size() >= 8)    // 特征点的个数大于8 ,需要删除误匹配
     {
         ROS_DEBUG("FM ransac begins");
         TicToc t_f;
