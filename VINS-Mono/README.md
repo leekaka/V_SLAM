@@ -11,9 +11,7 @@
 
 
 开源代码地址：
-[Linux端](https://github.com/HKUST-Aerial-Robotics/VINS-Mono)
-
-[Mobile phone端](https://github.com/HKUST-Aerial-Robotics/VINS-Mobile)
+[Linux端](https://github.com/HKUST-Aerial-Robotics/VINS-Mono)、[Mobile phone端](https://github.com/HKUST-Aerial-Robotics/VINS-Mobile)
 
 Linux端程序基于ROS系统，通过发布和订阅消息的方式实现进程间的通信。通过rosbag或者用户自己定义的节点发布IMU和CAMERA信息
 官方建议CAMERA帧率超过20Hz，IMU超过100Hz。
@@ -24,7 +22,7 @@ Linux端程序基于ROS系统，通过发布和订阅消息的方式实现进程
 很多人已经详细解读过VIO，比如我觉得很好的有[链接](https://www.zybuluo.com/Xiaobuyi/note/866099#%5b2%5d),也有一脉相承的[PDF](https://github.com/leekaka/V_SLAM/blob/master/docs/vinsmono_note_cg.pdf)
 
 这类解析主要是整体上的模块来讲解，比如IMU预计分模块的公式推导，前端跟踪，系统初始化，后端优化和闭环校正等，和文献思路很吻合。
-我主要想从代码实现的角度解读，比如代码里三个核心的node.
+我主要想在上述思路的基础上再从代码实现的角度解读一下，比如需要如何看代码，从三个node里的main函数入手。
 
 ### 2.代码详解
 
